@@ -1,0 +1,65 @@
+const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000";
+
+export class ApiError extends Error {
+  constructor(
+    public status: number,
+    message: string,
+    public code?: string,
+  ) {
+    super(message);
+    this.name = "ApiError";
+  }
+}
+
+type RefreshHandler = () => Promise<string | null>;
+
+let accessToken: string | null = null;
+let refreshHandler: RefreshHandler | null = null;
+
+export function setAccessToken(token: string | null) {
+  accessToken = token;
+}
+
+export function setRefreshHandler(handler: RefreshHandler | null) {
+  refreshHandler = handler;
+}
+
+interface RequestOptions {
+  method?: "GET" | "POST" | "PATCH" | "DELETE";
+  body?: unknown;
+  /** Attach the access token and retry once via the refresh handler on 401. Defaults to true. */
+  auth?: boolean;
+}
+
+async function rawRequest(path: string, options: RequestOptions, token: string | null) {
+  const isFormData = options.body instanceof FormData;
+  return fetch(`${API_URL}${path}`, {
+    method: options.method ?? "GET",
+    headers: {
+      // Let the browser set multipart/form-data with its own boundary for FormData bodies.
+      ...(isFormData ? {} : { "Content-Type": "application/json" }),
+      ...(options.auth !== false && token ? { Authorization: `Bearer ${token}` } : {}),
+    },
+    body: options.body === undefined ? undefined : isFormData ? (options.body as FormData) : JSON.stringify(options.body),
+  });
+}
+
+export async function apiRequest<T>(path: string, options: RequestOptions = {}): Promise<T> {
+  let res = await rawRequest(path, options, accessToken);
+
+  if (res.status === 401 && options.auth !== false && refreshHandler) {
+    const newToken = await refreshHandler();
+    if (newToken) {
+      res = await rawRequest(path, options, newToken);
+    }
+  }
+
+  const isJson = res.headers.get("content-type")?.includes("application/json");
+  const data = isJson ? await res.json() : undefined;
+
+  if (!res.ok) {
+    throw new ApiError(res.status, data?.error?.message ?? "İstek başarısız oldu", data?.error?.code);
+  }
+
+  return data as T;
+}
