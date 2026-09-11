@@ -5,7 +5,7 @@ import { addDisputeEvidence, listRentalDisputes, openDispute, type Dispute } fro
 import { ApiError } from "@/lib/api/client";
 import { formatDate } from "@/lib/format";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000";
+const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "";
 
 const STATUS_LABELS: Record<Dispute["status"], string> = {
   open: "Açık",

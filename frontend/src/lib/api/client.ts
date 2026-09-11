@@ -1,4 +1,9 @@
-const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000";
+// Empty string (not an absolute URL) is the correct default: it makes every
+// request relative to whatever origin the page was loaded from, so the same
+// build works behind the LAN IP, the Cloudflare tunnel, or any future domain
+// without needing to know the origin ahead of time. Only local dev sets this
+// explicitly (to the backend's own port, since it isn't proxied to :3000).
+const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "";
 
 export class ApiError extends Error {
   constructor(

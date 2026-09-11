@@ -12,7 +12,7 @@ import {
 import { ApiError } from "@/lib/api/client";
 import { STEP_LABELS, buildWizardSteps } from "./steps";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000";
+const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "";
 
 export function HandoverWizard({ rentalId, phase }: { rentalId: string; phase: HandoverPhase }) {
   const router = useRouter();

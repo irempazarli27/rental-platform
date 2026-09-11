@@ -1,7 +1,7 @@
 import type { HandoverRecord } from "@/lib/api/handover";
 import { STEP_ORDER, STEP_LABELS } from "./steps";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000";
+const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "";
 
 export function HandoverGallery({ title, record }: { title: string; record: HandoverRecord | null }) {
   if (!record) {

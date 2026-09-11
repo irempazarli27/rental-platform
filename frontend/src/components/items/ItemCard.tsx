@@ -3,7 +3,7 @@ import Link from "next/link";
 import type { ItemSummary } from "@/lib/api/items";
 import { formatPrice, RISK_LABELS } from "@/lib/format";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000";
+const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "";
 
 const RISK_BADGE_CLASSES: Record<string, string> = {
   low: "bg-emerald-50 text-emerald-700",

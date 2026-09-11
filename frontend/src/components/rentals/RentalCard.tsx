@@ -5,7 +5,7 @@ import Link from "next/link";
 import type { Rental } from "@/lib/api/rentals";
 import { RENTAL_STATUS_BADGE_CLASSES, RENTAL_STATUS_LABELS, formatDate, formatPrice } from "@/lib/format";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000";
+const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "";
 
 export function RentalCard({
   rental,

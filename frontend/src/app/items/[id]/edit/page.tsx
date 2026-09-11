@@ -10,7 +10,7 @@ import { deleteItemImage, getItem, updateItem, uploadItemImages, type ItemDetail
 import { ApiError } from "@/lib/api/client";
 import { ItemForm, formValuesToPayload, type ItemFormValues } from "@/components/items/ItemForm";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000";
+const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "";
 
 export default function EditItemPage() {
   const { id } = useParams<{ id: string }>();

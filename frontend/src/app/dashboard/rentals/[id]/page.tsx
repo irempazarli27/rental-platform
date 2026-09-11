@@ -20,7 +20,7 @@ import { ReviewSection } from "@/components/rentals/ReviewSection";
 import { DisputeSection } from "@/components/rentals/DisputeSection";
 import { startConversation } from "@/lib/api/messaging";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000";
+const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "";
 
 export default function RentalDetailPage() {
   const { id } = useParams<{ id: string }>();

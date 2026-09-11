@@ -19,7 +19,7 @@ import { CONDITION_LABELS, DELIVERY_LABELS, RISK_LABELS, formatDate, formatPrice
 import { RentalRequestForm } from "@/components/items/RentalRequestForm";
 import { startConversation } from "@/lib/api/messaging";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000";
+const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "";
 
 export default function ItemDetailPage() {
   const { id } = useParams<{ id: string }>();

@@ -119,7 +119,7 @@ export default function AdminDisputeDetailPage() {
               <div key={e.id}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
-                  src={`${process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000"}${e.mediaUrl}`}
+                  src={`${process.env.NEXT_PUBLIC_API_URL ?? ""}${e.mediaUrl}`}
                   alt={e.description ?? "Kanıt"}
                   className="aspect-square w-full rounded-xl object-cover"
                 />

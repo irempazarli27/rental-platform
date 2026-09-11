@@ -40,7 +40,10 @@ services:
     build:
       context: ./frontend
       args:
-        NEXT_PUBLIC_API_URL: ${PUBLIC_ORIGIN}
+        # Deliberately NOT set: leaving it unset makes the client bundle use
+        # same-origin relative requests, so the one build works behind the
+        # LAN IP, the Cloudflare tunnel, or any future domain — see the
+        # comment in lib/api/client.ts.
         NEXT_PUBLIC_GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
     restart: unless-stopped
     environment:
