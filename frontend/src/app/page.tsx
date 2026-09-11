@@ -5,7 +5,12 @@ import { ItemCard } from "@/components/items/ItemCard";
 import type { Category } from "@/lib/api/categories";
 import type { ItemSummary } from "@/lib/api/items";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000";
+// Server-side rendering runs inside the frontend container, so it talks to the
+// backend over the internal Docker network directly rather than through the
+// public HTTPS origin — going out through nginx would mean validating our own
+// self-signed cert, which Node's fetch (unlike a browser) has no way to
+// click past, and every server-rendered fetch here would fail.
+const API_URL = process.env.INTERNAL_API_URL ?? process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000";
 
 async function getHomeData(): Promise<{ categories: Category[]; items: ItemSummary[] }> {
   try {

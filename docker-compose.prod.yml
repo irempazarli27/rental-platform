@@ -43,6 +43,10 @@ services:
         NEXT_PUBLIC_API_URL: ${PUBLIC_ORIGIN}
         NEXT_PUBLIC_GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
     restart: unless-stopped
+    environment:
+      # Server-rendered pages fetch the backend over the internal Docker
+      # network, not through nginx/TLS — see the comment in app/page.tsx.
+      INTERNAL_API_URL: http://backend:4000
     depends_on:
       - backend
 

@@ -5,7 +5,9 @@ import { formatDate } from "@/lib/format";
 import type { ItemSummary } from "@/lib/api/items";
 import type { PublicReview } from "@/lib/api/reviews";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000";
+// See app/page.tsx for why server-rendered fetches use the internal Docker
+// network address instead of the public (self-signed HTTPS) origin.
+const API_URL = process.env.INTERNAL_API_URL ?? process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000";
 
 interface ProfileUser {
   id: string;
