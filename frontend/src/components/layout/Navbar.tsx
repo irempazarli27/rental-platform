@@ -2,40 +2,55 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { Bell, MessageCircle, Package } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import { listNotifications } from "@/lib/api/notifications";
 import { listConversations } from "@/lib/api/messaging";
 
+const POLL_INTERVAL_MS = 30_000;
+
 export function Navbar() {
   const { user, isLoading, logout } = useAuth();
   const router = useRouter();
+  const pathname = usePathname();
   const [unreadCount, setUnreadCount] = useState(0);
   const [unreadMessages, setUnreadMessages] = useState(0);
 
   useEffect(() => {
-    async function run() {
-      if (!user) {
-        setUnreadCount(0);
-        setUnreadMessages(0);
-        return;
-      }
+    if (!user) {
+      setUnreadCount(0);
+      setUnreadMessages(0);
+      return;
+    }
+
+    let cancelled = false;
+
+    async function refresh() {
       try {
         const { unreadCount } = await listNotifications();
-        setUnreadCount(unreadCount);
+        if (!cancelled) setUnreadCount(unreadCount);
       } catch {
         // Non-critical — the badge just stays at its previous value.
       }
       try {
         const { unreadCount: unreadMsgs } = await listConversations();
-        setUnreadMessages(unreadMsgs);
+        if (!cancelled) setUnreadMessages(unreadMsgs);
       } catch {
         // Non-critical — the badge just stays at its previous value.
       }
     }
-    run();
-  }, [user]);
+
+    // Re-check whenever the user navigates (e.g. away from a conversation or
+    // the notifications page, both of which mark things read as a side
+    // effect) and periodically in case they stay on one page for a while.
+    refresh();
+    const interval = setInterval(refresh, POLL_INTERVAL_MS);
+    return () => {
+      cancelled = true;
+      clearInterval(interval);
+    };
+  }, [user, pathname]);
 
   async function handleLogout() {
     // A protected page (e.g. /dashboard) redirects to /login on its own once the
