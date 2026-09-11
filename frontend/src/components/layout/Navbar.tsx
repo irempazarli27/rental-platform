@@ -120,7 +120,7 @@ export function Navbar() {
               </Link>
               {user.role === "admin" && (
                 <Link
-                  href="/admin/disputes"
+                  href="/admin"
                   className="hidden whitespace-nowrap rounded-full px-2.5 py-2 text-sm font-medium text-red-600 hover:bg-red-50 sm:inline sm:px-4"
                 >
                   Admin Paneli
