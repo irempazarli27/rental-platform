@@ -57,17 +57,17 @@ export function ReviewSection({ rentalId, isCompleted, viewerId }: { rentalId: s
   }
 
   return (
-    <section className="rounded-lg border border-zinc-200 bg-white p-4">
-      <h3 className="text-sm font-semibold text-zinc-900">Değerlendirme</h3>
+    <section className="rounded-2xl border border-stone-200 bg-white p-4">
+      <h3 className="text-sm font-semibold text-stone-900">Değerlendirme</h3>
 
       {myReview ? (
-        <div className="mt-2 rounded-md bg-zinc-50 p-3">
+        <div className="mt-2 rounded-xl bg-stone-50 p-3">
           <div className="flex items-center justify-between">
             <Stars rating={myReview.rating!} />
-            <span className="text-xs text-zinc-400">{formatDate(myReview.createdAt)}</span>
+            <span className="text-xs text-stone-400">{formatDate(myReview.createdAt)}</span>
           </div>
-          {myReview.comment && <p className="mt-1 text-sm text-zinc-600">{myReview.comment}</p>}
-          <p className="mt-1 text-xs text-zinc-400">Senin değerlendirmen</p>
+          {myReview.comment && <p className="mt-1 text-sm text-stone-600">{myReview.comment}</p>}
+          <p className="mt-1 text-xs text-stone-400">Senin değerlendirmen</p>
         </div>
       ) : (
         <form onSubmit={handleSubmit} className="mt-3 flex flex-col gap-2">
@@ -77,7 +77,7 @@ export function ReviewSection({ rentalId, isCompleted, viewerId }: { rentalId: s
                 key={n}
                 type="button"
                 onClick={() => setRating(n)}
-                className={`text-2xl ${n <= rating ? "text-amber-500" : "text-zinc-300"}`}
+                className={`text-2xl ${n <= rating ? "text-amber-500" : "text-stone-300"}`}
                 aria-label={`${n} yıldız`}
               >
                 ★
@@ -89,37 +89,37 @@ export function ReviewSection({ rentalId, isCompleted, viewerId }: { rentalId: s
             value={comment}
             onChange={(e) => setComment(e.target.value)}
             placeholder="Deneyimini paylaş (opsiyonel)"
-            className="w-full rounded-md border border-zinc-300 px-3 py-2 text-sm focus:border-zinc-500 focus:outline-none"
+            className="w-full rounded-xl border border-stone-300 px-3 py-2 text-sm focus:border-rose-500 focus:outline-none focus:ring-2 focus:ring-rose-100"
           />
           {error && <p className="text-sm text-red-600">{error}</p>}
           <button
             type="submit"
             disabled={submitting}
-            className="w-fit rounded-md bg-zinc-900 px-4 py-2 text-sm font-medium text-white hover:bg-zinc-800 disabled:opacity-50"
+            className="w-fit rounded-full bg-rose-600 px-4 py-2 text-sm font-medium text-white hover:bg-rose-700 disabled:opacity-50"
           >
             Değerlendirmeyi Gönder
           </button>
         </form>
       )}
 
-      <div className="mt-3 border-t border-zinc-100 pt-3">
+      <div className="mt-3 border-t border-stone-100 pt-3">
         {otherReview ? (
           otherReview.revealed ? (
-            <div className="rounded-md bg-zinc-50 p-3">
+            <div className="rounded-xl bg-stone-50 p-3">
               <div className="flex items-center justify-between">
                 <Stars rating={otherReview.rating!} />
-                <span className="text-xs text-zinc-400">{formatDate(otherReview.createdAt)}</span>
+                <span className="text-xs text-stone-400">{formatDate(otherReview.createdAt)}</span>
               </div>
-              {otherReview.comment && <p className="mt-1 text-sm text-zinc-600">{otherReview.comment}</p>}
-              <p className="mt-1 text-xs text-zinc-400">Karşı tarafın değerlendirmesi</p>
+              {otherReview.comment && <p className="mt-1 text-sm text-stone-600">{otherReview.comment}</p>}
+              <p className="mt-1 text-xs text-stone-400">Karşı tarafın değerlendirmesi</p>
             </div>
           ) : (
-            <p className="text-sm text-zinc-500">
+            <p className="text-sm text-stone-500">
               Karşı taraf değerlendirme yaptı — sen de değerlendirme yaptığında görünür olacak.
             </p>
           )
         ) : (
-          <p className="text-sm text-zinc-500">Karşı taraf henüz değerlendirme yapmadı.</p>
+          <p className="text-sm text-stone-500">Karşı taraf henüz değerlendirme yapmadı.</p>
         )}
       </div>
     </section>

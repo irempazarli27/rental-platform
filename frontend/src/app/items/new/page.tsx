@@ -39,13 +39,13 @@ export default function NewItemPage() {
   }
 
   if (isLoading || !user) {
-    return <div className="mx-auto max-w-3xl px-4 py-16 text-sm text-zinc-500">Yükleniyor...</div>;
+    return <div className="mx-auto max-w-3xl px-4 py-16 text-sm text-stone-500">Yükleniyor...</div>;
   }
 
   return (
     <div className="mx-auto w-full max-w-3xl px-4 py-12 sm:px-6">
-      <h1 className="text-2xl font-semibold text-zinc-900">Yeni İlan Oluştur</h1>
-      <p className="mt-1 text-sm text-zinc-600">
+      <h1 className="text-2xl font-semibold text-stone-900">Yeni İlan Oluştur</h1>
+      <p className="mt-1 text-sm text-stone-600">
         Fotoğrafları ilanı oluşturduktan sonra ekleyebilirsin.
       </p>
 

@@ -51,26 +51,26 @@ export function DamageReports({ rentalId }: { rentalId: string }) {
   if (isLoading) return null;
 
   return (
-    <section className="rounded-lg border border-zinc-200 bg-white p-4">
+    <section className="rounded-2xl border border-stone-200 bg-white p-4">
       <div className="flex items-center justify-between">
-        <h3 className="text-sm font-semibold text-zinc-900">Hasar Bildirimleri</h3>
+        <h3 className="text-sm font-semibold text-stone-900">Hasar Bildirimleri</h3>
         {!showForm && (
-          <button onClick={() => setShowForm(true)} className="text-xs font-medium text-zinc-700 underline">
+          <button onClick={() => setShowForm(true)} className="text-xs font-medium text-stone-700 underline">
             Hasar Bildir
           </button>
         )}
       </div>
 
-      {reports.length === 0 && !showForm && <p className="mt-2 text-sm text-zinc-500">Bildirilen hasar yok.</p>}
+      {reports.length === 0 && !showForm && <p className="mt-2 text-sm text-stone-500">Bildirilen hasar yok.</p>}
 
       <div className="mt-2 flex flex-col gap-2">
         {reports.map((r) => (
-          <div key={r.id} className="rounded-md bg-zinc-50 p-3 text-sm">
+          <div key={r.id} className="rounded-xl bg-stone-50 p-3 text-sm">
             <div className="flex items-center justify-between">
-              <span className="font-medium text-zinc-900">{SEVERITY_LABELS[r.severity]}</span>
-              <span className="text-xs text-zinc-400">{formatDate(r.createdAt)}</span>
+              <span className="font-medium text-stone-900">{SEVERITY_LABELS[r.severity]}</span>
+              <span className="text-xs text-stone-400">{formatDate(r.createdAt)}</span>
             </div>
-            <p className="mt-1 text-zinc-600">{r.description}</p>
+            <p className="mt-1 text-stone-600">{r.description}</p>
           </div>
         ))}
       </div>
@@ -84,12 +84,12 @@ export function DamageReports({ rentalId }: { rentalId: string }) {
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             placeholder="Hasarı açıkla..."
-            className="w-full rounded-md border border-zinc-300 px-3 py-2 text-sm focus:border-zinc-500 focus:outline-none"
+            className="w-full rounded-xl border border-stone-300 px-3 py-2 text-sm focus:border-rose-500 focus:outline-none focus:ring-2 focus:ring-rose-100"
           />
           <select
             value={severity}
             onChange={(e) => setSeverity(e.target.value as typeof severity)}
-            className="w-fit rounded-md border border-zinc-300 px-3 py-2 text-sm focus:border-zinc-500 focus:outline-none"
+            className="w-fit rounded-xl border border-stone-300 px-3 py-2 text-sm focus:border-rose-500 focus:outline-none focus:ring-2 focus:ring-rose-100"
           >
             <option value="minor">Hafif</option>
             <option value="moderate">Orta</option>
@@ -100,14 +100,14 @@ export function DamageReports({ rentalId }: { rentalId: string }) {
             <button
               type="submit"
               disabled={submitting}
-              className="rounded-md bg-zinc-900 px-4 py-2 text-sm font-medium text-white hover:bg-zinc-800 disabled:opacity-50"
+              className="rounded-full bg-rose-600 px-4 py-2 text-sm font-medium text-white hover:bg-rose-700 disabled:opacity-50"
             >
               Gönder
             </button>
             <button
               type="button"
               onClick={() => setShowForm(false)}
-              className="rounded-md border border-zinc-300 px-4 py-2 text-sm text-zinc-700 hover:bg-zinc-100"
+              className="rounded-full border border-stone-300 px-4 py-2 text-sm text-stone-700 hover:bg-stone-100"
             >
               Vazgeç
             </button>

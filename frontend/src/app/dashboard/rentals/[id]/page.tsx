@@ -85,14 +85,14 @@ export default function RentalDetailPage() {
   }
 
   if (authLoading || isLoading) {
-    return <div className="mx-auto max-w-3xl px-4 py-16 text-sm text-zinc-500">Yükleniyor...</div>;
+    return <div className="mx-auto max-w-3xl px-4 py-16 text-sm text-stone-500">Yükleniyor...</div>;
   }
 
   if (loadError || !rental || !user) {
     return (
       <div className="mx-auto max-w-3xl px-4 py-16">
         <p className="text-sm text-red-600">{loadError ?? "Kiralama bulunamadı."}</p>
-        <Link href="/dashboard/rentals" className="mt-2 inline-block text-sm font-medium text-zinc-900 underline">
+        <Link href="/dashboard/rentals" className="mt-2 inline-block text-sm font-medium text-stone-900 underline">
           Kiralamalarıma dön
         </Link>
       </div>
@@ -108,67 +108,67 @@ export default function RentalDetailPage() {
   return (
     <div className="mx-auto w-full max-w-3xl px-4 py-12 sm:px-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-semibold text-zinc-900">Kiralama Detayı</h1>
+        <h1 className="text-2xl font-semibold text-stone-900">Kiralama Detayı</h1>
         <span className={`rounded px-2 py-1 text-xs font-medium ${RENTAL_STATUS_BADGE_CLASSES[rental.status]}`}>
           {RENTAL_STATUS_LABELS[rental.status]}
         </span>
       </div>
 
-      <div className="mt-6 flex items-center gap-4 rounded-lg border border-zinc-200 bg-white p-4">
-        <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-md bg-zinc-100">
+      <div className="mt-6 flex items-center gap-4 rounded-2xl border border-stone-200 bg-white p-4">
+        <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-xl bg-stone-100">
           {rental.item?.coverImageUrl && (
             <Image src={`${API_URL}${rental.item.coverImageUrl}`} alt={rental.item.title} fill unoptimized className="object-cover" />
           )}
         </div>
         <div>
           {rental.item && (
-            <Link href={`/items/${rental.item.id}`} className="text-sm font-medium text-zinc-900 hover:underline">
+            <Link href={`/items/${rental.item.id}`} className="text-sm font-medium text-stone-900 hover:underline">
               {rental.item.title}
             </Link>
           )}
-          <p className="text-xs text-zinc-500">
+          <p className="text-xs text-stone-500">
             {formatDate(rental.startDate)} – {formatDate(rental.endDate)}
           </p>
         </div>
       </div>
 
       <div className="mt-4 grid gap-4 sm:grid-cols-2">
-        <section className="rounded-lg border border-zinc-200 bg-white p-4">
-          <h2 className="text-sm font-semibold text-zinc-900">
+        <section className="rounded-2xl border border-stone-200 bg-white p-4">
+          <h2 className="text-sm font-semibold text-stone-900">
             {isOwner ? "Kiracı" : "Eşya Sahibi"}
           </h2>
           {counterparty ? (
-            <Link href={`/profile/${counterparty.id}`} className="mt-2 block text-sm text-zinc-700 hover:underline">
+            <Link href={`/profile/${counterparty.id}`} className="mt-2 block text-sm text-stone-700 hover:underline">
               {counterparty.fullName}
             </Link>
           ) : (
-            <p className="mt-2 text-sm text-zinc-700">—</p>
+            <p className="mt-2 text-sm text-stone-700">—</p>
           )}
           {counterparty && isParticipant && (
             <button
               disabled={messaging}
               onClick={() => handleMessage(counterparty.id, rental.item?.id)}
-              className="mt-2 text-xs font-medium text-zinc-700 underline disabled:opacity-50"
+              className="mt-2 text-xs font-medium text-stone-700 underline disabled:opacity-50"
             >
               Mesajlaş
             </button>
           )}
         </section>
 
-        <section className="rounded-lg border border-zinc-200 bg-white p-4">
-          <h2 className="text-sm font-semibold text-zinc-900">Ücret Dökümü</h2>
+        <section className="rounded-2xl border border-stone-200 bg-white p-4">
+          <h2 className="text-sm font-semibold text-stone-900">Ücret Dökümü</h2>
           <dl className="mt-2 space-y-1 text-sm">
             <div className="flex justify-between">
-              <dt className="text-zinc-500">Kira bedeli</dt>
-              <dd className="text-zinc-900">{formatPrice(rental.rentalPrice)}</dd>
+              <dt className="text-stone-500">Kira bedeli</dt>
+              <dd className="text-stone-900">{formatPrice(rental.rentalPrice)}</dd>
             </div>
             <div className="flex justify-between">
-              <dt className="text-zinc-500">Platform bedeli</dt>
-              <dd className="text-zinc-900">{formatPrice(rental.platformFee)}</dd>
+              <dt className="text-stone-500">Platform bedeli</dt>
+              <dd className="text-stone-900">{formatPrice(rental.platformFee)}</dd>
             </div>
             <div className="flex justify-between">
-              <dt className="text-zinc-500">Güvence bedeli</dt>
-              <dd className="text-zinc-900">{formatPrice(rental.depositAmount)}</dd>
+              <dt className="text-stone-500">Güvence bedeli</dt>
+              <dd className="text-stone-900">{formatPrice(rental.depositAmount)}</dd>
             </div>
             <div className="flex justify-between font-semibold">
               <dt>Toplam</dt>
@@ -178,9 +178,9 @@ export default function RentalDetailPage() {
         </section>
       </div>
 
-      <section className="mt-4 rounded-lg border border-zinc-200 bg-white p-4">
-        <h2 className="text-sm font-semibold text-zinc-900">Durum Geçmişi</h2>
-        <ul className="mt-2 space-y-1 text-sm text-zinc-600">
+      <section className="mt-4 rounded-2xl border border-stone-200 bg-white p-4">
+        <h2 className="text-sm font-semibold text-stone-900">Durum Geçmişi</h2>
+        <ul className="mt-2 space-y-1 text-sm text-stone-600">
           <li>Talep oluşturuldu — {formatDate(rental.createdAt)}</li>
           {rental.acceptedAt && <li>Kabul edildi — {formatDate(rental.acceptedAt)}</li>}
           {rental.rejectedAt && <li>Reddedildi — {formatDate(rental.rejectedAt)}</li>}
@@ -192,7 +192,7 @@ export default function RentalDetailPage() {
       {actionError && <p className="mt-4 text-sm text-red-600">{actionError}</p>}
 
       {!isParticipant && (
-        <p className="mt-4 rounded-md bg-zinc-100 px-3 py-2 text-xs text-zinc-500">
+        <p className="mt-4 rounded-xl bg-stone-100 px-3 py-2 text-xs text-stone-500">
           Bunu bir admin olarak salt-okunur görüntülüyorsun.
         </p>
       )}
@@ -204,14 +204,14 @@ export default function RentalDetailPage() {
             <button
               disabled={busy}
               onClick={() => runAction(() => acceptRental(rental.id))}
-              className="rounded-md bg-zinc-900 px-4 py-2 text-sm font-medium text-white hover:bg-zinc-800 disabled:opacity-50"
+              className="rounded-full bg-rose-600 px-4 py-2 text-sm font-medium text-white hover:bg-rose-700 disabled:opacity-50"
             >
               Kabul Et
             </button>
             <button
               disabled={busy}
               onClick={() => runAction(() => rejectRental(rental.id))}
-              className="rounded-md border border-zinc-300 px-4 py-2 text-sm font-medium text-zinc-700 hover:bg-zinc-100 disabled:opacity-50"
+              className="rounded-full border border-stone-300 px-4 py-2 text-sm font-medium text-stone-700 hover:bg-stone-100 disabled:opacity-50"
             >
               Reddet
             </button>
@@ -222,7 +222,7 @@ export default function RentalDetailPage() {
           <button
             disabled={busy}
             onClick={() => runAction(() => cancelRental(rental.id))}
-            className="rounded-md border border-red-200 px-4 py-2 text-sm font-medium text-red-600 hover:bg-red-50 disabled:opacity-50"
+            className="rounded-xl border border-red-200 px-4 py-2 text-sm font-medium text-red-600 hover:bg-red-50 disabled:opacity-50"
           >
             İptal Et
           </button>
@@ -231,7 +231,7 @@ export default function RentalDetailPage() {
         {viewerRole === "owner" && rental.status === "ACCEPTED" && (
           <Link
             href={`/dashboard/rentals/${rental.id}/handover/pickup`}
-            className="rounded-md bg-zinc-900 px-4 py-2 text-sm font-medium text-white hover:bg-zinc-800"
+            className="rounded-full bg-rose-600 px-4 py-2 text-sm font-medium text-white hover:bg-rose-700"
           >
             Teslim Belgelerini Doldur
           </Link>
@@ -240,7 +240,7 @@ export default function RentalDetailPage() {
           <button
             disabled={busy}
             onClick={() => runAction(() => confirmHandover(rental.id, "pickup"))}
-            className="rounded-md bg-zinc-900 px-4 py-2 text-sm font-medium text-white hover:bg-zinc-800 disabled:opacity-50"
+            className="rounded-full bg-rose-600 px-4 py-2 text-sm font-medium text-white hover:bg-rose-700 disabled:opacity-50"
           >
             Teslim Aldım, Onaylıyorum
           </button>
@@ -248,7 +248,7 @@ export default function RentalDetailPage() {
         {viewerRole === "renter" && rental.status === "ACTIVE" && (
           <Link
             href={`/dashboard/rentals/${rental.id}/handover/return`}
-            className="rounded-md bg-zinc-900 px-4 py-2 text-sm font-medium text-white hover:bg-zinc-800"
+            className="rounded-full bg-rose-600 px-4 py-2 text-sm font-medium text-white hover:bg-rose-700"
           >
             İade Belgelerini Doldur
           </Link>
@@ -257,7 +257,7 @@ export default function RentalDetailPage() {
           <button
             disabled={busy}
             onClick={() => runAction(() => confirmHandover(rental.id, "return"))}
-            className="rounded-md bg-zinc-900 px-4 py-2 text-sm font-medium text-white hover:bg-zinc-800 disabled:opacity-50"
+            className="rounded-full bg-rose-600 px-4 py-2 text-sm font-medium text-white hover:bg-rose-700 disabled:opacity-50"
           >
             İadeyi Onaylıyorum
           </button>

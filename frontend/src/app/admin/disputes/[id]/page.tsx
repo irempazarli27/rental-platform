@@ -60,7 +60,7 @@ export default function AdminDisputeDetailPage() {
     }
   }
 
-  if (isLoading) return <div className="mx-auto max-w-5xl px-4 py-8 text-sm text-zinc-500">Yükleniyor...</div>;
+  if (isLoading) return <div className="mx-auto max-w-5xl px-4 py-8 text-sm text-stone-500">Yükleniyor...</div>;
   if (!detail) return <div className="mx-auto max-w-5xl px-4 py-8 text-sm text-red-600">Uyuşmazlık bulunamadı.</div>;
 
   const { dispute, openedByName, rental, handover, damageReports, messages } = detail;
@@ -68,42 +68,42 @@ export default function AdminDisputeDetailPage() {
 
   return (
     <div className="mx-auto w-full max-w-5xl px-4 py-8 sm:px-6">
-      <h1 className="text-xl font-semibold text-zinc-900">Uyuşmazlık Detayı</h1>
+      <h1 className="text-xl font-semibold text-stone-900">Uyuşmazlık Detayı</h1>
 
-      <section className="mt-4 rounded-lg border border-zinc-200 bg-white p-4">
-        <p className="text-sm text-zinc-500">
+      <section className="mt-4 rounded-2xl border border-stone-200 bg-white p-4">
+        <p className="text-sm text-stone-500">
           {openedByName} tarafından açıldı — {formatDate(dispute.createdAt)}
         </p>
-        <p className="mt-2 text-sm text-zinc-900">{dispute.reason}</p>
+        <p className="mt-2 text-sm text-stone-900">{dispute.reason}</p>
         {dispute.resolutionNotes && (
-          <p className="mt-2 rounded-md bg-emerald-50 p-2 text-sm text-emerald-800">
+          <p className="mt-2 rounded-xl bg-emerald-50 p-2 text-sm text-emerald-800">
             Sonuç: {dispute.resolutionNotes}
           </p>
         )}
       </section>
 
       <div className="mt-4 grid gap-4 sm:grid-cols-2">
-        <section className="rounded-lg border border-zinc-200 bg-white p-4">
-          <h2 className="text-sm font-semibold text-zinc-900">Kiralama</h2>
-          <p className="mt-2 text-sm text-zinc-700">{rental.item?.title}</p>
-          <p className="text-xs text-zinc-500">
+        <section className="rounded-2xl border border-stone-200 bg-white p-4">
+          <h2 className="text-sm font-semibold text-stone-900">Kiralama</h2>
+          <p className="mt-2 text-sm text-stone-700">{rental.item?.title}</p>
+          <p className="text-xs text-stone-500">
             {formatDate(rental.startDate)} – {formatDate(rental.endDate)}
           </p>
-          <p className="mt-2 text-sm text-zinc-700">Kiracı: {rental.renter?.fullName}</p>
-          <p className="text-sm text-zinc-700">Sahip: {rental.owner?.fullName}</p>
-          <p className="mt-2 text-sm font-medium text-zinc-900">Güvence bedeli: {formatPrice(rental.depositAmount)}</p>
+          <p className="mt-2 text-sm text-stone-700">Kiracı: {rental.renter?.fullName}</p>
+          <p className="text-sm text-stone-700">Sahip: {rental.owner?.fullName}</p>
+          <p className="mt-2 text-sm font-medium text-stone-900">Güvence bedeli: {formatPrice(rental.depositAmount)}</p>
         </section>
 
-        <section className="rounded-lg border border-zinc-200 bg-white p-4">
-          <h2 className="text-sm font-semibold text-zinc-900">Hasar Bildirimleri</h2>
+        <section className="rounded-2xl border border-stone-200 bg-white p-4">
+          <h2 className="text-sm font-semibold text-stone-900">Hasar Bildirimleri</h2>
           {damageReports.length === 0 ? (
-            <p className="mt-2 text-sm text-zinc-500">Yok</p>
+            <p className="mt-2 text-sm text-stone-500">Yok</p>
           ) : (
             <div className="mt-2 flex flex-col gap-2">
               {damageReports.map((r) => (
-                <div key={r.id} className="rounded-md bg-zinc-50 p-2 text-sm">
-                  <p className="font-medium text-zinc-900">{r.severity}</p>
-                  <p className="text-zinc-600">{r.description}</p>
+                <div key={r.id} className="rounded-xl bg-stone-50 p-2 text-sm">
+                  <p className="font-medium text-stone-900">{r.severity}</p>
+                  <p className="text-stone-600">{r.description}</p>
                 </div>
               ))}
             </div>
@@ -112,8 +112,8 @@ export default function AdminDisputeDetailPage() {
       </div>
 
       {dispute.evidence.length > 0 && (
-        <section className="mt-4 rounded-lg border border-zinc-200 bg-white p-4">
-          <h2 className="text-sm font-semibold text-zinc-900">Kanıtlar</h2>
+        <section className="mt-4 rounded-2xl border border-stone-200 bg-white p-4">
+          <h2 className="text-sm font-semibold text-stone-900">Kanıtlar</h2>
           <div className="mt-2 grid grid-cols-4 gap-2">
             {dispute.evidence.map((e) => (
               <div key={e.id}>
@@ -121,9 +121,9 @@ export default function AdminDisputeDetailPage() {
                 <img
                   src={`${process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000"}${e.mediaUrl}`}
                   alt={e.description ?? "Kanıt"}
-                  className="aspect-square w-full rounded-md object-cover"
+                  className="aspect-square w-full rounded-xl object-cover"
                 />
-                {e.description && <p className="mt-1 text-xs text-zinc-500">{e.description}</p>}
+                {e.description && <p className="mt-1 text-xs text-stone-500">{e.description}</p>}
               </div>
             ))}
           </div>
@@ -136,12 +136,12 @@ export default function AdminDisputeDetailPage() {
       </div>
 
       {messages.length > 0 && (
-        <section className="mt-4 rounded-lg border border-zinc-200 bg-white p-4">
-          <h2 className="text-sm font-semibold text-zinc-900">Taraf Mesajları</h2>
+        <section className="mt-4 rounded-2xl border border-stone-200 bg-white p-4">
+          <h2 className="text-sm font-semibold text-stone-900">Taraf Mesajları</h2>
           <div className="mt-2 flex flex-col gap-1">
             {messages.map((m) => (
-              <p key={m.id} className="text-sm text-zinc-700">
-                <span className="text-xs text-zinc-400">{formatDate(m.createdAt)}:</span> {m.content}
+              <p key={m.id} className="text-sm text-stone-700">
+                <span className="text-xs text-stone-400">{formatDate(m.createdAt)}:</span> {m.content}
               </p>
             ))}
           </div>
@@ -149,13 +149,13 @@ export default function AdminDisputeDetailPage() {
       )}
 
       {isOpen && (
-        <section className="mt-4 rounded-lg border border-zinc-300 bg-white p-4">
-          <h2 className="text-sm font-semibold text-zinc-900">Sonuçlandır</h2>
+        <section className="mt-4 rounded-2xl border border-stone-300 bg-white p-4">
+          <h2 className="text-sm font-semibold text-stone-900">Sonuçlandır</h2>
           <form onSubmit={handleResolve} className="mt-2 flex flex-col gap-3">
             <select
               value={status}
               onChange={(e) => setStatus(e.target.value as typeof status)}
-              className="w-fit rounded-md border border-zinc-300 px-3 py-2 text-sm focus:border-zinc-500 focus:outline-none"
+              className="w-fit rounded-xl border border-stone-300 px-3 py-2 text-sm focus:border-rose-500 focus:outline-none focus:ring-2 focus:ring-rose-100"
             >
               {Object.entries(RESOLUTION_LABELS).map(([value, label]) => (
                 <option key={value} value={value}>
@@ -173,7 +173,7 @@ export default function AdminDisputeDetailPage() {
                 value={claimedAmount}
                 onChange={(e) => setClaimedAmount(e.target.value)}
                 placeholder="Sahibe kesilecek tutar (₺)"
-                className="w-fit rounded-md border border-zinc-300 px-3 py-2 text-sm focus:border-zinc-500 focus:outline-none"
+                className="w-fit rounded-xl border border-stone-300 px-3 py-2 text-sm focus:border-rose-500 focus:outline-none focus:ring-2 focus:ring-rose-100"
               />
             )}
 
@@ -184,13 +184,13 @@ export default function AdminDisputeDetailPage() {
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
               placeholder="Karar gerekçesi..."
-              className="w-full rounded-md border border-zinc-300 px-3 py-2 text-sm focus:border-zinc-500 focus:outline-none"
+              className="w-full rounded-xl border border-stone-300 px-3 py-2 text-sm focus:border-rose-500 focus:outline-none focus:ring-2 focus:ring-rose-100"
             />
             {error && <p className="text-sm text-red-600">{error}</p>}
             <button
               type="submit"
               disabled={submitting}
-              className="w-fit rounded-md bg-zinc-900 px-4 py-2 text-sm font-medium text-white hover:bg-zinc-800 disabled:opacity-50"
+              className="w-fit rounded-full bg-rose-600 px-4 py-2 text-sm font-medium text-white hover:bg-rose-700 disabled:opacity-50"
             >
               Sonuçlandır
             </button>

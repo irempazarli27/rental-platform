@@ -59,7 +59,7 @@ export default function EditItemPage() {
   }
 
   if (authLoading || isLoading) {
-    return <div className="mx-auto max-w-3xl px-4 py-16 text-sm text-zinc-500">Yükleniyor...</div>;
+    return <div className="mx-auto max-w-3xl px-4 py-16 text-sm text-stone-500">Yükleniyor...</div>;
   }
 
   if (loadError || !item) {
@@ -72,7 +72,7 @@ export default function EditItemPage() {
 
   return (
     <div className="mx-auto w-full max-w-3xl px-4 py-12 sm:px-6">
-      <h1 className="text-2xl font-semibold text-zinc-900">İlanı Düzenle</h1>
+      <h1 className="text-2xl font-semibold text-stone-900">İlanı Düzenle</h1>
 
       <div className="mt-8">
         <ItemForm

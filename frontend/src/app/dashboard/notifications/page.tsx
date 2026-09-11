@@ -50,31 +50,31 @@ export default function NotificationsPage() {
   }
 
   if (authLoading || isLoading) {
-    return <div className="mx-auto max-w-2xl px-4 py-16 text-sm text-zinc-500">Yükleniyor...</div>;
+    return <div className="mx-auto max-w-2xl px-4 py-16 text-sm text-stone-500">Yükleniyor...</div>;
   }
 
   return (
     <div className="mx-auto w-full max-w-2xl px-4 py-12 sm:px-6">
-      <h1 className="text-2xl font-semibold text-zinc-900">Bildirimler</h1>
+      <h1 className="text-2xl font-semibold text-stone-900">Bildirimler</h1>
 
       {notifications.length === 0 ? (
-        <p className="mt-8 text-sm text-zinc-500">Henüz bir bildirimin yok.</p>
+        <p className="mt-8 text-sm text-stone-500">Henüz bir bildirimin yok.</p>
       ) : (
         <div className="mt-6 flex flex-col gap-2">
           {notifications.map((notification) => {
             const href = linkFor(notification);
             const content = (
               <div
-                className={`rounded-lg border p-4 ${
-                  notification.readAt ? "border-zinc-200 bg-white" : "border-zinc-300 bg-zinc-50"
+                className={`rounded-2xl border p-4 ${
+                  notification.readAt ? "border-stone-200 bg-white" : "border-stone-300 bg-stone-50"
                 }`}
               >
                 <div className="flex items-center justify-between gap-2">
-                  <p className="text-sm font-medium text-zinc-900">{notification.title}</p>
-                  {!notification.readAt && <span className="h-2 w-2 shrink-0 rounded-full bg-zinc-900" />}
+                  <p className="text-sm font-medium text-stone-900">{notification.title}</p>
+                  {!notification.readAt && <span className="h-2 w-2 shrink-0 rounded-full bg-rose-600" />}
                 </div>
-                <p className="mt-1 text-sm text-zinc-600">{notification.body}</p>
-                <p className="mt-1 text-xs text-zinc-400">{formatDate(notification.createdAt)}</p>
+                <p className="mt-1 text-sm text-stone-600">{notification.body}</p>
+                <p className="mt-1 text-xs text-stone-400">{formatDate(notification.createdAt)}</p>
               </div>
             );
 

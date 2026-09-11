@@ -77,7 +77,7 @@ export function RentalRequestForm({
             min={today}
             value={startDate}
             onChange={(e) => setStartDate(e.target.value)}
-            className="mt-1 w-full rounded-lg border border-stone-300 px-2 py-1.5 text-sm focus:border-rose-500 focus:outline-none focus:ring-2 focus:ring-rose-100"
+            className="mt-1 w-full rounded-2xl border border-stone-300 px-2 py-1.5 text-sm focus:border-rose-500 focus:outline-none focus:ring-2 focus:ring-rose-100"
           />
         </div>
         <div>
@@ -91,7 +91,7 @@ export function RentalRequestForm({
             min={startDate || today}
             value={endDate}
             onChange={(e) => setEndDate(e.target.value)}
-            className="mt-1 w-full rounded-lg border border-stone-300 px-2 py-1.5 text-sm focus:border-rose-500 focus:outline-none focus:ring-2 focus:ring-rose-100"
+            className="mt-1 w-full rounded-2xl border border-stone-300 px-2 py-1.5 text-sm focus:border-rose-500 focus:outline-none focus:ring-2 focus:ring-rose-100"
           />
         </div>
       </div>

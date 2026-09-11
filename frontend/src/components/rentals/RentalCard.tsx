@@ -25,21 +25,21 @@ export function RentalCard({
   const counterparty = viewerRole === "renter" ? rental.owner : rental.renter;
 
   return (
-    <div className="flex items-center gap-4 rounded-lg border border-zinc-200 bg-white p-4">
-      <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-md bg-zinc-100">
+    <div className="flex items-center gap-4 rounded-2xl border border-stone-200 bg-white p-4">
+      <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-xl bg-stone-100">
         {rental.item?.coverImageUrl ? (
           <Image src={`${API_URL}${rental.item.coverImageUrl}`} alt={rental.item.title} fill unoptimized className="object-cover" />
         ) : null}
       </div>
 
       <div className="min-w-0 flex-1">
-        <Link href={`/dashboard/rentals/${rental.id}`} className="truncate text-sm font-medium text-zinc-900 hover:underline">
+        <Link href={`/dashboard/rentals/${rental.id}`} className="truncate text-sm font-medium text-stone-900 hover:underline">
           {rental.item?.title ?? "İlan"}
         </Link>
-        <p className="text-xs text-zinc-500">
+        <p className="text-xs text-stone-500">
           {formatDate(rental.startDate)} – {formatDate(rental.endDate)} · {counterparty?.fullName ?? "—"}
         </p>
-        <p className="text-xs font-medium text-zinc-700">{formatPrice(rental.totalAmount)}</p>
+        <p className="text-xs font-medium text-stone-700">{formatPrice(rental.totalAmount)}</p>
       </div>
 
       <span className={`shrink-0 rounded px-2 py-1 text-xs font-medium ${RENTAL_STATUS_BADGE_CLASSES[rental.status]}`}>
@@ -52,14 +52,14 @@ export function RentalCard({
             <button
               disabled={busy}
               onClick={() => onAccept?.(rental.id)}
-              className="rounded-md bg-zinc-900 px-3 py-1.5 text-xs font-medium text-white hover:bg-zinc-800 disabled:opacity-50"
+              className="rounded-full bg-rose-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-rose-700 disabled:opacity-50"
             >
               Kabul Et
             </button>
             <button
               disabled={busy}
               onClick={() => onReject?.(rental.id)}
-              className="rounded-md border border-zinc-300 px-3 py-1.5 text-xs font-medium text-zinc-700 hover:bg-zinc-100 disabled:opacity-50"
+              className="rounded-full border border-stone-300 px-3 py-1.5 text-xs font-medium text-stone-700 hover:bg-stone-100 disabled:opacity-50"
             >
               Reddet
             </button>
@@ -70,7 +70,7 @@ export function RentalCard({
           <button
             disabled={busy}
             onClick={() => onCancel?.(rental.id)}
-            className="rounded-md border border-red-200 px-3 py-1.5 text-xs font-medium text-red-600 hover:bg-red-50 disabled:opacity-50"
+            className="rounded-xl border border-red-200 px-3 py-1.5 text-xs font-medium text-red-600 hover:bg-red-50 disabled:opacity-50"
           >
             İptal Et
           </button>

@@ -47,7 +47,7 @@ export function HandoverWizard({ rentalId, phase }: { rentalId: string; phase: H
   }, [load]);
 
   if (isLoading) {
-    return <p className="text-sm text-zinc-500">Yükleniyor...</p>;
+    return <p className="text-sm text-stone-500">Yükleniyor...</p>;
   }
 
   if (loadError || !summary) {
@@ -94,7 +94,7 @@ export function HandoverWizard({ rentalId, phase }: { rentalId: string; phase: H
   }
 
   if (!current) {
-    return <p className="text-sm text-zinc-500">Bu eşya için gösterilecek adım yok.</p>;
+    return <p className="text-sm text-stone-500">Bu eşya için gösterilecek adım yok.</p>;
   }
 
   return (
@@ -108,10 +108,10 @@ export function HandoverWizard({ rentalId, phase }: { rentalId: string; phase: H
               onClick={() => setStepIndex(i)}
               className={`rounded-full px-3 py-1 text-xs font-medium ${
                 i === stepIndex
-                  ? "bg-zinc-900 text-white"
+                  ? "bg-rose-600 text-white"
                   : done
                     ? "bg-emerald-50 text-emerald-700"
-                    : "bg-zinc-100 text-zinc-500"
+                    : "bg-stone-100 text-stone-500"
               }`}
             >
               {done ? "✓ " : ""}
@@ -121,21 +121,21 @@ export function HandoverWizard({ rentalId, phase }: { rentalId: string; phase: H
         })}
       </div>
 
-      <div className="mt-6 rounded-lg border border-zinc-200 bg-white p-6">
-        <p className="text-xs font-medium text-zinc-500">
+      <div className="mt-6 rounded-2xl border border-stone-200 bg-white p-6">
+        <p className="text-xs font-medium text-stone-500">
           Adım {stepIndex + 1} / {wizardSteps.length}
           {!current.required && " (opsiyonel)"}
         </p>
-        <h2 className="mt-1 text-lg font-semibold text-zinc-900">{STEP_LABELS[current.step]}</h2>
+        <h2 className="mt-1 text-lg font-semibold text-stone-900">{STEP_LABELS[current.step]}</h2>
 
         {existingMedia.length > 0 && (
           <div className="mt-4 grid grid-cols-3 gap-2">
             {existingMedia.map((m) =>
               m.mediaType === "video" ? (
-                <video key={m.id} src={`${API_URL}${m.url}`} controls className="aspect-square w-full rounded-md bg-black object-cover" />
+                <video key={m.id} src={`${API_URL}${m.url}`} controls className="aspect-square w-full rounded-xl bg-black object-cover" />
               ) : (
                 // eslint-disable-next-line @next/next/no-img-element
-                <img key={m.id} src={`${API_URL}${m.url}`} alt={STEP_LABELS[current.step]} className="aspect-square w-full rounded-md object-cover" />
+                <img key={m.id} src={`${API_URL}${m.url}`} alt={STEP_LABELS[current.step]} className="aspect-square w-full rounded-xl object-cover" />
               ),
             )}
           </div>
@@ -149,9 +149,9 @@ export function HandoverWizard({ rentalId, phase }: { rentalId: string; phase: H
             capture="environment"
             disabled={uploading}
             onChange={handleFileChange}
-            className="text-sm text-zinc-600"
+            className="text-sm text-stone-600"
           />
-          {uploading && <p className="mt-1 text-xs text-zinc-500">Yükleniyor...</p>}
+          {uploading && <p className="mt-1 text-xs text-stone-500">Yükleniyor...</p>}
           {uploadError && <p className="mt-1 text-sm text-red-600">{uploadError}</p>}
         </div>
 
@@ -159,14 +159,14 @@ export function HandoverWizard({ rentalId, phase }: { rentalId: string; phase: H
           <button
             disabled={stepIndex === 0}
             onClick={() => setStepIndex((i) => Math.max(0, i - 1))}
-            className="rounded-md border border-zinc-300 px-3 py-1.5 text-sm text-zinc-700 hover:bg-zinc-100 disabled:opacity-40"
+            className="rounded-full border border-stone-300 px-3 py-1.5 text-sm text-stone-700 hover:bg-stone-100 disabled:opacity-40"
           >
             Önceki
           </button>
           <button
             disabled={isLastStep}
             onClick={() => setStepIndex((i) => Math.min(wizardSteps.length - 1, i + 1))}
-            className="rounded-md border border-zinc-300 px-3 py-1.5 text-sm text-zinc-700 hover:bg-zinc-100 disabled:opacity-40"
+            className="rounded-full border border-stone-300 px-3 py-1.5 text-sm text-stone-700 hover:bg-stone-100 disabled:opacity-40"
           >
             Sonraki
           </button>
@@ -174,8 +174,8 @@ export function HandoverWizard({ rentalId, phase }: { rentalId: string; phase: H
       </div>
 
       {allRequiredDone && (
-        <div className="mt-6 rounded-lg border border-zinc-200 bg-white p-6">
-          <label htmlFor="handover-notes" className="block text-sm font-medium text-zinc-700">
+        <div className="mt-6 rounded-2xl border border-stone-200 bg-white p-6">
+          <label htmlFor="handover-notes" className="block text-sm font-medium text-stone-700">
             Ek not (opsiyonel)
           </label>
           <textarea
@@ -184,13 +184,13 @@ export function HandoverWizard({ rentalId, phase }: { rentalId: string; phase: H
             value={notes}
             onChange={(e) => setNotes(e.target.value)}
             placeholder="Örn: Sağ alt köşede küçük bir çizik mevcut."
-            className="mt-1 w-full rounded-md border border-zinc-300 px-3 py-2 text-sm focus:border-zinc-500 focus:outline-none"
+            className="mt-1 w-full rounded-xl border border-stone-300 px-3 py-2 text-sm focus:border-rose-500 focus:outline-none focus:ring-2 focus:ring-rose-100"
           />
           {finishError && <p className="mt-2 text-sm text-red-600">{finishError}</p>}
           <button
             disabled={finishing}
             onClick={handleFinish}
-            className="mt-3 rounded-md bg-zinc-900 px-4 py-2.5 text-sm font-medium text-white hover:bg-zinc-800 disabled:opacity-50"
+            className="mt-3 rounded-full bg-rose-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-rose-700 disabled:opacity-50"
           >
             {finishing
               ? "Kaydediliyor..."

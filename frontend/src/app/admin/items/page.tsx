@@ -52,7 +52,7 @@ export default function AdminItemsPage() {
 
   return (
     <div className="mx-auto w-full max-w-5xl px-4 py-8 sm:px-6">
-      <h1 className="text-2xl font-semibold text-zinc-900">İlanlar</h1>
+      <h1 className="text-2xl font-semibold text-stone-900">İlanlar</h1>
 
       <select
         value={status}
@@ -61,7 +61,7 @@ export default function AdminItemsPage() {
           setStatus(v);
           load(v || undefined);
         }}
-        className="mt-4 w-fit rounded-md border border-zinc-300 px-3 py-2 text-sm focus:border-zinc-500 focus:outline-none"
+        className="mt-4 w-fit rounded-xl border border-stone-300 px-3 py-2 text-sm focus:border-rose-500 focus:outline-none focus:ring-2 focus:ring-rose-100"
       >
         <option value="">Tüm Durumlar</option>
         {Object.entries(STATUS_LABELS).map(([value, label]) => (
@@ -74,18 +74,18 @@ export default function AdminItemsPage() {
       {error && <p className="mt-3 text-sm text-red-600">{error}</p>}
 
       {isLoading ? (
-        <p className="mt-6 text-sm text-zinc-500">Yükleniyor...</p>
+        <p className="mt-6 text-sm text-stone-500">Yükleniyor...</p>
       ) : (
         <>
-          <p className="mt-4 text-xs text-zinc-500">{total} ilan</p>
+          <p className="mt-4 text-xs text-stone-500">{total} ilan</p>
           <div className="mt-2 flex flex-col gap-2">
             {items.map((item) => (
-              <div key={item.id} className="flex items-center justify-between gap-3 rounded-lg border border-zinc-200 bg-white p-4">
+              <div key={item.id} className="flex items-center justify-between gap-3 rounded-2xl border border-stone-200 bg-white p-4">
                 <div className="min-w-0">
-                  <Link href={`/items/${item.id}`} className="truncate text-sm font-medium text-zinc-900 hover:underline">
+                  <Link href={`/items/${item.id}`} className="truncate text-sm font-medium text-stone-900 hover:underline">
                     {item.title}
                   </Link>
-                  <p className="text-xs text-zinc-500">
+                  <p className="text-xs text-stone-500">
                     {STATUS_LABELS[item.status] ?? item.status} · {formatPrice(item.dailyPrice, item.currency)} / gün · Sahip: {item.ownerName ?? "—"}
                   </p>
                 </div>
@@ -93,7 +93,7 @@ export default function AdminItemsPage() {
                   <button
                     disabled={busyId === item.id}
                     onClick={() => handleRemove(item)}
-                    className="shrink-0 rounded-md border border-red-200 px-3 py-1.5 text-xs font-medium text-red-600 hover:bg-red-50 disabled:opacity-50"
+                    className="shrink-0 rounded-xl border border-red-200 px-3 py-1.5 text-xs font-medium text-red-600 hover:bg-red-50 disabled:opacity-50"
                   >
                     Kaldır
                   </button>

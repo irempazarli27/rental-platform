@@ -74,26 +74,26 @@ export default function MessageThreadPage() {
   }
 
   if (authLoading || isLoading) {
-    return <div className="mx-auto max-w-2xl px-4 py-16 text-sm text-zinc-500">Yükleniyor...</div>;
+    return <div className="mx-auto max-w-2xl px-4 py-16 text-sm text-stone-500">Yükleniyor...</div>;
   }
 
   return (
     <div className="mx-auto flex w-full max-w-2xl flex-1 flex-col px-4 py-8 sm:px-6">
-      <h1 className="text-xl font-semibold text-zinc-900">Mesajlar</h1>
+      <h1 className="text-xl font-semibold text-stone-900">Mesajlar</h1>
 
-      <div className="mt-4 flex-1 space-y-3 overflow-y-auto rounded-lg border border-zinc-200 bg-white p-4">
+      <div className="mt-4 flex-1 space-y-3 overflow-y-auto rounded-2xl border border-stone-200 bg-white p-4">
         {messages.length === 0 ? (
-          <p className="text-sm text-zinc-500">Henüz mesaj yok, ilk mesajı sen gönder.</p>
+          <p className="text-sm text-stone-500">Henüz mesaj yok, ilk mesajı sen gönder.</p>
         ) : (
           messages.map((m) => (
             <div key={m.id} className={`flex ${m.senderId === user?.id ? "justify-end" : "justify-start"}`}>
               <div
-                className={`max-w-[75%] rounded-lg px-3 py-2 text-sm ${
-                  m.senderId === user?.id ? "bg-zinc-900 text-white" : "bg-zinc-100 text-zinc-900"
+                className={`max-w-[75%] rounded-2xl px-3 py-2 text-sm ${
+                  m.senderId === user?.id ? "bg-rose-600 text-white" : "bg-stone-100 text-stone-900"
                 }`}
               >
                 <p>{m.content}</p>
-                <p className={`mt-1 text-[10px] ${m.senderId === user?.id ? "text-zinc-300" : "text-zinc-400"}`}>
+                <p className={`mt-1 text-[10px] ${m.senderId === user?.id ? "text-stone-300" : "text-stone-400"}`}>
                   {formatDate(m.createdAt)}
                 </p>
               </div>
@@ -111,12 +111,12 @@ export default function MessageThreadPage() {
           value={content}
           onChange={(e) => setContent(e.target.value)}
           placeholder="Bir mesaj yaz..."
-          className="flex-1 rounded-md border border-zinc-300 px-3 py-2 text-sm focus:border-zinc-500 focus:outline-none"
+          className="flex-1 rounded-xl border border-stone-300 px-3 py-2 text-sm focus:border-rose-500 focus:outline-none focus:ring-2 focus:ring-rose-100"
         />
         <button
           type="submit"
           disabled={sending || !content.trim()}
-          className="rounded-md bg-zinc-900 px-4 py-2 text-sm font-medium text-white hover:bg-zinc-800 disabled:opacity-50"
+          className="rounded-full bg-rose-600 px-4 py-2 text-sm font-medium text-white hover:bg-rose-700 disabled:opacity-50"
         >
           Gönder
         </button>

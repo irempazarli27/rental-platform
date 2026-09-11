@@ -62,7 +62,7 @@ export function HandoverPageShell({ phase }: { phase: HandoverPhase }) {
   }, [authLoading, user, router]);
 
   if (authLoading || isLoading) {
-    return <div className="mx-auto max-w-3xl px-4 py-16 text-sm text-zinc-500">Yükleniyor...</div>;
+    return <div className="mx-auto max-w-3xl px-4 py-16 text-sm text-stone-500">Yükleniyor...</div>;
   }
 
   if (loadError || !rental || !user) {
@@ -88,7 +88,7 @@ export function HandoverPageShell({ phase }: { phase: HandoverPhase }) {
     return (
       <div className="mx-auto max-w-3xl px-4 py-16">
         <p className="text-sm text-red-600">{config.statusMessage}</p>
-        <Link href={`/dashboard/rentals/${id}`} className="mt-2 inline-block text-sm font-medium text-zinc-900 underline">
+        <Link href={`/dashboard/rentals/${id}`} className="mt-2 inline-block text-sm font-medium text-stone-900 underline">
           Kiralama detayına dön
         </Link>
       </div>
@@ -97,8 +97,8 @@ export function HandoverPageShell({ phase }: { phase: HandoverPhase }) {
 
   return (
     <div className="mx-auto w-full max-w-2xl px-4 py-12 sm:px-6">
-      <h1 className="text-2xl font-semibold text-zinc-900">{config.title}</h1>
-      <p className="mt-1 text-sm text-zinc-600">{rental.item?.title}</p>
+      <h1 className="text-2xl font-semibold text-stone-900">{config.title}</h1>
+      <p className="mt-1 text-sm text-stone-600">{rental.item?.title}</p>
 
       <div className="mt-8">
         <HandoverWizard rentalId={id} phase={phase} />

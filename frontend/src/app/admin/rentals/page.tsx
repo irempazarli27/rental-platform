@@ -32,7 +32,7 @@ export default function AdminRentalsPage() {
 
   return (
     <div className="mx-auto w-full max-w-5xl px-4 py-8 sm:px-6">
-      <h1 className="text-2xl font-semibold text-zinc-900">Kiralamalar</h1>
+      <h1 className="text-2xl font-semibold text-stone-900">Kiralamalar</h1>
 
       <select
         value={status}
@@ -41,7 +41,7 @@ export default function AdminRentalsPage() {
           setStatus(v);
           load(v || undefined);
         }}
-        className="mt-4 w-fit rounded-md border border-zinc-300 px-3 py-2 text-sm focus:border-zinc-500 focus:outline-none"
+        className="mt-4 w-fit rounded-xl border border-stone-300 px-3 py-2 text-sm focus:border-rose-500 focus:outline-none focus:ring-2 focus:ring-rose-100"
       >
         <option value="">Tüm Durumlar</option>
         {Object.entries(RENTAL_STATUS_LABELS).map(([value, label]) => (
@@ -52,20 +52,20 @@ export default function AdminRentalsPage() {
       </select>
 
       {isLoading ? (
-        <p className="mt-6 text-sm text-zinc-500">Yükleniyor...</p>
+        <p className="mt-6 text-sm text-stone-500">Yükleniyor...</p>
       ) : (
         <>
-          <p className="mt-4 text-xs text-zinc-500">{total} kiralama</p>
+          <p className="mt-4 text-xs text-stone-500">{total} kiralama</p>
           <div className="mt-2 flex flex-col gap-2">
             {rentals.map((r) => (
               <Link
                 key={r.id}
                 href={`/dashboard/rentals/${r.id}`}
-                className="flex items-center justify-between gap-3 rounded-lg border border-zinc-200 bg-white p-4 hover:border-zinc-300"
+                className="flex items-center justify-between gap-3 rounded-2xl border border-stone-200 bg-white p-4 hover:border-stone-300"
               >
                 <div className="min-w-0">
-                  <p className="truncate text-sm font-medium text-zinc-900">{r.item?.title ?? "İlan"}</p>
-                  <p className="text-xs text-zinc-500">
+                  <p className="truncate text-sm font-medium text-stone-900">{r.item?.title ?? "İlan"}</p>
+                  <p className="text-xs text-stone-500">
                     {formatDate(r.startDate)} – {formatDate(r.endDate)} · {r.renter?.fullName} → {r.owner?.fullName}
                   </p>
                 </div>
@@ -73,7 +73,7 @@ export default function AdminRentalsPage() {
                   <span className={`rounded px-2 py-1 text-xs font-medium ${RENTAL_STATUS_BADGE_CLASSES[r.status]}`}>
                     {RENTAL_STATUS_LABELS[r.status]}
                   </span>
-                  <p className="mt-1 text-xs text-zinc-400">{formatPrice(r.totalAmount)}</p>
+                  <p className="mt-1 text-xs text-stone-400">{formatPrice(r.totalAmount)}</p>
                 </div>
               </Link>
             ))}

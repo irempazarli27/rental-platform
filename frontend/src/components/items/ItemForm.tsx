@@ -66,8 +66,8 @@ export function formValuesToPayload(values: ItemFormValues): Omit<CreateItemInpu
 }
 
 const inputClass =
-  "mt-1 w-full rounded-md border border-zinc-300 px-3 py-2 text-sm focus:border-zinc-500 focus:outline-none";
-const labelClass = "block text-xs font-medium text-zinc-700";
+  "mt-1 w-full rounded-xl border border-stone-300 px-3 py-2 text-sm focus:border-rose-500 focus:outline-none focus:ring-2 focus:ring-rose-100";
+const labelClass = "block text-xs font-medium text-stone-700";
 
 export function ItemForm({
   categories,
@@ -275,7 +275,7 @@ export function ItemForm({
       <div>
         <div className="flex items-center justify-between">
           <label className={labelClass}>Aksesuarlar</label>
-          <button type="button" onClick={addAccessory} className="text-xs font-medium text-zinc-700 underline">
+          <button type="button" onClick={addAccessory} className="text-xs font-medium text-stone-700 underline">
             + Aksesuar ekle
           </button>
         </div>
@@ -299,7 +299,7 @@ export function ItemForm({
               <button
                 type="button"
                 onClick={() => removeAccessory(index)}
-                className="rounded-md border border-zinc-300 px-3 text-sm text-zinc-500 hover:bg-zinc-100"
+                className="rounded-full border border-stone-300 px-3 text-sm text-stone-500 hover:bg-stone-100"
               >
                 Sil
               </button>
@@ -314,7 +314,7 @@ export function ItemForm({
         <button
           type="submit"
           disabled={submitting}
-          className="rounded-md bg-zinc-900 px-5 py-2.5 text-sm font-medium text-white hover:bg-zinc-800 disabled:opacity-50"
+          className="rounded-full bg-rose-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-rose-700 disabled:opacity-50"
         >
           {submitting ? "Kaydediliyor..." : submitLabel}
         </button>
@@ -323,7 +323,7 @@ export function ItemForm({
             type="button"
             disabled={submitting}
             onClick={() => secondaryAction.onClick(values)}
-            className="rounded-md border border-zinc-300 px-5 py-2.5 text-sm font-medium text-zinc-700 hover:bg-zinc-100 disabled:opacity-50"
+            className="rounded-full border border-stone-300 px-5 py-2.5 text-sm font-medium text-stone-700 hover:bg-stone-100 disabled:opacity-50"
           >
             {secondaryAction.label}
           </button>

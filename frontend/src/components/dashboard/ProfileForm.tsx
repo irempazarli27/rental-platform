@@ -32,7 +32,7 @@ export function ProfileForm({ user, onSaved }: { user: AuthUser; onSaved: () => 
   return (
     <form onSubmit={handleSave} className="mt-4 flex flex-col gap-3">
       <div>
-        <label htmlFor="bio" className="block text-xs font-medium text-zinc-700">
+        <label htmlFor="bio" className="block text-xs font-medium text-stone-700">
           Hakkımda
         </label>
         <textarea
@@ -40,12 +40,12 @@ export function ProfileForm({ user, onSaved }: { user: AuthUser; onSaved: () => 
           rows={3}
           value={bio}
           onChange={(e) => setBio(e.target.value)}
-          className="mt-1 w-full rounded-md border border-zinc-300 px-3 py-2 text-sm focus:border-zinc-500 focus:outline-none"
+          className="mt-1 w-full rounded-xl border border-stone-300 px-3 py-2 text-sm focus:border-rose-500 focus:outline-none focus:ring-2 focus:ring-rose-100"
         />
       </div>
       <div className="grid grid-cols-2 gap-3">
         <div>
-          <label htmlFor="city" className="block text-xs font-medium text-zinc-700">
+          <label htmlFor="city" className="block text-xs font-medium text-stone-700">
             Şehir
           </label>
           <input
@@ -53,11 +53,11 @@ export function ProfileForm({ user, onSaved }: { user: AuthUser; onSaved: () => 
             type="text"
             value={city}
             onChange={(e) => setCity(e.target.value)}
-            className="mt-1 w-full rounded-md border border-zinc-300 px-3 py-2 text-sm focus:border-zinc-500 focus:outline-none"
+            className="mt-1 w-full rounded-xl border border-stone-300 px-3 py-2 text-sm focus:border-rose-500 focus:outline-none focus:ring-2 focus:ring-rose-100"
           />
         </div>
         <div>
-          <label htmlFor="district" className="block text-xs font-medium text-zinc-700">
+          <label htmlFor="district" className="block text-xs font-medium text-stone-700">
             İlçe
           </label>
           <input
@@ -65,7 +65,7 @@ export function ProfileForm({ user, onSaved }: { user: AuthUser; onSaved: () => 
             type="text"
             value={district}
             onChange={(e) => setDistrict(e.target.value)}
-            className="mt-1 w-full rounded-md border border-zinc-300 px-3 py-2 text-sm focus:border-zinc-500 focus:outline-none"
+            className="mt-1 w-full rounded-xl border border-stone-300 px-3 py-2 text-sm focus:border-rose-500 focus:outline-none focus:ring-2 focus:ring-rose-100"
           />
         </div>
       </div>
@@ -76,7 +76,7 @@ export function ProfileForm({ user, onSaved }: { user: AuthUser; onSaved: () => 
       <button
         type="submit"
         disabled={isSaving}
-        className="mt-1 self-start rounded-md bg-zinc-900 px-4 py-2 text-sm font-medium text-white hover:bg-zinc-800 disabled:opacity-50"
+        className="mt-1 self-start rounded-full bg-rose-600 px-4 py-2 text-sm font-medium text-white hover:bg-rose-700 disabled:opacity-50"
       >
         {isSaving ? "Kaydediliyor..." : "Kaydet"}
       </button>

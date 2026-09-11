@@ -59,19 +59,19 @@ export default function MyRentalsPage() {
   }
 
   if (authLoading || isLoading) {
-    return <div className="mx-auto max-w-4xl px-4 py-16 text-sm text-zinc-500">Yükleniyor...</div>;
+    return <div className="mx-auto max-w-4xl px-4 py-16 text-sm text-stone-500">Yükleniyor...</div>;
   }
 
   return (
     <div className="mx-auto w-full max-w-4xl px-4 py-12 sm:px-6">
-      <h1 className="text-2xl font-semibold text-zinc-900">Kiralamalarım</h1>
+      <h1 className="text-2xl font-semibold text-stone-900">Kiralamalarım</h1>
 
       {error && <p className="mt-4 text-sm text-red-600">{error}</p>}
 
       <section className="mt-8">
-        <h2 className="text-sm font-semibold text-zinc-900">Gelen Talepler</h2>
+        <h2 className="text-sm font-semibold text-stone-900">Gelen Talepler</h2>
         {asOwner.length === 0 ? (
-          <p className="mt-3 text-sm text-zinc-500">Henüz gelen bir talep yok.</p>
+          <p className="mt-3 text-sm text-stone-500">Henüz gelen bir talep yok.</p>
         ) : (
           <div className="mt-3 flex flex-col gap-3">
             {asOwner.map((rental) => (
@@ -90,9 +90,9 @@ export default function MyRentalsPage() {
       </section>
 
       <section className="mt-10">
-        <h2 className="text-sm font-semibold text-zinc-900">Kiraladıklarım</h2>
+        <h2 className="text-sm font-semibold text-stone-900">Kiraladıklarım</h2>
         {asRenter.length === 0 ? (
-          <p className="mt-3 text-sm text-zinc-500">Henüz bir kiralama talebin yok.</p>
+          <p className="mt-3 text-sm text-stone-500">Henüz bir kiralama talebin yok.</p>
         ) : (
           <div className="mt-3 flex flex-col gap-3">
             {asRenter.map((rental) => (

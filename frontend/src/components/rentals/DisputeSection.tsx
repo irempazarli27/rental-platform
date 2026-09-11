@@ -89,9 +89,9 @@ export function DisputeSection({
   if (disputes.length === 0 && !canOpen) return null;
 
   return (
-    <section className="rounded-lg border border-zinc-200 bg-white p-4">
+    <section className="rounded-2xl border border-stone-200 bg-white p-4">
       <div className="flex items-center justify-between">
-        <h3 className="text-sm font-semibold text-zinc-900">Uyuşmazlık</h3>
+        <h3 className="text-sm font-semibold text-stone-900">Uyuşmazlık</h3>
         {canOpen && !activeDispute && !showForm && (
           <button onClick={() => setShowForm(true)} className="text-xs font-medium text-red-600 underline">
             Uyuşmazlık Aç
@@ -108,21 +108,21 @@ export function DisputeSection({
             value={reason}
             onChange={(e) => setReason(e.target.value)}
             placeholder="Sorunu açıkla (ör. iade edilen üründe yeni hasar var)..."
-            className="w-full rounded-md border border-zinc-300 px-3 py-2 text-sm focus:border-zinc-500 focus:outline-none"
+            className="w-full rounded-xl border border-stone-300 px-3 py-2 text-sm focus:border-rose-500 focus:outline-none focus:ring-2 focus:ring-rose-100"
           />
           {error && <p className="text-sm text-red-600">{error}</p>}
           <div className="flex gap-2">
             <button
               type="submit"
               disabled={submitting}
-              className="rounded-md bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700 disabled:opacity-50"
+              className="rounded-xl bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700 disabled:opacity-50"
             >
               Uyuşmazlığı Başlat
             </button>
             <button
               type="button"
               onClick={() => setShowForm(false)}
-              className="rounded-md border border-zinc-300 px-4 py-2 text-sm text-zinc-700 hover:bg-zinc-100"
+              className="rounded-full border border-stone-300 px-4 py-2 text-sm text-stone-700 hover:bg-stone-100"
             >
               Vazgeç
             </button>
@@ -131,18 +131,18 @@ export function DisputeSection({
       )}
 
       {activeDispute && (
-        <div className="mt-3 rounded-md bg-amber-50 p-3">
+        <div className="mt-3 rounded-xl bg-amber-50 p-3">
           <p className="text-sm font-medium text-amber-800">{STATUS_LABELS[activeDispute.status]}</p>
-          <p className="mt-1 text-sm text-zinc-700">{activeDispute.reason}</p>
-          <p className="mt-1 text-xs text-zinc-400">{formatDate(activeDispute.createdAt)}</p>
+          <p className="mt-1 text-sm text-stone-700">{activeDispute.reason}</p>
+          <p className="mt-1 text-xs text-stone-400">{formatDate(activeDispute.createdAt)}</p>
 
           {activeDispute.evidence.length > 0 && (
             <div className="mt-3 grid grid-cols-3 gap-2">
               {activeDispute.evidence.map((e) => (
                 <div key={e.id}>
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={`${API_URL}${e.mediaUrl}`} alt={e.description ?? "Kanıt"} className="aspect-square w-full rounded-md object-cover" />
-                  {e.description && <p className="mt-1 text-xs text-zinc-500">{e.description}</p>}
+                  <img src={`${API_URL}${e.mediaUrl}`} alt={e.description ?? "Kanıt"} className="aspect-square w-full rounded-xl object-cover" />
+                  {e.description && <p className="mt-1 text-xs text-stone-500">{e.description}</p>}
                 </div>
               ))}
             </div>
@@ -155,18 +155,18 @@ export function DisputeSection({
               accept="image/jpeg,image/png,image/webp,video/mp4,video/webm,video/quicktime"
               disabled={uploadingId === activeDispute.id}
               onChange={(e) => handleEvidenceUpload(activeDispute.id, e.target.files)}
-              className="text-sm text-zinc-600"
+              className="text-sm text-stone-600"
             />
-            <p className="mt-1 text-xs text-zinc-500">Kanıt olarak fotoğraf/video ekleyebilirsin. Bir admin bu kaydı inceleyecek.</p>
+            <p className="mt-1 text-xs text-stone-500">Kanıt olarak fotoğraf/video ekleyebilirsin. Bir admin bu kaydı inceleyecek.</p>
           </div>
         </div>
       )}
 
       {resolvedDisputes.map((d) => (
-        <div key={d.id} className="mt-3 rounded-md bg-zinc-50 p-3">
-          <p className="text-sm font-medium text-zinc-900">{STATUS_LABELS[d.status]}</p>
-          <p className="mt-1 text-sm text-zinc-600">{d.reason}</p>
-          {d.resolutionNotes && <p className="mt-1 text-sm text-zinc-500">Admin notu: {d.resolutionNotes}</p>}
+        <div key={d.id} className="mt-3 rounded-xl bg-stone-50 p-3">
+          <p className="text-sm font-medium text-stone-900">{STATUS_LABELS[d.status]}</p>
+          <p className="mt-1 text-sm text-stone-600">{d.reason}</p>
+          {d.resolutionNotes && <p className="mt-1 text-sm text-stone-500">Admin notu: {d.resolutionNotes}</p>}
         </div>
       ))}
     </section>
