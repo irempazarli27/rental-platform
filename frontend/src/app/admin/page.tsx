@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { getAdminStats, type AdminStats } from "@/lib/api/admin";
 import { RENTAL_STATUS_LABELS } from "@/lib/format";
 import { formatPrice } from "@/lib/format";
@@ -12,12 +13,15 @@ const ITEM_STATUS_LABELS: Record<string, string> = {
   deleted: "Silindi",
 };
 
-function StatCard({ label, value }: { label: string; value: string | number }) {
+function StatCard({ label, value, href }: { label: string; value: string | number; href: string }) {
   return (
-    <div className="rounded-2xl border border-stone-200 bg-white p-4">
+    <Link
+      href={href}
+      className="rounded-2xl border border-stone-200 bg-white p-4 transition-all hover:-translate-y-0.5 hover:border-rose-200 hover:shadow-md"
+    >
       <p className="text-xs font-medium text-stone-500">{label}</p>
       <p className="mt-1 text-2xl font-semibold text-stone-900">{value}</p>
-    </div>
+    </Link>
   );
 }
 
@@ -49,14 +53,18 @@ export default function AdminOverviewPage() {
       <h1 className="text-2xl font-semibold text-stone-900">Sistem Özeti</h1>
 
       <div className="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-4">
-        <StatCard label="Toplam Kullanıcı" value={stats.totalUsers} />
-        <StatCard label="Toplam İlan" value={totalItems} />
-        <StatCard label="Toplam Kiralama" value={totalRentals} />
-        <StatCard label="Açık Uyuşmazlık" value={stats.openDisputes} />
+        <StatCard label="Toplam Kullanıcı" value={stats.totalUsers} href="/admin/users" />
+        <StatCard label="Toplam İlan" value={totalItems} href="/admin/items" />
+        <StatCard label="Toplam Kiralama" value={totalRentals} href="/admin/rentals" />
+        <StatCard label="Açık Uyuşmazlık" value={stats.openDisputes} href="/admin/disputes" />
       </div>
 
       <div className="mt-4">
-        <StatCard label="Toplam Platform Komisyonu (kabul edilen kiralamalar)" value={formatPrice(stats.totalPlatformFeeRevenue)} />
+        <StatCard
+          label="Toplam Platform Komisyonu (kabul edilen kiralamalar)"
+          value={formatPrice(stats.totalPlatformFeeRevenue)}
+          href="/admin/rentals"
+        />
       </div>
 
       <div className="mt-6 grid gap-4 sm:grid-cols-2">
