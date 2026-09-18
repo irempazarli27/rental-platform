@@ -3,6 +3,7 @@ import { OAuth2Client } from "google-auth-library";
 import jwt from "jsonwebtoken";
 import { env } from "../../config/env";
 import { AppError } from "../../utils/AppError";
+import { isPlausibleEmailDomain } from "../../utils/emailValidity";
 import { sha256, newTokenId } from "../../utils/hash";
 import { signAccessToken, signRefreshToken, verifyRefreshToken } from "../../utils/jwt";
 import { usersRepository } from "../users/users.repository";
@@ -36,6 +37,10 @@ export const authService = {
     const existing = await usersRepository.findByEmail(input.email);
     if (existing) {
       throw AppError.conflict("An account with this email already exists", "EMAIL_TAKEN");
+    }
+
+    if (!(await isPlausibleEmailDomain(input.email))) {
+      throw AppError.badRequest("Lütfen geçerli, gerçek bir e-posta adresi kullan", "IMPLAUSIBLE_EMAIL");
     }
 
     const passwordHash = await bcrypt.hash(input.password, BCRYPT_ROUNDS);

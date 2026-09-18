@@ -17,6 +17,26 @@ describe("auth", () => {
     expect(res.body.refreshToken).toBeTypeOf("string");
   });
 
+  it("rejects registration with a made-up, unreachable email domain", async () => {
+    const email = `${unique("nodomain")}@this-domain-does-not-exist-xyzzy.invalid`;
+    const res = await request(app)
+      .post("/api/auth/register")
+      .send({ email, password: "password123", fullName: "No Domain" });
+
+    expect(res.status).toBe(400);
+    expect(res.body.error.code).toBe("IMPLAUSIBLE_EMAIL");
+  });
+
+  it("rejects registration from a known disposable-email provider", async () => {
+    const email = `${unique("throwaway")}@mailinator.com`;
+    const res = await request(app)
+      .post("/api/auth/register")
+      .send({ email, password: "password123", fullName: "Throwaway" });
+
+    expect(res.status).toBe(400);
+    expect(res.body.error.code).toBe("IMPLAUSIBLE_EMAIL");
+  });
+
   it("rejects a duplicate email with 409", async () => {
     const email = `${unique("dup")}@example.com`;
     await request(app).post("/api/auth/register").send({ email, password: "password123", fullName: "First" });
