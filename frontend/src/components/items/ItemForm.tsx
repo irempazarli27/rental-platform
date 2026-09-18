@@ -205,6 +205,7 @@ export function ItemForm({
             required
             type="number"
             min={1}
+            max={1_000_000}
             step="0.01"
             value={values.dailyPrice}
             onChange={(e) => set("dailyPrice", e.target.value)}
@@ -218,6 +219,7 @@ export function ItemForm({
             id="item-weekly-price"
             type="number"
             min={1}
+            max={5_000_000}
             step="0.01"
             value={values.weeklyPrice}
             onChange={(e) => set("weeklyPrice", e.target.value)}
@@ -231,6 +233,7 @@ export function ItemForm({
             id="item-deposit"
             type="number"
             min={0}
+            max={1_000_000}
             step="0.01"
             value={values.depositAmount}
             onChange={(e) => set("depositAmount", e.target.value)}
