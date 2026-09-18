@@ -17,7 +17,7 @@ function StatCard({ label, value, href }: { label: string; value: string | numbe
   return (
     <Link
       href={href}
-      className="rounded-2xl border border-stone-200 bg-white p-4 transition-all hover:-translate-y-0.5 hover:border-rose-200 hover:shadow-md"
+      className="block rounded-2xl border border-stone-200 bg-white p-4 transition-all hover:-translate-y-0.5 hover:border-rose-200 hover:shadow-md"
     >
       <p className="text-xs font-medium text-stone-500">{label}</p>
       <p className="mt-1 text-2xl font-semibold text-stone-900">{value}</p>
