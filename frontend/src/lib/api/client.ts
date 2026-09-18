@@ -10,10 +10,21 @@ export class ApiError extends Error {
     public status: number,
     message: string,
     public code?: string,
+    public details?: { formErrors?: string[]; fieldErrors?: Record<string, string[]> },
   ) {
     super(message);
     this.name = "ApiError";
   }
+}
+
+// Zod validation failures come back as { formErrors, fieldErrors } — surface
+// the actual per-field messages instead of the generic "Validation failed"
+// summary, which tells the user nothing about what to fix.
+export function describeApiError(err: unknown, fallback: string): string {
+  if (!(err instanceof ApiError)) return fallback;
+  const fieldMessages = Object.values(err.details?.fieldErrors ?? {}).flat();
+  if (fieldMessages.length > 0) return fieldMessages.join(" · ");
+  return err.message || fallback;
 }
 
 type RefreshHandler = () => Promise<string | null>;
@@ -63,7 +74,7 @@ export async function apiRequest<T>(path: string, options: RequestOptions = {}):
   const data = isJson ? await res.json() : undefined;
 
   if (!res.ok) {
-    throw new ApiError(res.status, data?.error?.message ?? "İstek başarısız oldu", data?.error?.code);
+    throw new ApiError(res.status, data?.error?.message ?? "İstek başarısız oldu", data?.error?.code, data?.error?.details);
   }
 
   return data as T;

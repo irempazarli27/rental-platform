@@ -7,7 +7,7 @@ import { X } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import { listCategories, type Category } from "@/lib/api/categories";
 import { deleteItemImage, getItem, updateItem, uploadItemImages, type ItemDetail } from "@/lib/api/items";
-import { ApiError } from "@/lib/api/client";
+import { describeApiError } from "@/lib/api/client";
 import { ItemForm, formValuesToPayload, type ItemFormValues } from "@/components/items/ItemForm";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "";
@@ -86,7 +86,7 @@ export default function EditItemPage() {
       setNewPhotos([]);
       await load();
     } catch (err) {
-      setSubmitError(err instanceof ApiError ? err.message : "Fotoğraflar yüklenemedi.");
+      setSubmitError(describeApiError(err, "Fotoğraflar yüklenemedi."));
     } finally {
       setIsUploading(false);
     }
@@ -99,7 +99,7 @@ export default function EditItemPage() {
       await deleteItemImage(id, imageId);
       await load();
     } catch (err) {
-      setSubmitError(err instanceof ApiError ? err.message : "Fotoğraf silinemedi.");
+      setSubmitError(describeApiError(err, "Fotoğraf silinemedi."));
     } finally {
       setDeletingImageId(null);
     }
@@ -122,7 +122,7 @@ export default function EditItemPage() {
       }
       router.push(`/items/${id}`);
     } catch (err) {
-      setSubmitError(err instanceof ApiError ? err.message : "İlan güncellenemedi.");
+      setSubmitError(describeApiError(err, "İlan güncellenemedi."));
       setSubmitting(false);
     }
   }

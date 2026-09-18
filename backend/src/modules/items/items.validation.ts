@@ -8,17 +8,36 @@ const accessorySchema = z.object({
 });
 
 export const createItemSchema = z.object({
-  title: z.string().trim().min(3).max(150),
-  description: z.string().trim().min(10).max(5000),
-  categoryId: z.string().uuid(),
+  title: z
+    .string()
+    .trim()
+    .min(3, "Eşya adı en az 3 karakter olmalı")
+    .max(150, "Eşya adı en fazla 150 karakter olabilir"),
+  description: z
+    .string()
+    .trim()
+    .min(10, "Açıklama en az 10 karakter olmalı")
+    .max(5000, "Açıklama en fazla 5000 karakter olabilir"),
+  categoryId: z.string().uuid("Lütfen bir kategori seç"),
   brand: z.string().trim().max(100).optional(),
   model: z.string().trim().max(100).optional(),
   serialNumber: z.string().trim().max(100).optional(),
   condition: z.enum(["new", "like_new", "good", "fair"]).default("good"),
   riskLevel: z.enum(["low", "medium", "high"]).optional(),
-  dailyPrice: z.coerce.number().positive().max(1_000_000),
-  weeklyPrice: z.coerce.number().positive().max(5_000_000).optional(),
-  depositAmount: z.coerce.number().min(0).max(1_000_000).default(0),
+  dailyPrice: z.coerce
+    .number({ message: "Günlük kira fiyatı sayı olmalı" })
+    .positive("Günlük kira fiyatı 0'dan büyük olmalı")
+    .max(1_000_000, "Günlük kira fiyatı çok yüksek"),
+  weeklyPrice: z.coerce
+    .number({ message: "Haftalık kira fiyatı sayı olmalı" })
+    .positive("Haftalık kira fiyatı 0'dan büyük olmalı")
+    .max(5_000_000, "Haftalık kira fiyatı çok yüksek")
+    .optional(),
+  depositAmount: z.coerce
+    .number({ message: "Güvence bedeli sayı olmalı" })
+    .min(0, "Güvence bedeli negatif olamaz")
+    .max(1_000_000, "Güvence bedeli çok yüksek")
+    .default(0),
   deliveryMethod: z.enum(["pickup", "delivery", "both"]).default("pickup"),
   city: z.string().trim().max(100).optional(),
   district: z.string().trim().max(100).optional(),

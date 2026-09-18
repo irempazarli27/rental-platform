@@ -6,7 +6,7 @@ import { X } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import { listCategories, type Category } from "@/lib/api/categories";
 import { createItem, uploadItemImages } from "@/lib/api/items";
-import { ApiError } from "@/lib/api/client";
+import { describeApiError } from "@/lib/api/client";
 import { ItemForm, formValuesToPayload, type ItemFormValues } from "@/components/items/ItemForm";
 
 export default function NewItemPage() {
@@ -67,7 +67,7 @@ export default function NewItemPage() {
       }
       router.push(`/items/${item.id}`);
     } catch (err) {
-      setError(err instanceof ApiError ? err.message : "İlan oluşturulamadı.");
+      setError(describeApiError(err, "İlan oluşturulamadı."));
       setSubmitting(false);
     }
   }
