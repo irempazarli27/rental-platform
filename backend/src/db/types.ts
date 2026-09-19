@@ -72,10 +72,24 @@ export interface UsersTable {
   verification_level: Generated<VerificationLevel>;
   email_verified_at: NullableTimestamp;
   phone_verified_at: NullableTimestamp;
+  id_verified_at: NullableTimestamp;
+  id_number_hash: Nullable<string>;
+  verification_consent_at: NullableTimestamp;
   status: Generated<UserStatus>;
   role: Generated<UserRole>;
   created_at: GeneratedTimestamp;
   updated_at: GeneratedTimestamp;
+}
+
+export interface VerificationCodesTable {
+  id: Generated<string>;
+  user_id: string;
+  channel: "email" | "phone";
+  target: string;
+  code_hash: string;
+  attempts: Generated<number>;
+  expires_at: Timestamp;
+  created_at: GeneratedTimestamp;
 }
 
 export interface RefreshTokensTable {
@@ -307,6 +321,7 @@ export interface AdminActionsTable {
 export interface Database {
   users: UsersTable;
   refresh_tokens: RefreshTokensTable;
+  verification_codes: VerificationCodesTable;
   categories: CategoriesTable;
   items: ItemsTable;
   item_accessories: ItemAccessoriesTable;

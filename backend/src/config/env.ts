@@ -24,5 +24,9 @@ export const env = {
   maxUploadSizeMb: Number(process.env.MAX_UPLOAD_SIZE_MB ?? 25),
   maxVideoSizeMb: Number(process.env.MAX_VIDEO_SIZE_MB ?? 100),
   // Minimum trust score (0-100) a renter needs to request a high-risk item.
+  // Demo mode: no real email/SMS provider is wired up, so verification codes are
+  // returned in the API response instead of being sent. Turn off once a real
+  // provider exists (sending then fails loudly rather than silently pretending).
+  verificationDemoMode: process.env.VERIFICATION_DEMO_MODE !== "false",
   highRiskMinTrust: Number(process.env.HIGH_RISK_MIN_TRUST ?? 40),
 };

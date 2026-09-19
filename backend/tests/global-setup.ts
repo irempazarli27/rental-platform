@@ -26,6 +26,7 @@ const TABLES_IN_FK_ORDER = [
   "item_accessories",
   "items",
   "categories",
+  "verification_codes",
   "refresh_tokens",
   "users",
 ];

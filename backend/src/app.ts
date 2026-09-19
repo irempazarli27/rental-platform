@@ -14,6 +14,7 @@ import { conversationsRouter } from "./modules/messaging/messaging.routes";
 import { notificationsRouter } from "./modules/notifications/notifications.routes";
 import { rentalsRouter } from "./modules/rentals/rentals.routes";
 import { usersRouter } from "./modules/users/users.routes";
+import { verificationRouter } from "./modules/verification/verification.routes";
 
 export const app = express();
 
@@ -35,6 +36,7 @@ app.get("/health", (_req, res) => {
 
 app.use("/api/auth", authRouter);
 app.use("/api/users", usersRouter);
+app.use("/api/verification", verificationRouter);
 app.use("/api/categories", categoriesRouter);
 app.use("/api/items", itemsRouter);
 app.use("/api/rentals", rentalsRouter);

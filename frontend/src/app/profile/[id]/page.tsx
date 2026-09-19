@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ItemCard } from "@/components/items/ItemCard";
-import { TrustBadge } from "@/components/TrustBadge";
+import { TrustBadge, VerificationChips } from "@/components/TrustBadge";
 import type { TrustLevel } from "@/lib/api/auth";
 import { formatDate } from "@/lib/format";
 import type { ItemSummary } from "@/lib/api/items";
@@ -68,6 +68,9 @@ export default async function ProfilePage({ params }: { params: Promise<{ id: st
             {user.ratingCount > 0 ? `⭐ ${user.ratingAvg.toFixed(1)} (${user.ratingCount} değerlendirme)` : "Henüz değerlendirme yok"}
           </p>
           <p className="text-xs text-stone-400">{formatDate(user.memberSince)} tarihinden beri üye</p>
+          <div className="mt-1.5">
+            <VerificationChips level={user.verificationLevel} />
+          </div>
         </div>
       </div>
 

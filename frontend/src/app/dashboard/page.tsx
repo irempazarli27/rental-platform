@@ -32,7 +32,7 @@ export default function DashboardPage() {
       <h1 className="text-2xl font-semibold text-stone-900">Panelim</h1>
 
       <div className="mt-8 grid gap-8 sm:grid-cols-2">
-        {user.trust && <TrustCard trust={user.trust} />}
+        {user.trust && <TrustCard trust={user.trust} verificationLevel={user.verificationLevel} />}
 
         <section className="rounded-2xl border border-stone-200 bg-white p-6">
           <h2 className="text-sm font-semibold text-stone-900">Hesap Bilgileri</h2>

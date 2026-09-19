@@ -31,10 +31,12 @@ const RATINGS_FULL_WEIGHT_AT = 5;
 const ACCOUNT_AGE_FULL_AT_DAYS = 60;
 const PENALTY_PER_LOST_DISPUTE = 20;
 
-const VERIFICATION_POINTS: Record<TrustInputs["verificationLevel"], number> = {
+// Points are the running total for a level, not per step. Identity carries most of
+// the weight since e-mail and phone are cheap to fake.
+export const VERIFICATION_POINTS: Record<TrustInputs["verificationLevel"], number> = {
   none: 0,
-  email: 5,
-  phone: 10,
+  email: 3,
+  phone: 6,
   id_verified: 15,
 };
 
