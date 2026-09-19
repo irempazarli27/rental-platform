@@ -102,7 +102,7 @@ export default function MyListingsPage() {
               className="flex items-center justify-between gap-4 rounded-2xl border border-stone-200 bg-white p-4"
             >
               <div className="min-w-0 flex-1">
-                <Link href={`/items/${item.id}`} className="truncate text-sm font-medium text-stone-900 hover:underline">
+                <Link href={`/items/${item.id}`} className="block truncate text-sm font-medium text-stone-900 hover:underline">
                   {item.title}
                 </Link>
                 <p className="text-xs text-stone-500">

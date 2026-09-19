@@ -36,7 +36,7 @@ export function ItemCard({ item }: { item: ItemSummary }) {
         )}
       </div>
       <div className="flex flex-1 flex-col gap-1 p-4">
-        <div className="flex items-start justify-between gap-2">
+        <div className="flex flex-col items-start gap-1.5 sm:flex-row sm:justify-between sm:gap-2">
           <h3 className="line-clamp-2 text-sm font-medium text-stone-900">{item.title}</h3>
           <span
             className={`shrink-0 rounded-full px-2 py-0.5 text-[11px] font-medium ${RISK_BADGE_CLASSES[item.riskLevel]}`}

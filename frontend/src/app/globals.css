@@ -8,3 +8,14 @@
 body {
   font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
 }
+
+/* iOS Safari zooms the page when a focused field's font-size is under 16px,
+   which makes forms feel broken on phones. Bump form fields to 16px on small
+   screens only; desktop keeps the compact text-sm sizing. */
+@media (max-width: 639px) {
+  input:not([type="checkbox"]):not([type="radio"]):not([type="file"]),
+  select,
+  textarea {
+    font-size: 16px;
+  }
+}

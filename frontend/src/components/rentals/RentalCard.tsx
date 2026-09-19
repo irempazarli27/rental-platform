@@ -33,7 +33,7 @@ export function RentalCard({
       </div>
 
       <div className="min-w-0 flex-1">
-        <Link href={`/dashboard/rentals/${rental.id}`} className="truncate text-sm font-medium text-stone-900 hover:underline">
+        <Link href={`/dashboard/rentals/${rental.id}`} className="block truncate text-sm font-medium text-stone-900 hover:underline">
           {rental.item?.title ?? "İlan"}
         </Link>
         <p className="text-xs text-stone-500">

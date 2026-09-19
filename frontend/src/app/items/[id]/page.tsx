@@ -141,7 +141,7 @@ export default function ItemDetailPage() {
       )}
 
       <div className="grid gap-8 lg:grid-cols-3">
-        <div className="lg:col-span-2">
+        <div className="min-w-0 lg:col-span-2">
           {item.images.length > 0 ? (
             <div className="grid grid-cols-2 gap-2">
               {item.images.map((image) => (
@@ -173,7 +173,7 @@ export default function ItemDetailPage() {
                 multiple
                 onChange={(e) => handleUpload(e.target.files)}
                 disabled={isUploading}
-                className="text-sm text-stone-600"
+                className="w-full text-sm text-stone-600"
               />
               {isUploading && <p className="mt-1 text-xs text-stone-500">Yükleniyor...</p>}
             </div>

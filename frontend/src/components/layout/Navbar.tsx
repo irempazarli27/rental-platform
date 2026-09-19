@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { Bell, MessageCircle, Package } from "lucide-react";
+import { Bell, Menu, MessageCircle, Package, X } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import { listNotifications } from "@/lib/api/notifications";
 import { listConversations } from "@/lib/api/messaging";
@@ -16,6 +16,11 @@ export function Navbar() {
   const pathname = usePathname();
   const [unreadCount, setUnreadCount] = useState(0);
   const [unreadMessages, setUnreadMessages] = useState(0);
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  useEffect(() => {
+    setMenuOpen(false);
+  }, [pathname]);
 
   useEffect(() => {
     if (!user) {
@@ -60,8 +65,12 @@ export function Navbar() {
     await logout();
   }
 
+  const desktopLink =
+    "whitespace-nowrap rounded-full px-2.5 py-2 text-sm font-medium text-stone-700 hover:bg-stone-100 sm:px-4";
+  const mobileLink = "block rounded-xl px-3 py-3 text-base font-medium text-stone-800 active:bg-stone-100";
+
   return (
-    <header className="sticky top-0 z-40 border-b border-stone-200 bg-white/85 backdrop-blur-md">
+    <header className="sticky top-0 z-40 border-b border-stone-200 bg-white/90 backdrop-blur-md">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-2 px-3 sm:px-6">
         <Link
           href="/"
@@ -76,27 +85,21 @@ export function Navbar() {
         <nav className="flex items-center gap-0.5 sm:gap-1.5">
           <Link
             href="/search"
-            className="whitespace-nowrap rounded-full px-2.5 py-2 text-sm font-medium text-stone-700 hover:bg-stone-100 sm:px-4"
+            className={`${desktopLink} ${user ? "hidden sm:inline-block" : ""}`}
           >
             Ara
           </Link>
           {isLoading ? null : user ? (
             <>
-              <Link
-                href="/items/new"
-                className="hidden whitespace-nowrap rounded-full px-2.5 py-2 text-sm font-medium text-stone-700 hover:bg-stone-100 sm:inline sm:px-4"
-              >
+              <Link href="/items/new" className={`${desktopLink} hidden sm:inline-block`}>
                 İlan Ver
               </Link>
-              <Link
-                href="/dashboard"
-                className="whitespace-nowrap rounded-full px-2.5 py-2 text-sm font-medium text-stone-700 hover:bg-stone-100 sm:px-4"
-              >
+              <Link href="/dashboard" className={`${desktopLink} hidden sm:inline-block`}>
                 Panelim
               </Link>
               <Link
                 href="/dashboard/messages"
-                className="relative rounded-full p-2 text-stone-600 hover:bg-stone-100 sm:p-2.5"
+                className="relative rounded-full p-2.5 text-stone-600 hover:bg-stone-100"
                 aria-label="Mesajlar"
               >
                 <MessageCircle className="h-5 w-5" strokeWidth={1.75} />
@@ -108,7 +111,7 @@ export function Navbar() {
               </Link>
               <Link
                 href="/dashboard/notifications"
-                className="relative rounded-full p-2 text-stone-600 hover:bg-stone-100 sm:p-2.5"
+                className="relative rounded-full p-2.5 text-stone-600 hover:bg-stone-100"
                 aria-label="Bildirimler"
               >
                 <Bell className="h-5 w-5" strokeWidth={1.75} />
@@ -121,7 +124,7 @@ export function Navbar() {
               {user.role === "admin" && (
                 <Link
                   href="/admin"
-                  className="hidden whitespace-nowrap rounded-full px-2.5 py-2 text-sm font-medium text-red-600 hover:bg-red-50 sm:inline sm:px-4"
+                  className="hidden whitespace-nowrap rounded-full px-4 py-2 text-sm font-medium text-red-600 hover:bg-red-50 sm:inline-block"
                 >
                   Admin Paneli
                 </Link>
@@ -129,17 +132,22 @@ export function Navbar() {
               <span className="hidden pl-2 text-sm text-stone-500 lg:inline">{user.fullName}</span>
               <button
                 onClick={handleLogout}
-                className="ml-0.5 whitespace-nowrap rounded-full bg-stone-900 px-2.5 py-2 text-sm font-medium text-white hover:bg-stone-800 sm:ml-1 sm:px-4"
+                className="ml-1 hidden whitespace-nowrap rounded-full bg-stone-900 px-4 py-2 text-sm font-medium text-white hover:bg-stone-800 sm:inline-block"
               >
                 Çıkış Yap
+              </button>
+              <button
+                onClick={() => setMenuOpen((o) => !o)}
+                className="rounded-full p-2.5 text-stone-700 hover:bg-stone-100 sm:hidden"
+                aria-label={menuOpen ? "Menüyü kapat" : "Menüyü aç"}
+                aria-expanded={menuOpen}
+              >
+                {menuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
               </button>
             </>
           ) : (
             <>
-              <Link
-                href="/login"
-                className="whitespace-nowrap rounded-full px-2.5 py-2 text-sm font-medium text-stone-700 hover:bg-stone-100 sm:px-4"
-              >
+              <Link href="/login" className={desktopLink}>
                 Giriş Yap
               </Link>
               <Link
@@ -152,6 +160,32 @@ export function Navbar() {
           )}
         </nav>
       </div>
+
+      {menuOpen && user && (
+        <div className="border-t border-stone-200 bg-white px-3 pb-4 pt-2 sm:hidden">
+          <p className="px-3 py-2 text-xs font-medium text-stone-400">{user.fullName}</p>
+          <Link href="/search" className={mobileLink}>
+            Ara
+          </Link>
+          <Link href="/items/new" className={mobileLink}>
+            İlan Ver
+          </Link>
+          <Link href="/dashboard" className={mobileLink}>
+            Panelim
+          </Link>
+          {user.role === "admin" && (
+            <Link href="/admin" className="block rounded-xl px-3 py-3 text-base font-medium text-red-600 active:bg-red-50">
+              Admin Paneli
+            </Link>
+          )}
+          <button
+            onClick={handleLogout}
+            className="mt-2 w-full rounded-full bg-stone-900 px-4 py-3 text-base font-medium text-white active:bg-stone-800"
+          >
+            Çıkış Yap
+          </button>
+        </div>
+      )}
     </header>
   );
 }

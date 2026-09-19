@@ -76,7 +76,7 @@ export function SearchFiltersForm({
       <select
         value={formState.city}
         onChange={(e) => setFormState((s) => ({ ...s, city: e.target.value }))}
-        className={fieldClasses}
+        className={`col-span-2 ${fieldClasses} sm:col-span-1`}
       >
         <option value="">Tüm Şehirler</option>
         {sortedCities.map((city) => (

@@ -26,11 +26,11 @@ export function HandoverGallery({ title, record }: { title: string; record: Hand
         )}
       </div>
       {record.conditionNotes && <p className="mt-2 text-xs text-stone-600">Not: {record.conditionNotes}</p>}
-      <div className="mt-3 flex flex-col gap-3">
+      <div className="mt-3 grid grid-cols-2 gap-3 sm:flex sm:flex-col">
         {steps.map((step) => (
           <div key={step}>
             <p className="text-xs font-medium text-stone-500">{STEP_LABELS[step]}</p>
-            <div className="mt-1 grid grid-cols-3 gap-2">
+            <div className="mt-1 grid grid-cols-1 gap-2 sm:grid-cols-3">
               {record.mediaByStep[step]!.map((m) =>
                 m.mediaType === "video" ? (
                   <video key={m.id} src={`${API_URL}${m.url}`} controls className="aspect-square w-full rounded-xl bg-black object-cover" />

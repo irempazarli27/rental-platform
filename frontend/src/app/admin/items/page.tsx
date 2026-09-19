@@ -82,7 +82,7 @@ export default function AdminItemsPage() {
             {items.map((item) => (
               <div key={item.id} className="flex items-center justify-between gap-3 rounded-2xl border border-stone-200 bg-white p-4">
                 <div className="min-w-0">
-                  <Link href={`/items/${item.id}`} className="truncate text-sm font-medium text-stone-900 hover:underline">
+                  <Link href={`/items/${item.id}`} className="block truncate text-sm font-medium text-stone-900 hover:underline">
                     {item.title}
                   </Link>
                   <p className="text-xs text-stone-500">
