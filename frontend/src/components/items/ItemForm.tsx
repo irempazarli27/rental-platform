@@ -5,6 +5,7 @@ import type { Category } from "@/lib/api/categories";
 import type { CreateItemInput, ItemCondition, ItemDetail, DeliveryMethod } from "@/lib/api/items";
 import { CONDITION_LABELS, DELIVERY_LABELS } from "@/lib/format";
 import { TURKISH_CITIES } from "@/lib/turkishCities";
+import { TURKISH_DISTRICTS } from "@/lib/turkishDistricts";
 
 const SORTED_CITIES = [...TURKISH_CITIES].sort((a, b) => a.localeCompare(b, "tr"));
 
@@ -87,6 +88,12 @@ export function ItemForm({
   secondaryAction?: { label: string; onClick: (values: ItemFormValues) => void };
 }) {
   const [values, setValues] = useState<ItemFormValues>(() => toFormValues(item));
+
+  const cityDistricts = TURKISH_DISTRICTS[values.city] ?? [];
+  // Keep a previously saved free-text district selectable so editing an older
+  // listing doesn't silently blank it out.
+  const districtOptions =
+    values.district && !cityDistricts.includes(values.district) ? [values.district, ...cityDistricts] : cityDistricts;
 
   function set<K extends keyof ItemFormValues>(key: K, value: ItemFormValues[K]) {
     setValues((v) => ({ ...v, [key]: value }));
@@ -259,7 +266,12 @@ export function ItemForm({
 
         <div>
           <label htmlFor="item-city" className={labelClass}>Şehir</label>
-          <select id="item-city" value={values.city} onChange={(e) => set("city", e.target.value)} className={inputClass}>
+          <select
+            id="item-city"
+            value={values.city}
+            onChange={(e) => setValues((v) => ({ ...v, city: e.target.value, district: "" }))}
+            className={inputClass}
+          >
             <option value="">Seçiniz</option>
             {SORTED_CITIES.map((city) => (
               <option key={city} value={city}>
@@ -271,7 +283,20 @@ export function ItemForm({
 
         <div>
           <label htmlFor="item-district" className={labelClass}>İlçe</label>
-          <input id="item-district" value={values.district} onChange={(e) => set("district", e.target.value)} className={inputClass} />
+          <select
+            id="item-district"
+            value={values.district}
+            onChange={(e) => set("district", e.target.value)}
+            disabled={!values.city}
+            className={`${inputClass} disabled:bg-stone-100 disabled:text-stone-400`}
+          >
+            <option value="">{values.city ? "Seçiniz" : "Önce şehir seç"}</option>
+            {districtOptions.map((d) => (
+              <option key={d} value={d}>
+                {d}
+              </option>
+            ))}
+          </select>
         </div>
       </div>
 
