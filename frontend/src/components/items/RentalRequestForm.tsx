@@ -1,8 +1,9 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { getMe, type TrustInfo } from "@/lib/api/auth";
 import { createRentalRequest } from "@/lib/api/rentals";
 import { ApiError } from "@/lib/api/client";
 import { computePricingPreview } from "@/lib/pricing";
@@ -15,6 +16,7 @@ export function RentalRequestForm({
   depositAmount,
   currency,
   isLoggedIn,
+  riskLevel,
 }: {
   itemId: string;
   dailyPrice: string;
@@ -22,6 +24,7 @@ export function RentalRequestForm({
   depositAmount: string;
   currency: string;
   isLoggedIn: boolean;
+  riskLevel: string;
 }) {
   const router = useRouter();
   const today = new Date().toISOString().slice(0, 10);
@@ -30,6 +33,17 @@ export function RentalRequestForm({
   const [endDate, setEndDate] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [trust, setTrust] = useState<TrustInfo | null>(null);
+
+  // Only high-risk items are gated on trust; skip the extra request otherwise.
+  useEffect(() => {
+    if (!isLoggedIn || riskLevel !== "high") return;
+    getMe()
+      .then(({ user }) => setTrust(user.trust ?? null))
+      .catch(() => setTrust(null));
+  }, [isLoggedIn, riskLevel]);
+
+  const blockedByTrust = riskLevel === "high" && trust !== null && !trust.canRentHighRisk;
 
   const preview = computePricingPreview(
     Number(dailyPrice),
@@ -119,11 +133,18 @@ export function RentalRequestForm({
         </dl>
       )}
 
+      {blockedByTrust && trust && (
+        <p className="mt-3 rounded-xl bg-amber-50 px-3 py-2 text-xs text-amber-800">
+          Bu ilan yüksek riskli. Kiralamak için güven puanın en az {trust.highRiskMinScore} olmalı (şu an: {trust.score}).
+          Düşük riskli eşyalarla başlayıp puan kazanabilirsin.
+        </p>
+      )}
+
       {error && <p className="mt-2 text-sm text-red-600">{error}</p>}
 
       <button
         type="submit"
-        disabled={submitting || !preview}
+        disabled={submitting || !preview || blockedByTrust}
         className="mt-4 w-full rounded-full bg-rose-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-rose-700 disabled:opacity-50"
       >
         {submitting ? "Gönderiliyor..." : "Kiralama Talebi Gönder"}

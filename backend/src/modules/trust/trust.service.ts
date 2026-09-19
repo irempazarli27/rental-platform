@@ -1,0 +1,61 @@
+import { env } from "../../config/env";
+import { AppError } from "../../utils/AppError";
+import { reviewsService } from "../reviews/reviews.service";
+import { usersRepository } from "../users/users.repository";
+import { computeTrust, type TrustBreakdown, type TrustLevel } from "./trust.score";
+import { trustRepository } from "./trust.repository";
+
+export interface TrustDto {
+  score: number;
+  level: TrustLevel;
+  breakdown: TrustBreakdown;
+  /** Whether this user currently meets the minimum to request high-risk items. */
+  canRentHighRisk: boolean;
+  highRiskMinScore: number;
+}
+
+const DAY_MS = 24 * 60 * 60 * 1000;
+
+export const trustService = {
+  async getTrust(userId: string): Promise<TrustDto> {
+    const user = await usersRepository.findById(userId);
+    if (!user) throw AppError.notFound("User not found");
+
+    const [completedRentals, lostDisputes, rating] = await Promise.all([
+      trustRepository.countCompletedRentals(userId),
+      trustRepository.countLostDisputes(userId),
+      reviewsService.getRatingStats(userId),
+    ]);
+
+    const { score, level, breakdown } = computeTrust({
+      completedRentals,
+      ratingAvg: rating.ratingAvg,
+      ratingCount: rating.ratingCount,
+      verificationLevel: user.verification_level,
+      accountAgeDays: (Date.now() - new Date(user.created_at).getTime()) / DAY_MS,
+      lostDisputes,
+      suspended: user.status === "suspended",
+    });
+
+    return {
+      score,
+      level,
+      breakdown,
+      canRentHighRisk: score >= env.highRiskMinTrust,
+      highRiskMinScore: env.highRiskMinTrust,
+    };
+  },
+
+  /** Throws unless the renter is trusted enough for a high-risk item. */
+  async assertCanRent(renterId: string, itemRiskLevel: string) {
+    if (itemRiskLevel !== "high") return;
+    const trust = await this.getTrust(renterId);
+    if (!trust.canRentHighRisk) {
+      throw new AppError(
+        403,
+        `Bu ilan yüksek riskli. Kiralamak için güven puanın en az ${trust.highRiskMinScore} olmalı (şu an: ${trust.score}). Önce düşük riskli eşyalarla başlayıp puan kazanabilirsin.`,
+        "TRUST_TOO_LOW",
+      );
+    }
+  },
+};

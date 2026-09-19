@@ -1,5 +1,15 @@
 import { apiRequest } from "./client";
 
+export type TrustLevel = "new" | "trusted" | "highly_trusted";
+
+export interface TrustInfo {
+  score: number;
+  level: TrustLevel;
+  canRentHighRisk: boolean;
+  highRiskMinScore: number;
+  breakdown: { rentals: number; ratings: number; verification: number; accountAge: number; penalty: number };
+}
+
 export interface AuthUser {
   id: string;
   email: string;
@@ -17,6 +27,8 @@ export interface AuthUser {
   role: string;
   status: string;
   createdAt: string;
+  /** Only present on /users/me responses (not on login/register/refresh). */
+  trust?: TrustInfo;
 }
 
 export interface AuthSession {

@@ -4,6 +4,7 @@ import { itemImagesRepository } from "../items/item-images.repository";
 import { itemsRepository } from "../items/items.repository";
 import { usersRepository } from "../users/users.repository";
 import { notificationsService } from "../notifications/notifications.service";
+import { trustService } from "../trust/trust.service";
 import { billingRepository } from "./billing.repository";
 import { computePricing } from "./rentals.pricing";
 import { rentalsRepository } from "./rentals.repository";
@@ -51,6 +52,8 @@ export const rentalsService = {
     if (item.owner_id === renterId) {
       throw AppError.badRequest("You cannot rent your own item", "OWN_ITEM");
     }
+
+    await trustService.assertCanRent(renterId, item.risk_level);
 
     const pricing = computePricing({
       dailyPrice: Number(item.daily_price),

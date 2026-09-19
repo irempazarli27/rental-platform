@@ -17,7 +17,7 @@ test("full rental lifecycle: list, request, accept, handover both ways, review",
     await ownerPage.goto("/items/new", { waitUntil: "networkidle" });
     await ownerPage.fill("#item-title", "E2E Golden Path Camera");
     await ownerPage.fill("#item-description", "Created by the automated end-to-end suite.");
-    await ownerPage.selectOption("#item-category", { index: 1 });
+    await ownerPage.selectOption("#item-category", { index: 2 });
     await ownerPage.fill("#item-daily-price", "100");
     await ownerPage.fill("#item-deposit", "250");
     await ownerPage.click('button:has-text("Yayınla")');

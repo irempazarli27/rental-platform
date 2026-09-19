@@ -296,6 +296,7 @@ export default function ItemDetailPage() {
                 depositAmount={item.depositAmount}
                 currency={item.currency}
                 isLoggedIn={!!user}
+                riskLevel={item.riskLevel}
               />
             )}
           </div>

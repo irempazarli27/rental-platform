@@ -1,6 +1,7 @@
 import { AppError } from "../../utils/AppError";
 import { omitUndefined } from "../../utils/object";
 import { reviewsService } from "../reviews/reviews.service";
+import { trustService } from "../trust/trust.service";
 import { usersRepository } from "./users.repository";
 import type { UpdateProfileInput } from "./users.validation";
 import { toPrivateUserDto, toPublicUserDto } from "./users.types";
@@ -9,15 +10,17 @@ export const usersService = {
   async getMe(userId: string) {
     const user = await usersRepository.findById(userId);
     if (!user) throw AppError.notFound("User not found");
-    const stats = await reviewsService.getRatingStats(userId);
-    return { ...toPrivateUserDto(user), ...stats };
+    const [stats, trust] = await Promise.all([reviewsService.getRatingStats(userId), trustService.getTrust(userId)]);
+    return { ...toPrivateUserDto(user), ...stats, trust };
   },
 
   async getPublicProfile(userId: string) {
     const user = await usersRepository.findById(userId);
     if (!user) throw AppError.notFound("User not found");
-    const stats = await reviewsService.getRatingStats(userId);
-    return { ...toPublicUserDto(user), ...stats };
+    const [stats, trust] = await Promise.all([reviewsService.getRatingStats(userId), trustService.getTrust(userId)]);
+    // The breakdown (e.g. lost-dispute penalties) is private to the user; the public
+    // profile only shows the resulting score and level.
+    return { ...toPublicUserDto(user), ...stats, trust: { score: trust.score, level: trust.level } };
   },
 
   async updateMe(userId: string, input: UpdateProfileInput) {

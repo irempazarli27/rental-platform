@@ -23,4 +23,6 @@ export const env = {
   uploadDir: process.env.UPLOAD_DIR ?? "uploads",
   maxUploadSizeMb: Number(process.env.MAX_UPLOAD_SIZE_MB ?? 25),
   maxVideoSizeMb: Number(process.env.MAX_VIDEO_SIZE_MB ?? 100),
+  // Minimum trust score (0-100) a renter needs to request a high-risk item.
+  highRiskMinTrust: Number(process.env.HIGH_RISK_MIN_TRUST ?? 40),
 };

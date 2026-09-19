@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import { ProfileForm } from "@/components/dashboard/ProfileForm";
+import { TrustCard } from "@/components/dashboard/TrustCard";
 
 export default function DashboardPage() {
   const { user, isLoading, refreshUser } = useAuth();
@@ -16,6 +17,12 @@ export default function DashboardPage() {
     }
   }, [isLoading, user, router]);
 
+  // Login/register/refresh responses don't carry the trust score; /users/me does.
+  const hasUser = !!user;
+  useEffect(() => {
+    if (hasUser) refreshUser().catch(() => {});
+  }, [hasUser, refreshUser]);
+
   if (isLoading || !user) {
     return <div className="mx-auto max-w-4xl px-4 py-16 text-sm text-stone-500">Yükleniyor...</div>;
   }
@@ -25,6 +32,8 @@ export default function DashboardPage() {
       <h1 className="text-2xl font-semibold text-stone-900">Panelim</h1>
 
       <div className="mt-8 grid gap-8 sm:grid-cols-2">
+        {user.trust && <TrustCard trust={user.trust} />}
+
         <section className="rounded-2xl border border-stone-200 bg-white p-6">
           <h2 className="text-sm font-semibold text-stone-900">Hesap Bilgileri</h2>
           <dl className="mt-4 space-y-2 text-sm">

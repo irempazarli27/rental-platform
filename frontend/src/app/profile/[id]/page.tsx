@@ -1,6 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ItemCard } from "@/components/items/ItemCard";
+import { TrustBadge } from "@/components/TrustBadge";
+import type { TrustLevel } from "@/lib/api/auth";
 import { formatDate } from "@/lib/format";
 import type { ItemSummary } from "@/lib/api/items";
 import type { PublicReview } from "@/lib/api/reviews";
@@ -19,6 +21,7 @@ interface ProfileUser {
   ratingCount: number;
   verificationLevel: string;
   memberSince: string;
+  trust?: { score: number; level: TrustLevel };
 }
 
 async function getProfileData(id: string) {
@@ -57,7 +60,10 @@ export default async function ProfilePage({ params }: { params: Promise<{ id: st
           </div>
         )}
         <div>
-          <h1 className="text-xl font-semibold text-stone-900">{user.fullName}</h1>
+          <div className="flex flex-wrap items-center gap-2">
+            <h1 className="text-xl font-semibold text-stone-900">{user.fullName}</h1>
+            {user.trust && <TrustBadge level={user.trust.level} score={user.trust.score} />}
+          </div>
           <p className="text-sm text-stone-500">
             {user.ratingCount > 0 ? `⭐ ${user.ratingAvg.toFixed(1)} (${user.ratingCount} değerlendirme)` : "Henüz değerlendirme yok"}
           </p>
