@@ -1,0 +1,76 @@
+# Production stack for a single AWS EC2 host, with automatic HTTPS via Caddy.
+# Same services as docker-compose.prod.yml, but Caddy replaces nginx + the
+# self-signed certificate. Run with: --env-file .env.aws
+services:
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  backend:
+    build: ./backend
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      NODE_ENV: production
+      PORT: 4000
+      DATABASE_URL: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
+      JWT_ACCESS_SECRET: ${JWT_ACCESS_SECRET}
+      JWT_REFRESH_SECRET: ${JWT_REFRESH_SECRET}
+      JWT_ACCESS_EXPIRES_IN: 15m
+      JWT_REFRESH_EXPIRES_IN: 30d
+      CORS_ORIGIN: https://${DOMAIN}
+      TRUST_PROXY_HOPS: 1
+      HIGH_RISK_MIN_TRUST: ${HIGH_RISK_MIN_TRUST:-40}
+      VERIFICATION_DEMO_MODE: ${VERIFICATION_DEMO_MODE:-true}
+      UPLOAD_DIR: uploads
+      MAX_UPLOAD_SIZE_MB: 25
+      MAX_VIDEO_SIZE_MB: 100
+    volumes:
+      - backend_uploads:/app/uploads
+
+  frontend:
+    build:
+      context: ./frontend
+    restart: unless-stopped
+    environment:
+      # Server-rendered pages talk to the backend over the internal network.
+      INTERNAL_API_URL: http://backend:4000
+    depends_on:
+      - backend
+
+  caddy:
+    image: caddy:2
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      DOMAIN: ${DOMAIN}
+    volumes:
+      - ./deploy/aws/Caddyfile:/etc/caddy/Caddyfile:ro
+      # Persisting these keeps the issued certificate across restarts (Let's
+      # Encrypt rate-limits re-issuance).
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - backend
+      - frontend
+
+volumes:
+  postgres_data:
+  backend_uploads:
+  caddy_data:
+  caddy_config:

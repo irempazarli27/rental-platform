@@ -1,0 +1,23 @@
+# Caddy obtains and renews the Let's Encrypt certificate for {$DOMAIN} by itself
+# (it needs ports 80 and 443 reachable and the domain's A record pointing here).
+{$DOMAIN} {
+	encode gzip
+
+	# Same ceiling as the nginx setup: video uploads for handover records.
+	request_body {
+		max_size 120MB
+	}
+
+	handle /api/* {
+		reverse_proxy backend:4000
+	}
+	handle /uploads/* {
+		reverse_proxy backend:4000
+	}
+	handle /health {
+		reverse_proxy backend:4000
+	}
+	handle {
+		reverse_proxy frontend:3000
+	}
+}
