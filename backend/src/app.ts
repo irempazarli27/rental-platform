@@ -18,6 +18,8 @@ import { verificationRouter } from "./modules/verification/verification.routes";
 
 export const app = express();
 
+app.set("trust proxy", env.trustProxyHops);
+
 app.use(helmet({ crossOriginResourcePolicy: { policy: "cross-origin" } }));
 app.use(
   cors({

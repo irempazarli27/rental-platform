@@ -23,10 +23,16 @@ export const env = {
   uploadDir: process.env.UPLOAD_DIR ?? "uploads",
   maxUploadSizeMb: Number(process.env.MAX_UPLOAD_SIZE_MB ?? 25),
   maxVideoSizeMb: Number(process.env.MAX_VIDEO_SIZE_MB ?? 100),
-  // Minimum trust score (0-100) a renter needs to request a high-risk item.
+  // How many reverse proxies sit in front of the API (nginx/Caddy = 1). Express
+  // uses this to read the real client IP from X-Forwarded-For; without it every
+  // user looks like the proxy and shares one rate-limit bucket. Set 0 only if
+  // the API is exposed directly. Never higher than the real number of hops, or
+  // clients could spoof their IP.
+  trustProxyHops: Number(process.env.TRUST_PROXY_HOPS ?? 1),
   // Demo mode: no real email/SMS provider is wired up, so verification codes are
   // returned in the API response instead of being sent. Turn off once a real
   // provider exists (sending then fails loudly rather than silently pretending).
   verificationDemoMode: process.env.VERIFICATION_DEMO_MODE !== "false",
+  // Minimum trust score (0-100) a renter needs to request a high-risk item.
   highRiskMinTrust: Number(process.env.HIGH_RISK_MIN_TRUST ?? 40),
 };
