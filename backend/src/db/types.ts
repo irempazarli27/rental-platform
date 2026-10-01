@@ -318,6 +318,12 @@ export interface AdminActionsTable {
   created_at: GeneratedTimestamp;
 }
 
+export interface FavoritesTable {
+  user_id: string;
+  item_id: string;
+  created_at: Generated<Date>;
+}
+
 export interface Database {
   users: UsersTable;
   refresh_tokens: RefreshTokensTable;
@@ -327,6 +333,7 @@ export interface Database {
   item_accessories: ItemAccessoriesTable;
   item_images: ItemImagesTable;
   item_availability_blocks: ItemAvailabilityBlocksTable;
+  favorites: FavoritesTable;
   rentals: RentalsTable;
   handover_records: HandoverRecordsTable;
   handover_media: HandoverMediaTable;

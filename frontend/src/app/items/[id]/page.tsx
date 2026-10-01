@@ -16,6 +16,7 @@ import {
 } from "@/lib/api/items";
 import { ApiError } from "@/lib/api/client";
 import { CONDITION_LABELS, DELIVERY_LABELS, RISK_LABELS, formatDate, formatPrice } from "@/lib/format";
+import { FavoriteButton } from "@/components/items/FavoriteButton";
 import { RentalRequestForm } from "@/components/items/RentalRequestForm";
 import { startConversation } from "@/lib/api/messaging";
 
@@ -179,7 +180,10 @@ export default function ItemDetailPage() {
             </div>
           )}
 
-          <h1 className="mt-6 text-2xl font-semibold text-stone-900">{item.title}</h1>
+          <div className="mt-6 flex items-start justify-between gap-3">
+            <h1 className="text-2xl font-semibold text-stone-900">{item.title}</h1>
+            <FavoriteButton item={item} className="shrink-0 border border-stone-200" />
+          </div>
           <div className="mt-2 flex flex-wrap gap-2 text-xs">
             <span className="rounded-full bg-stone-100 px-2.5 py-1 font-medium text-stone-700">
               {CONDITION_LABELS[item.condition]}

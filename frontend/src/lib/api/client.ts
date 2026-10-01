@@ -41,7 +41,7 @@ export function setRefreshHandler(handler: RefreshHandler | null) {
 }
 
 interface RequestOptions {
-  method?: "GET" | "POST" | "PATCH" | "DELETE";
+  method?: "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
   body?: unknown;
   /** Attach the access token and retry once via the refresh handler on 401. Defaults to true. */
   auth?: boolean;

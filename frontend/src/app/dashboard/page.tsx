@@ -90,6 +90,16 @@ export default function DashboardPage() {
             Gelen kiralama taleplerini ve kiraladığın eşyaları buradan yönetebilirsin.
           </p>
         </section>
+
+        <section className="rounded-2xl border border-stone-200 bg-surface p-6">
+          <div className="flex items-center justify-between">
+            <h2 className="text-sm font-semibold text-stone-900">Favorilerim</h2>
+            <Link href="/dashboard/favorites" className="text-sm font-medium text-stone-700 underline">
+              Tümünü gör
+            </Link>
+          </div>
+          <p className="mt-2 text-sm text-stone-500">Kalp ile işaretlediğin ilanlar burada durur.</p>
+        </section>
       </div>
     </div>
   );

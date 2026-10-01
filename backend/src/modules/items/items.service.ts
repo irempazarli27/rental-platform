@@ -43,6 +43,9 @@ async function summariesWithCovers(rows: Awaited<ReturnType<typeof itemsReposito
 }
 
 export const itemsService = {
+  /** Card-level DTOs (with cover image) for rows another module already selected. */
+  toSummaries: summariesWithCovers,
+
   async create(ownerId: string, input: CreateItemInput): Promise<ItemDetailDto> {
     const category = await categoriesService.getActiveById(input.categoryId);
     const riskLevel = resolveRiskLevel(category.default_risk_level, input.riskLevel);

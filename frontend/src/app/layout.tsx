@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { AuthProvider } from "@/context/AuthContext";
+import { FavoritesProvider } from "@/context/FavoritesContext";
 import { Navbar } from "@/components/layout/Navbar";
 import "./globals.css";
 
@@ -36,8 +37,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       </head>
       <body className="flex min-h-full flex-col bg-stone-50 text-stone-900">
         <AuthProvider>
-          <Navbar />
-          <main className="flex flex-1 flex-col">{children}</main>
+          <FavoritesProvider>
+            <Navbar />
+            <main className="flex flex-1 flex-col">{children}</main>
+          </FavoritesProvider>
         </AuthProvider>
       </body>
     </html>
