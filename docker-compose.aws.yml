@@ -1,6 +1,5 @@
 # Production stack for a single AWS EC2 host, with automatic HTTPS via Caddy.
-# Same services as docker-compose.prod.yml, but Caddy replaces nginx + the
-# self-signed certificate. Run with: --env-file .env.aws
+# Run with: --env-file .env.aws
 services:
   postgres:
     image: postgres:16-alpine

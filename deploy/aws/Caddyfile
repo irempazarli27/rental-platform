@@ -3,7 +3,7 @@
 {$DOMAIN} {
 	encode gzip
 
-	# Same ceiling as the nginx setup: video uploads for handover records.
+	# Video uploads for handover records (the backend caps them at 100MB).
 	request_body {
 		max_size 120MB
 	}

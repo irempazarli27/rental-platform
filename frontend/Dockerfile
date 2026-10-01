@@ -3,9 +3,9 @@ WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm ci
 COPY . .
-# Baked into the client bundle at build time — must be the public-facing
-# origin (nginx), reachable both from browsers and from this container's own
-# server-side fetches (e.g. the home page), since Next.js can't tell them apart.
+# Baked into the client bundle at build time. Left empty in production so the
+# browser calls the API on the site's own origin (Caddy routes /api to the
+# backend); server-side fetches use INTERNAL_API_URL instead.
 ARG NEXT_PUBLIC_API_URL
 ENV NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
 ARG NEXT_PUBLIC_GOOGLE_CLIENT_ID

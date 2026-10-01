@@ -12,7 +12,7 @@ SSH=(ssh -i "$KEY" -o StrictHostKeyChecking=accept-new)
 
 rsync -az --delete \
   --exclude '.git' --exclude 'node_modules' --exclude '.next' --exclude 'dist' \
-  --exclude 'backups' --exclude 'nginx/certs' --exclude 'uploads' --exclude 'uploads-test' \
+  --exclude 'backups' --exclude 'uploads' --exclude 'uploads-test' \
   --exclude '.env*' --exclude '*.log' --exclude 'test-results' --exclude 'playwright-report' \
   -e "${SSH[*]}" "$ROOT"/ "$TARGET":/opt/paylasimlik/
 
