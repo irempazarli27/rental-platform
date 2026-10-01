@@ -61,5 +61,31 @@ owner="${SUDO_USER:-$(id -un 1000 2>/dev/null || echo root)}"
 mkdir -p /opt/paylasimlik
 chown -R "$owner":"$owner" /opt/paylasimlik
 
+# Nightly database + uploads backup (see backup.sh). The script is read from the
+# deployed project, so it only starts working after the first deploy.
+cat > /etc/systemd/system/paylasimlik-backup.service <<'UNIT'
+[Unit]
+Description=Paylasimlik database and uploads backup
+After=docker.service
+Requires=docker.service
+
+[Service]
+Type=oneshot
+ExecStart=/bin/bash /opt/paylasimlik/deploy/aws/backup.sh
+UNIT
+cat > /etc/systemd/system/paylasimlik-backup.timer <<'UNIT'
+[Unit]
+Description=Run the Paylasimlik backup every night
+
+[Timer]
+OnCalendar=*-*-* 03:00:00
+Persistent=true
+
+[Install]
+WantedBy=timers.target
+UNIT
+systemctl daemon-reload
+systemctl enable --now paylasimlik-backup.timer
+
 echo "Done. Docker: $(docker --version) | $(docker compose version)"
 echo "Log out and back in once so the docker group applies."
