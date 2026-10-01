@@ -127,6 +127,11 @@ function CodeStep({
         </button>
       ) : (
         <form onSubmit={confirm} className="flex flex-col gap-3">
+          {!sent.demoCode && (
+            <p className="rounded-xl border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm text-emerald-800">
+              Kodu gönderdik. Birkaç dakika içinde gelmezse spam klasörüne bak.
+            </p>
+          )}
           {sent.demoCode && (
             <div className="rounded-xl border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-900">
               <span className="text-xs font-medium uppercase tracking-wide">Demo</span>
@@ -263,8 +268,10 @@ export default function VerificationPage() {
         <div className="mt-5 rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900">
           <p className="font-medium">Demo modu</p>
           <p className="mt-1 text-xs">
-            Henüz gerçek bir e-posta/SMS veya kimlik doğrulama sağlayıcısı bağlı değil. Kodlar mesaj olarak gönderilmez, ekranda gösterilir. Gerçek
-            yayında bu adımlar lisanslı bir sağlayıcı üzerinden çalışır.
+            {status.realEmail
+              ? "E-posta kodu gerçekten gönderilir. Telefon ve kimlik adımları için henüz bir sağlayıcı bağlı değil: SMS kodu gönderilmez, ekranda gösterilir."
+              : "Henüz gerçek bir e-posta/SMS veya kimlik doğrulama sağlayıcısı bağlı değil. Kodlar mesaj olarak gönderilmez, ekranda gösterilir."}{" "}
+            Gerçek yayında bu adımlar lisanslı bir sağlayıcı üzerinden çalışır.
           </p>
         </div>
       )}

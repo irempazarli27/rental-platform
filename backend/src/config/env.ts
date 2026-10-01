@@ -29,9 +29,20 @@ export const env = {
   // the API is exposed directly. Never higher than the real number of hops, or
   // clients could spoof their IP.
   trustProxyHops: Number(process.env.TRUST_PROXY_HOPS ?? 1),
-  // Demo mode: no real email/SMS provider is wired up, so verification codes are
-  // returned in the API response instead of being sent. Turn off once a real
-  // provider exists (sending then fails loudly rather than silently pretending).
+  // Outgoing mail for email verification codes. Unset = no real email is sent
+  // and the email step behaves like the rest of demo mode.
+  smtp: process.env.SMTP_HOST
+    ? {
+        host: process.env.SMTP_HOST,
+        port: Number(process.env.SMTP_PORT ?? 587),
+        user: required("SMTP_USER"),
+        pass: required("SMTP_PASS"),
+        from: process.env.MAIL_FROM || required("SMTP_USER"),
+      }
+    : null,
+  // Demo mode: steps without a real provider (SMS, and email when SMTP is unset)
+  // return their verification code in the API response instead of sending it.
+  // With it off, those steps fail loudly rather than silently pretending.
   verificationDemoMode: process.env.VERIFICATION_DEMO_MODE !== "false",
   // Minimum trust score (0-100) a renter needs to request a high-risk item.
   highRiskMinTrust: Number(process.env.HIGH_RISK_MIN_TRUST ?? 40),

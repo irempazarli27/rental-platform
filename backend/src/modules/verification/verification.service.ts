@@ -4,6 +4,7 @@ import { AppError } from "../../utils/AppError";
 import { sha256 } from "../../utils/hash";
 import { usersRepository } from "../users/users.repository";
 import { VERIFICATION_POINTS } from "../trust/trust.score";
+import { mailer } from "./mailer";
 import { verificationRepository } from "./verification.repository";
 import { hashIdNumber, isValidTckn, maxLevel, normalizeTrPhone } from "./verification.rules";
 
@@ -16,6 +17,8 @@ export interface VerificationStatus {
   phone: { verified: boolean; number: string | null };
   id: { verified: boolean };
   demoMode: boolean;
+  /** True when email codes are really delivered, even while demoMode covers the other steps. */
+  realEmail: boolean;
   /** Trust points each step adds on top of the previous one. */
   points: { email: number; phone: number; id: number };
 }
@@ -41,6 +44,7 @@ export const verificationService = {
       phone: { verified: user.phone_verified_at !== null, number: user.phone_verified_at ? user.phone : null },
       id: { verified: user.id_verified_at !== null },
       demoMode: env.verificationDemoMode,
+      realEmail: mailer.isConfigured(),
       points: {
         email: VERIFICATION_POINTS.email,
         phone: VERIFICATION_POINTS.phone - VERIFICATION_POINTS.email,
@@ -50,9 +54,10 @@ export const verificationService = {
   },
 
   /**
-   * Issues a 6-digit code. There is no real email/SMS provider yet, so in demo
-   * mode the code is handed back in the response; outside demo mode this fails
-   * loudly instead of pretending a message was sent.
+   * Issues a 6-digit code. Email codes are delivered over SMTP when it is
+   * configured. There is no SMS provider yet, so phone codes (and email codes
+   * without SMTP) are handed back in the response in demo mode; outside demo
+   * mode they fail loudly instead of pretending a message was sent.
    */
   async sendCode(userId: string, channel: "email" | "phone", phoneInput?: string) {
     const user = await loadUser(userId);
@@ -74,7 +79,8 @@ export const verificationService = {
       target = normalized;
     }
 
-    if (!env.verificationDemoMode) {
+    const deliver = channel === "email" && mailer.isConfigured();
+    if (!deliver && !env.verificationDemoMode) {
       throw new AppError(503, "Doğrulama sağlayıcısı henüz yapılandırılmadı", "VERIFICATION_PROVIDER_NOT_CONFIGURED");
     }
 
@@ -87,7 +93,16 @@ export const verificationService = {
       expiresAt: new Date(Date.now() + CODE_TTL_MS),
     });
 
-    return { sent: true, expiresInMinutes: CODE_TTL_MS / 60000, demoCode: code };
+    const expiresInMinutes = CODE_TTL_MS / 60000;
+    if (!deliver) return { sent: true, expiresInMinutes, demoCode: code };
+
+    try {
+      await mailer.sendVerificationCode(target, code, expiresInMinutes);
+    } catch (err) {
+      console.error("Verification email could not be sent:", err);
+      throw new AppError(502, "Doğrulama e-postası gönderilemedi, biraz sonra tekrar dene", "EMAIL_SEND_FAILED");
+    }
+    return { sent: true, expiresInMinutes };
   },
 
   async confirmCode(userId: string, channel: "email" | "phone", code: string) {

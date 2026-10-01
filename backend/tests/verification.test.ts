@@ -55,6 +55,7 @@ describe("verification flow", () => {
       phone: { verified: false },
       id: { verified: false },
       demoMode: true,
+      realEmail: false,
       points: { email: 3, phone: 3, id: 9 },
     });
   });

@@ -28,5 +28,11 @@ VERIFICATION_DEMO_MODE=true
 # Optional: OAuth client ID (Web application) from Google Cloud Console, with
 # https://${DOMAIN} listed as an authorized JavaScript origin.
 GOOGLE_CLIENT_ID=
+# Optional: SMTP server for real email verification codes (empty = demo mode).
+SMTP_HOST=
+SMTP_PORT=587
+SMTP_USER=
+SMTP_PASS=
+MAIL_FROM=
 ENV
 echo "Wrote $OUT (permissions 600) for domain ${DOMAIN}."

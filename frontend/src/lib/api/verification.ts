@@ -6,6 +6,7 @@ export interface VerificationStatus {
   phone: { verified: boolean; number: string | null };
   id: { verified: boolean };
   demoMode: boolean;
+  realEmail: boolean;
   points: { email: number; phone: number; id: number };
 }
 

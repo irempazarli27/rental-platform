@@ -36,6 +36,12 @@ services:
       TRUST_PROXY_HOPS: 1
       HIGH_RISK_MIN_TRUST: ${HIGH_RISK_MIN_TRUST:-40}
       VERIFICATION_DEMO_MODE: ${VERIFICATION_DEMO_MODE:-true}
+      # Empty SMTP_HOST keeps the email verification step in demo mode.
+      SMTP_HOST: ${SMTP_HOST:-}
+      SMTP_PORT: ${SMTP_PORT:-587}
+      SMTP_USER: ${SMTP_USER:-}
+      SMTP_PASS: ${SMTP_PASS:-}
+      MAIL_FROM: ${MAIL_FROM:-}
       UPLOAD_DIR: uploads
       MAX_UPLOAD_SIZE_MB: 25
       MAX_VIDEO_SIZE_MB: 100
