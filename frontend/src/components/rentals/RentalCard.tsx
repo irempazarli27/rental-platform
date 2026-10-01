@@ -25,7 +25,7 @@ export function RentalCard({
   const counterparty = viewerRole === "renter" ? rental.owner : rental.renter;
 
   return (
-    <div className="flex items-center gap-4 rounded-2xl border border-stone-200 bg-white p-4">
+    <div className="flex items-center gap-4 rounded-2xl border border-stone-200 bg-surface p-4">
       <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-xl bg-stone-100">
         {rental.item?.coverImageUrl ? (
           <Image src={`${API_URL}${rental.item.coverImageUrl}`} alt={rental.item.title} fill unoptimized className="object-cover" />

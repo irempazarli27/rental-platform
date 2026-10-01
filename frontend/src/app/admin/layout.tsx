@@ -30,7 +30,7 @@ export default function AdminLayout({ children }: LayoutProps<"/admin">) {
 
   return (
     <div className="min-h-full bg-stone-50">
-      <div className="border-b border-stone-200 bg-white">
+      <div className="border-b border-stone-200 bg-surface">
         <div className="mx-auto max-w-5xl px-4 sm:px-6">
           <p className="pt-4 text-xs font-medium uppercase tracking-wide text-stone-400">Admin Paneli</p>
           <nav className="mt-3 flex gap-1 overflow-x-auto pb-3">

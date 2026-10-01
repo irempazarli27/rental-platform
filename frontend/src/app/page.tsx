@@ -6,10 +6,8 @@ import type { Category } from "@/lib/api/categories";
 import type { ItemSummary } from "@/lib/api/items";
 
 // Server-side rendering runs inside the frontend container, so it talks to the
-// backend over the internal Docker network directly rather than through the
-// public HTTPS origin — going out through nginx would mean validating our own
-// self-signed cert, which Node's fetch (unlike a browser) has no way to
-// click past, and every server-rendered fetch here would fail.
+// backend over the internal Docker network directly rather than going out
+// through the public HTTPS origin and back in.
 const API_URL = process.env.INTERNAL_API_URL ?? process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000";
 
 async function getHomeData(): Promise<{ categories: Category[]; items: ItemSummary[] }> {
@@ -51,7 +49,7 @@ export default async function HomePage() {
             </Link>
             <Link
               href="/items/new"
-              className="rounded-full border border-stone-300 bg-white px-6 py-3 text-sm font-semibold text-stone-700 hover:bg-stone-100"
+              className="rounded-full border border-stone-300 bg-surface px-6 py-3 text-sm font-semibold text-stone-700 hover:bg-stone-100"
             >
               Eşyanı Kiraya Ver
             </Link>
@@ -67,7 +65,7 @@ export default async function HomePage() {
               <Link
                 key={category.id}
                 href={`/search?categoryId=${category.id}`}
-                className="group flex shrink-0 flex-col items-center gap-2.5 rounded-2xl border border-stone-200 bg-white px-5 py-4 transition-all hover:-translate-y-0.5 hover:border-rose-200 hover:shadow-md"
+                className="group flex shrink-0 flex-col items-center gap-2.5 rounded-2xl border border-stone-200 bg-surface px-5 py-4 transition-all hover:-translate-y-0.5 hover:border-rose-200 hover:shadow-md"
               >
                 <span className="flex h-10 w-10 items-center justify-center rounded-full bg-rose-50 text-rose-600 group-hover:bg-rose-100">
                   <CategoryIcon icon={category.icon} className="h-5 w-5" />

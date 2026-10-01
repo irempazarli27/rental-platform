@@ -43,7 +43,7 @@ export default function AdminDisputesPage() {
             <Link
               key={d.id}
               href={`/admin/disputes/${d.id}`}
-              className="flex items-center justify-between gap-3 rounded-2xl border border-stone-200 bg-white p-4 hover:border-stone-300"
+              className="flex items-center justify-between gap-3 rounded-2xl border border-stone-200 bg-surface p-4 hover:border-stone-300"
             >
               <div className="min-w-0">
                 <p className="truncate text-sm font-medium text-stone-900">{d.itemTitle ?? "İlan"}</p>

@@ -6,7 +6,7 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "";
 export function HandoverGallery({ title, record }: { title: string; record: HandoverRecord | null }) {
   if (!record) {
     return (
-      <div className="rounded-2xl border border-dashed border-stone-300 bg-white p-4">
+      <div className="rounded-2xl border border-dashed border-stone-300 bg-surface p-4">
         <h3 className="text-sm font-semibold text-stone-900">{title}</h3>
         <p className="mt-1 text-sm text-stone-500">Henüz belge yok.</p>
       </div>
@@ -16,7 +16,7 @@ export function HandoverGallery({ title, record }: { title: string; record: Hand
   const steps = STEP_ORDER.filter((step) => (record.mediaByStep[step]?.length ?? 0) > 0);
 
   return (
-    <div className="rounded-2xl border border-stone-200 bg-white p-4">
+    <div className="rounded-2xl border border-stone-200 bg-surface p-4">
       <div className="flex items-center justify-between">
         <h3 className="text-sm font-semibold text-stone-900">{title}</h3>
         {record.status === "completed" ? (

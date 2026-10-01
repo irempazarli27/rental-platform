@@ -153,7 +153,7 @@ export default function EditItemPage() {
                 type="button"
                 onClick={() => handleDeleteExisting(image.id)}
                 disabled={deletingImageId === image.id}
-                className="absolute right-1 top-1 flex h-5 w-5 items-center justify-center rounded-full bg-stone-900/70 text-white hover:bg-stone-900 disabled:opacity-50"
+                className="absolute right-1 top-1 flex h-5 w-5 items-center justify-center rounded-full bg-stone-900/70 text-stone-50 hover:bg-stone-900 disabled:opacity-50"
                 aria-label="Fotoğrafı sil"
               >
                 <X className="h-3 w-3" />
@@ -167,7 +167,7 @@ export default function EditItemPage() {
               <button
                 type="button"
                 onClick={() => removeNewPhoto(index)}
-                className="absolute right-1 top-1 flex h-5 w-5 items-center justify-center rounded-full bg-stone-900/70 text-white hover:bg-stone-900"
+                className="absolute right-1 top-1 flex h-5 w-5 items-center justify-center rounded-full bg-stone-900/70 text-stone-50 hover:bg-stone-900"
                 aria-label="Fotoğrafı kaldır"
               >
                 <X className="h-3 w-3" />

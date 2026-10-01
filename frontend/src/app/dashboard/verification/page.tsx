@@ -39,7 +39,7 @@ function StepCard({
 }) {
   return (
     <section
-      className={`rounded-2xl border bg-white p-5 ${state === "active" ? "border-rose-200 shadow-sm" : "border-stone-200"} ${
+      className={`rounded-2xl border bg-surface p-5 ${state === "active" ? "border-rose-200 shadow-sm" : "border-stone-200"} ${
         state === "locked" ? "opacity-60" : ""
       }`}
     >

@@ -46,7 +46,7 @@ export default function RegisterPage() {
       <div className="pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full bg-rose-200/40 blur-3xl" />
       <div className="pointer-events-none absolute -left-24 bottom-0 h-72 w-72 rounded-full bg-amber-200/30 blur-3xl" />
 
-      <div className="relative w-full max-w-md rounded-3xl border border-stone-200 bg-white p-8 shadow-xl shadow-stone-900/5">
+      <div className="relative w-full max-w-md rounded-3xl border border-stone-200 bg-surface p-8 shadow-xl shadow-stone-900/5">
         <h1 className="text-2xl font-semibold text-stone-900">Hesap Oluştur</h1>
         <p className="mt-1 text-sm text-stone-600">Eşya kiralamaya veya kiraya vermeye başla.</p>
 

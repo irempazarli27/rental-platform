@@ -15,7 +15,7 @@ export function ItemCard({ item }: { item: ItemSummary }) {
   return (
     <Link
       href={`/items/${item.id}`}
-      className="group flex flex-col overflow-hidden rounded-2xl border border-stone-200 bg-white transition-all hover:-translate-y-0.5 hover:shadow-lg hover:shadow-stone-900/5"
+      className="group flex flex-col overflow-hidden rounded-2xl border border-stone-200 bg-surface transition-all hover:-translate-y-0.5 hover:shadow-lg hover:shadow-stone-900/5"
     >
       <div className="relative aspect-[4/3] w-full overflow-hidden bg-stone-100">
         {item.coverImageUrl ? (
@@ -30,7 +30,7 @@ export function ItemCard({ item }: { item: ItemSummary }) {
           <div className="flex h-full items-center justify-center text-sm text-stone-400">Fotoğraf yok</div>
         )}
         {item.status !== "active" && (
-          <span className="absolute left-2 top-2 rounded-full bg-stone-900/80 px-2.5 py-1 text-xs font-medium text-white">
+          <span className="absolute left-2 top-2 rounded-full bg-stone-900/80 px-2.5 py-1 text-xs font-medium text-stone-50">
             {item.status === "draft" ? "Taslak" : item.status === "paused" ? "Pasif" : ""}
           </span>
         )}

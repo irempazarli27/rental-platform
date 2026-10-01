@@ -80,7 +80,7 @@ export default function AdminItemsPage() {
           <p className="mt-4 text-xs text-stone-500">{total} ilan</p>
           <div className="mt-2 flex flex-col gap-2">
             {items.map((item) => (
-              <div key={item.id} className="flex items-center justify-between gap-3 rounded-2xl border border-stone-200 bg-white p-4">
+              <div key={item.id} className="flex items-center justify-between gap-3 rounded-2xl border border-stone-200 bg-surface p-4">
                 <div className="min-w-0">
                   <Link href={`/items/${item.id}`} className="block truncate text-sm font-medium text-stone-900 hover:underline">
                     {item.title}

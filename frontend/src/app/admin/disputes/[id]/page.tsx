@@ -70,7 +70,7 @@ export default function AdminDisputeDetailPage() {
     <div className="mx-auto w-full max-w-5xl px-4 py-8 sm:px-6">
       <h1 className="text-xl font-semibold text-stone-900">Uyuşmazlık Detayı</h1>
 
-      <section className="mt-4 rounded-2xl border border-stone-200 bg-white p-4">
+      <section className="mt-4 rounded-2xl border border-stone-200 bg-surface p-4">
         <p className="text-sm text-stone-500">
           {openedByName} tarafından açıldı — {formatDate(dispute.createdAt)}
         </p>
@@ -83,7 +83,7 @@ export default function AdminDisputeDetailPage() {
       </section>
 
       <div className="mt-4 grid gap-4 sm:grid-cols-2">
-        <section className="rounded-2xl border border-stone-200 bg-white p-4">
+        <section className="rounded-2xl border border-stone-200 bg-surface p-4">
           <h2 className="text-sm font-semibold text-stone-900">Kiralama</h2>
           <p className="mt-2 text-sm text-stone-700">{rental.item?.title}</p>
           <p className="text-xs text-stone-500">
@@ -94,7 +94,7 @@ export default function AdminDisputeDetailPage() {
           <p className="mt-2 text-sm font-medium text-stone-900">Güvence bedeli: {formatPrice(rental.depositAmount)}</p>
         </section>
 
-        <section className="rounded-2xl border border-stone-200 bg-white p-4">
+        <section className="rounded-2xl border border-stone-200 bg-surface p-4">
           <h2 className="text-sm font-semibold text-stone-900">Hasar Bildirimleri</h2>
           {damageReports.length === 0 ? (
             <p className="mt-2 text-sm text-stone-500">Yok</p>
@@ -112,7 +112,7 @@ export default function AdminDisputeDetailPage() {
       </div>
 
       {dispute.evidence.length > 0 && (
-        <section className="mt-4 rounded-2xl border border-stone-200 bg-white p-4">
+        <section className="mt-4 rounded-2xl border border-stone-200 bg-surface p-4">
           <h2 className="text-sm font-semibold text-stone-900">Kanıtlar</h2>
           <div className="mt-2 grid grid-cols-4 gap-2">
             {dispute.evidence.map((e) => (
@@ -136,7 +136,7 @@ export default function AdminDisputeDetailPage() {
       </div>
 
       {messages.length > 0 && (
-        <section className="mt-4 rounded-2xl border border-stone-200 bg-white p-4">
+        <section className="mt-4 rounded-2xl border border-stone-200 bg-surface p-4">
           <h2 className="text-sm font-semibold text-stone-900">Taraf Mesajları</h2>
           <div className="mt-2 flex flex-col gap-1">
             {messages.map((m) => (
@@ -149,7 +149,7 @@ export default function AdminDisputeDetailPage() {
       )}
 
       {isOpen && (
-        <section className="mt-4 rounded-2xl border border-stone-300 bg-white p-4">
+        <section className="mt-4 rounded-2xl border border-stone-300 bg-surface p-4">
           <h2 className="text-sm font-semibold text-stone-900">Sonuçlandır</h2>
           <form onSubmit={handleResolve} className="mt-2 flex flex-col gap-3">
             <select

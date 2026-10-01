@@ -114,7 +114,7 @@ export default function RentalDetailPage() {
         </span>
       </div>
 
-      <div className="mt-6 flex items-center gap-4 rounded-2xl border border-stone-200 bg-white p-4">
+      <div className="mt-6 flex items-center gap-4 rounded-2xl border border-stone-200 bg-surface p-4">
         <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-xl bg-stone-100">
           {rental.item?.coverImageUrl && (
             <Image src={`${API_URL}${rental.item.coverImageUrl}`} alt={rental.item.title} fill unoptimized className="object-cover" />
@@ -133,7 +133,7 @@ export default function RentalDetailPage() {
       </div>
 
       <div className="mt-4 grid gap-4 sm:grid-cols-2">
-        <section className="rounded-2xl border border-stone-200 bg-white p-4">
+        <section className="rounded-2xl border border-stone-200 bg-surface p-4">
           <h2 className="text-sm font-semibold text-stone-900">
             {isOwner ? "Kiracı" : "Eşya Sahibi"}
           </h2>
@@ -155,7 +155,7 @@ export default function RentalDetailPage() {
           )}
         </section>
 
-        <section className="rounded-2xl border border-stone-200 bg-white p-4">
+        <section className="rounded-2xl border border-stone-200 bg-surface p-4">
           <h2 className="text-sm font-semibold text-stone-900">Ücret Dökümü</h2>
           <dl className="mt-2 space-y-1 text-sm">
             <div className="flex justify-between">
@@ -178,7 +178,7 @@ export default function RentalDetailPage() {
         </section>
       </div>
 
-      <section className="mt-4 rounded-2xl border border-stone-200 bg-white p-4">
+      <section className="mt-4 rounded-2xl border border-stone-200 bg-surface p-4">
         <h2 className="text-sm font-semibold text-stone-900">Durum Geçmişi</h2>
         <ul className="mt-2 space-y-1 text-sm text-stone-600">
           <li>Talep oluşturuldu — {formatDate(rental.createdAt)}</li>

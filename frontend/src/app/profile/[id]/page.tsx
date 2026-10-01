@@ -95,7 +95,7 @@ export default async function ProfilePage({ params }: { params: Promise<{ id: st
         ) : (
           <div className="mt-4 flex flex-col gap-3">
             {reviews.map((review) => (
-              <div key={review.id} className="rounded-2xl border border-stone-200 bg-white p-4">
+              <div key={review.id} className="rounded-2xl border border-stone-200 bg-surface p-4">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     {review.reviewer ? (

@@ -99,7 +99,7 @@ export default function MyListingsPage() {
           {items.map((item) => (
             <div
               key={item.id}
-              className="flex items-center justify-between gap-4 rounded-2xl border border-stone-200 bg-white p-4"
+              className="flex items-center justify-between gap-4 rounded-2xl border border-stone-200 bg-surface p-4"
             >
               <div className="min-w-0 flex-1">
                 <Link href={`/items/${item.id}`} className="block truncate text-sm font-medium text-stone-900 hover:underline">

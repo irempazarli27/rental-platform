@@ -150,7 +150,7 @@ export default function ItemDetailPage() {
                   {isOwner && (
                     <button
                       onClick={() => handleDeleteImage(image.id)}
-                      className="absolute right-2 top-2 rounded-full bg-white/90 px-2.5 py-1 text-xs font-medium text-red-600 hover:bg-white"
+                      className="absolute right-2 top-2 rounded-full bg-surface/90 px-2.5 py-1 text-xs font-medium text-red-600 hover:bg-surface"
                     >
                       Sil
                     </button>
@@ -233,7 +233,7 @@ export default function ItemDetailPage() {
         </div>
 
         <div>
-          <div className="rounded-2xl border border-stone-200 bg-white p-5 shadow-sm shadow-stone-900/5">
+          <div className="rounded-2xl border border-stone-200 bg-surface p-5 shadow-sm shadow-stone-900/5">
             <p className="text-2xl font-semibold text-stone-900">
               {formatPrice(item.dailyPrice, item.currency)}
               <span className="text-sm font-normal text-stone-500"> / gün</span>

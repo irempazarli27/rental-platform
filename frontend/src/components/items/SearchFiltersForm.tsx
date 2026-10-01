@@ -14,7 +14,7 @@ export interface SearchFilters {
 }
 
 const fieldClasses =
-  "rounded-xl border border-stone-300 bg-white px-3 py-2.5 text-sm text-stone-900 focus:border-rose-500 focus:outline-none focus:ring-2 focus:ring-rose-100";
+  "rounded-xl border border-stone-300 bg-surface px-3 py-2.5 text-sm text-stone-900 focus:border-rose-500 focus:outline-none focus:ring-2 focus:ring-rose-100";
 
 export function SearchFiltersForm({
   initial,
@@ -36,7 +36,7 @@ export function SearchFiltersForm({
   return (
     <form
       onSubmit={handleSubmit}
-      className="grid grid-cols-2 gap-3 rounded-2xl border border-stone-200 bg-white p-4 shadow-sm sm:grid-cols-6"
+      className="grid grid-cols-2 gap-3 rounded-2xl border border-stone-200 bg-surface p-4 shadow-sm sm:grid-cols-6"
     >
       <input
         type="text"

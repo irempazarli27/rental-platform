@@ -7,6 +7,7 @@ import { Bell, Menu, MessageCircle, Package, X } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import { listNotifications } from "@/lib/api/notifications";
 import { listConversations } from "@/lib/api/messaging";
+import { ThemeToggle } from "./ThemeToggle";
 
 const POLL_INTERVAL_MS = 30_000;
 
@@ -70,7 +71,7 @@ export function Navbar() {
   const mobileLink = "block rounded-xl px-3 py-3 text-base font-medium text-stone-800 active:bg-stone-100";
 
   return (
-    <header className="sticky top-0 z-40 border-b border-stone-200 bg-white/90 backdrop-blur-md">
+    <header className="sticky top-0 z-40 border-b border-stone-200 bg-surface/90 backdrop-blur-md">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-2 px-3 sm:px-6">
         <Link
           href="/"
@@ -89,6 +90,7 @@ export function Navbar() {
           >
             Ara
           </Link>
+          <ThemeToggle />
           {isLoading ? null : user ? (
             <>
               <Link href="/items/new" className={`${desktopLink} hidden sm:inline-block`}>
@@ -132,7 +134,7 @@ export function Navbar() {
               <span className="hidden pl-2 text-sm text-stone-500 lg:inline">{user.fullName}</span>
               <button
                 onClick={handleLogout}
-                className="ml-1 hidden whitespace-nowrap rounded-full bg-stone-900 px-4 py-2 text-sm font-medium text-white hover:bg-stone-800 sm:inline-block"
+                className="ml-1 hidden whitespace-nowrap rounded-full bg-stone-900 px-4 py-2 text-sm font-medium text-stone-50 hover:bg-stone-800 sm:inline-block"
               >
                 Çıkış Yap
               </button>
@@ -162,7 +164,7 @@ export function Navbar() {
       </div>
 
       {menuOpen && user && (
-        <div className="border-t border-stone-200 bg-white px-3 pb-4 pt-2 sm:hidden">
+        <div className="border-t border-stone-200 bg-surface px-3 pb-4 pt-2 sm:hidden">
           <p className="px-3 py-2 text-xs font-medium text-stone-400">{user.fullName}</p>
           <Link href="/search" className={mobileLink}>
             Ara
@@ -180,7 +182,7 @@ export function Navbar() {
           )}
           <button
             onClick={handleLogout}
-            className="mt-2 w-full rounded-full bg-stone-900 px-4 py-3 text-base font-medium text-white active:bg-stone-800"
+            className="mt-2 w-full rounded-full bg-stone-900 px-4 py-3 text-base font-medium text-stone-50 active:bg-stone-800"
           >
             Çıkış Yap
           </button>

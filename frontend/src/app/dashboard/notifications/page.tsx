@@ -66,7 +66,7 @@ export default function NotificationsPage() {
             const content = (
               <div
                 className={`rounded-2xl border p-4 ${
-                  notification.readAt ? "border-stone-200 bg-white" : "border-stone-300 bg-stone-50"
+                  notification.readAt ? "border-stone-200 bg-surface" : "border-stone-300 bg-stone-50"
                 }`}
               >
                 <div className="flex items-center justify-between gap-2">

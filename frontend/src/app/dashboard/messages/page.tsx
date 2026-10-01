@@ -50,7 +50,7 @@ export default function MessagesPage() {
               key={c.id}
               href={`/dashboard/messages/${c.id}`}
               className={`flex items-center justify-between gap-3 rounded-2xl border p-4 ${
-                c.unreadCount > 0 ? "border-stone-300 bg-stone-50" : "border-stone-200 bg-white"
+                c.unreadCount > 0 ? "border-stone-300 bg-stone-50" : "border-stone-200 bg-surface"
               }`}
             >
               <div className="min-w-0">

@@ -81,7 +81,7 @@ export default function MessageThreadPage() {
     <div className="mx-auto flex h-[calc(100dvh-4rem)] w-full max-w-2xl flex-col px-4 py-4 sm:px-6 sm:py-8">
       <h1 className="text-xl font-semibold text-stone-900">Mesajlar</h1>
 
-      <div className="mt-4 min-h-0 flex-1 space-y-3 overflow-y-auto rounded-2xl border border-stone-200 bg-white p-4">
+      <div className="mt-4 min-h-0 flex-1 space-y-3 overflow-y-auto rounded-2xl border border-stone-200 bg-surface p-4">
         {messages.length === 0 ? (
           <p className="text-sm text-stone-500">Henüz mesaj yok, ilk mesajı sen gönder.</p>
         ) : (

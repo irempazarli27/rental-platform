@@ -17,7 +17,7 @@ function StatCard({ label, value, href }: { label: string; value: string | numbe
   return (
     <Link
       href={href}
-      className="block rounded-2xl border border-stone-200 bg-white p-4 transition-all hover:-translate-y-0.5 hover:border-rose-200 hover:shadow-md"
+      className="block rounded-2xl border border-stone-200 bg-surface p-4 transition-all hover:-translate-y-0.5 hover:border-rose-200 hover:shadow-md"
     >
       <p className="text-xs font-medium text-stone-500">{label}</p>
       <p className="mt-1 text-2xl font-semibold text-stone-900">{value}</p>
@@ -68,7 +68,7 @@ export default function AdminOverviewPage() {
       </div>
 
       <div className="mt-6 grid gap-4 sm:grid-cols-2">
-        <section className="rounded-2xl border border-stone-200 bg-white p-4">
+        <section className="rounded-2xl border border-stone-200 bg-surface p-4">
           <h2 className="text-sm font-semibold text-stone-900">İlan Durumları</h2>
           <dl className="mt-2 space-y-1 text-sm">
             {Object.entries(stats.itemsByStatus).map(([status, count]) => (
@@ -80,7 +80,7 @@ export default function AdminOverviewPage() {
           </dl>
         </section>
 
-        <section className="rounded-2xl border border-stone-200 bg-white p-4">
+        <section className="rounded-2xl border border-stone-200 bg-surface p-4">
           <h2 className="text-sm font-semibold text-stone-900">Kiralama Durumları</h2>
           <dl className="mt-2 space-y-1 text-sm">
             {Object.entries(stats.rentalsByStatus).map(([status, count]) => (

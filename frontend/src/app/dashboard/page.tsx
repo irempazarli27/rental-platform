@@ -34,7 +34,7 @@ export default function DashboardPage() {
       <div className="mt-8 grid gap-8 sm:grid-cols-2">
         {user.trust && <TrustCard trust={user.trust} verificationLevel={user.verificationLevel} />}
 
-        <section className="rounded-2xl border border-stone-200 bg-white p-6">
+        <section className="rounded-2xl border border-stone-200 bg-surface p-6">
           <h2 className="text-sm font-semibold text-stone-900">Hesap Bilgileri</h2>
           <dl className="mt-4 space-y-2 text-sm">
             <div className="flex justify-between">
@@ -62,14 +62,14 @@ export default function DashboardPage() {
           </dl>
         </section>
 
-        <section className="rounded-2xl border border-stone-200 bg-white p-6">
+        <section className="rounded-2xl border border-stone-200 bg-surface p-6">
           <h2 className="text-sm font-semibold text-stone-900">Profili Düzenle</h2>
           <ProfileForm user={user} onSaved={refreshUser} />
         </section>
       </div>
 
       <div className="mt-8 grid gap-8 sm:grid-cols-2">
-        <section className="rounded-2xl border border-stone-200 bg-white p-6">
+        <section className="rounded-2xl border border-stone-200 bg-surface p-6">
           <div className="flex items-center justify-between">
             <h2 className="text-sm font-semibold text-stone-900">İlanlarım</h2>
             <Link href="/dashboard/listings" className="text-sm font-medium text-stone-700 underline">
@@ -79,7 +79,7 @@ export default function DashboardPage() {
           <p className="mt-2 text-sm text-stone-500">İlanlarını buradan yönetebilirsin.</p>
         </section>
 
-        <section className="rounded-2xl border border-stone-200 bg-white p-6">
+        <section className="rounded-2xl border border-stone-200 bg-surface p-6">
           <div className="flex items-center justify-between">
             <h2 className="text-sm font-semibold text-stone-900">Kiralamalarım</h2>
             <Link href="/dashboard/rentals" className="text-sm font-medium text-stone-700 underline">

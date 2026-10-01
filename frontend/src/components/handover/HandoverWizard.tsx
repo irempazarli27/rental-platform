@@ -121,7 +121,7 @@ export function HandoverWizard({ rentalId, phase }: { rentalId: string; phase: H
         })}
       </div>
 
-      <div className="mt-6 rounded-2xl border border-stone-200 bg-white p-6">
+      <div className="mt-6 rounded-2xl border border-stone-200 bg-surface p-6">
         <p className="text-xs font-medium text-stone-500">
           Adım {stepIndex + 1} / {wizardSteps.length}
           {!current.required && " (opsiyonel)"}
@@ -174,7 +174,7 @@ export function HandoverWizard({ rentalId, phase }: { rentalId: string; phase: H
       </div>
 
       {allRequiredDone && (
-        <div className="mt-6 rounded-2xl border border-stone-200 bg-white p-6">
+        <div className="mt-6 rounded-2xl border border-stone-200 bg-surface p-6">
           <label htmlFor="handover-notes" className="block text-sm font-medium text-stone-700">
             Ek not (opsiyonel)
           </label>

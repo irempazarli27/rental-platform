@@ -89,7 +89,7 @@ export function DisputeSection({
   if (disputes.length === 0 && !canOpen) return null;
 
   return (
-    <section className="rounded-2xl border border-stone-200 bg-white p-4">
+    <section className="rounded-2xl border border-stone-200 bg-surface p-4">
       <div className="flex items-center justify-between">
         <h3 className="text-sm font-semibold text-stone-900">Uyuşmazlık</h3>
         {canOpen && !activeDispute && !showForm && (

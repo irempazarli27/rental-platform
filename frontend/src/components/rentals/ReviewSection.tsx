@@ -57,7 +57,7 @@ export function ReviewSection({ rentalId, isCompleted, viewerId }: { rentalId: s
   }
 
   return (
-    <section className="rounded-2xl border border-stone-200 bg-white p-4">
+    <section className="rounded-2xl border border-stone-200 bg-surface p-4">
       <h3 className="text-sm font-semibold text-stone-900">Değerlendirme</h3>
 
       {myReview ? (

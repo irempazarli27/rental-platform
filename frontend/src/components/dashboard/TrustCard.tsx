@@ -11,7 +11,7 @@ const ROWS: { key: keyof TrustInfo["breakdown"]; label: string; max: number; hin
 
 export function TrustCard({ trust, verificationLevel }: { trust: TrustInfo; verificationLevel: string }) {
   return (
-    <section className="rounded-2xl border border-stone-200 bg-white p-6 sm:col-span-2">
+    <section className="rounded-2xl border border-stone-200 bg-surface p-6 sm:col-span-2">
       <div className="flex flex-wrap items-center justify-between gap-2">
         <h2 className="text-sm font-semibold text-stone-900">Güven Puanın</h2>
         <TrustBadge level={trust.level} />

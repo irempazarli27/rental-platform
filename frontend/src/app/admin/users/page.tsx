@@ -102,7 +102,7 @@ export default function AdminUsersPage() {
           <p className="mt-4 text-xs text-stone-500">{total} kullanıcı</p>
           <div className="mt-2 flex flex-col gap-2">
             {users.map((u) => (
-              <div key={u.id} className="rounded-2xl border border-stone-200 bg-white p-4">
+              <div key={u.id} className="rounded-2xl border border-stone-200 bg-surface p-4">
                 <div className="flex items-center justify-between gap-3">
                   <div className="min-w-0">
                     <div className="flex items-center gap-2">
