@@ -8,5 +8,7 @@ export const usersRouter = Router();
 usersRouter.get("/me", requireAuth, asyncHandler(usersController.me));
 usersRouter.patch("/me", requireAuth, asyncHandler(usersController.updateMe));
 usersRouter.get("/me/listings", requireAuth, asyncHandler(usersController.myListings));
+usersRouter.get("/me/earnings", requireAuth, asyncHandler(usersController.myEarnings));
+usersRouter.get("/me/calendar", requireAuth, asyncHandler(usersController.myCalendar));
 usersRouter.get("/:id", asyncHandler(usersController.publicProfile));
 usersRouter.get("/:id/reviews", asyncHandler(usersController.reviews));
