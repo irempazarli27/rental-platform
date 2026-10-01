@@ -90,7 +90,6 @@ export function Navbar() {
           >
             Ara
           </Link>
-          <ThemeToggle />
           {isLoading ? null : user ? (
             <>
               <Link href="/items/new" className={`${desktopLink} hidden sm:inline-block`}>
@@ -138,6 +137,7 @@ export function Navbar() {
               >
                 Çıkış Yap
               </button>
+              <ThemeToggle />
               <button
                 onClick={() => setMenuOpen((o) => !o)}
                 className="rounded-full p-2.5 text-stone-700 hover:bg-stone-100 sm:hidden"
@@ -158,6 +158,7 @@ export function Navbar() {
               >
                 Kayıt Ol
               </Link>
+              <ThemeToggle />
             </>
           )}
         </nav>
