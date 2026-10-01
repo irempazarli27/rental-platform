@@ -4,7 +4,7 @@ import { AppError } from "../../utils/AppError";
 import { sha256 } from "../../utils/hash";
 import { usersRepository } from "../users/users.repository";
 import { VERIFICATION_POINTS } from "../trust/trust.score";
-import { mailer } from "./mailer";
+import { mailer } from "../../utils/mailer";
 import { verificationRepository } from "./verification.repository";
 import { hashIdNumber, isValidTckn, maxLevel, normalizeTrPhone } from "./verification.rules";
 

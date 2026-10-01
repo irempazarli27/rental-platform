@@ -4,8 +4,8 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 // Stand in for a configured SMTP server: the service should deliver the code
 // through the mailer and keep it out of the HTTP response.
 const { sendVerificationCode } = vi.hoisted(() => ({ sendVerificationCode: vi.fn() }));
-vi.mock("../src/modules/verification/mailer", () => ({
-  mailer: { isConfigured: () => true, sendVerificationCode },
+vi.mock("../src/utils/mailer", () => ({
+  mailer: { isConfigured: () => true, sendVerificationCode, sendNotification: vi.fn() },
 }));
 
 import { app, authHeader, registerUser, type TestUser } from "./helpers";

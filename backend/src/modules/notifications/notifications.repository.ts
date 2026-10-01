@@ -23,6 +23,19 @@ export const notificationsRepository = {
       .executeTakeFirstOrThrow();
   },
 
+  async hasUnread(userId: string, type: string, relatedEntityId: string | undefined) {
+    const row = await db
+      .selectFrom("notifications")
+      .select("id")
+      .where("user_id", "=", userId)
+      .where("type", "=", type)
+      .where("read_at", "is", null)
+      .$if(relatedEntityId !== undefined, (qb) => qb.where("related_entity_id", "=", relatedEntityId!))
+      .limit(1)
+      .executeTakeFirst();
+    return row !== undefined;
+  },
+
   listForUser(userId: string) {
     return db
       .selectFrom("notifications")
