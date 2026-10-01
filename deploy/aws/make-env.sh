@@ -25,5 +25,8 @@ JWT_ACCESS_SECRET=$(openssl rand -hex 32)
 JWT_REFRESH_SECRET=$(openssl rand -hex 32)
 HIGH_RISK_MIN_TRUST=40
 VERIFICATION_DEMO_MODE=true
+# Optional: OAuth client ID (Web application) from Google Cloud Console, with
+# https://${DOMAIN} listed as an authorized JavaScript origin.
+GOOGLE_CLIENT_ID=
 ENV
 echo "Wrote $OUT (permissions 600) for domain ${DOMAIN}."

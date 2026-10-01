@@ -31,6 +31,8 @@ services:
       JWT_ACCESS_EXPIRES_IN: 15m
       JWT_REFRESH_EXPIRES_IN: 30d
       CORS_ORIGIN: https://${DOMAIN}
+      # Empty disables Google sign-in on both the API and the login pages.
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID:-}
       TRUST_PROXY_HOPS: 1
       HIGH_RISK_MIN_TRUST: ${HIGH_RISK_MIN_TRUST:-40}
       VERIFICATION_DEMO_MODE: ${VERIFICATION_DEMO_MODE:-true}
@@ -43,6 +45,8 @@ services:
   frontend:
     build:
       context: ./frontend
+      args:
+        NEXT_PUBLIC_GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID:-}
     restart: unless-stopped
     environment:
       # Server-rendered pages talk to the backend over the internal network.
