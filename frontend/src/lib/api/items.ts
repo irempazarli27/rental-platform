@@ -37,6 +37,9 @@ export interface ItemSummary {
   district: string | null;
   status: ItemStatus;
   coverImageUrl: string | null;
+  /** From public renter reviews of this item; 0 / 0 when it has none. */
+  ratingAvg: number;
+  ratingCount: number;
   createdAt: string;
 }
 

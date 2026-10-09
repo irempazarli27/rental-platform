@@ -182,7 +182,15 @@ export default function ItemDetailPage() {
           )}
 
           <div className="mt-6 flex items-start justify-between gap-3">
-            <h1 className="text-2xl font-semibold text-stone-900">{item.title}</h1>
+            <div>
+              <h1 className="text-2xl font-semibold text-stone-900">{item.title}</h1>
+              {item.ratingCount > 0 && (
+                <a href="#urun-degerlendirmeleri" className="mt-1 inline-block text-sm text-stone-600 hover:underline">
+                  <span className="text-amber-500">★</span> <span className="font-medium text-stone-900">{item.ratingAvg.toFixed(1)}</span>{" "}
+                  · {item.ratingCount} değerlendirme
+                </a>
+              )}
+            </div>
             <FavoriteButton item={item} className="shrink-0 border border-stone-200" />
           </div>
           <div className="mt-2 flex flex-wrap gap-2 text-xs">

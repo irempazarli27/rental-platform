@@ -6,6 +6,7 @@ import { storage } from "../../storage";
 import { categoriesService } from "../categories/categories.service";
 import { categoriesRepository } from "../categories/categories.repository";
 import { toCategoryDto } from "../categories/categories.types";
+import { reviewsRepository } from "../reviews/reviews.repository";
 import { reviewsService } from "../reviews/reviews.service";
 import { usersRepository } from "../users/users.repository";
 import { toPublicUserDto } from "../users/users.types";
@@ -37,9 +38,13 @@ async function assertOwnedItem(itemId: string, requesterId: string) {
 }
 
 async function summariesWithCovers(rows: Awaited<ReturnType<typeof itemsRepository.listByOwner>>): Promise<ItemSummaryDto[]> {
-  const covers = await itemImagesRepository.listCoversByItemIds(rows.map((r) => r.id));
+  const ids = rows.map((r) => r.id);
+  const [covers, ratings] = await Promise.all([
+    itemImagesRepository.listCoversByItemIds(ids),
+    reviewsRepository.ratingStatsForItems(ids),
+  ]);
   const coverByItemId = new Map(covers.map((c) => [c.item_id, c.url]));
-  return rows.map((row) => toItemSummaryDto(row, coverByItemId.get(row.id) ?? null));
+  return rows.map((row) => toItemSummaryDto(row, coverByItemId.get(row.id) ?? null, ratings.get(row.id)));
 }
 
 export const itemsService = {
@@ -86,18 +91,19 @@ export const itemsService = {
       throw AppError.notFound("Item not found");
     }
 
-    const [images, accessories, category, owner, ownerStats] = await Promise.all([
+    const [images, accessories, category, owner, ownerStats, itemRatings] = await Promise.all([
       itemImagesRepository.listByItemId(item.id),
       itemAccessoriesRepository.listByItemId(item.id),
       categoriesRepository.findById(item.category_id),
       usersRepository.findById(item.owner_id),
       reviewsService.getRatingStats(item.owner_id),
+      reviewsRepository.ratingStatsForItems([item.id]),
     ]);
 
     const cover = images.find((i) => i.is_cover)?.url ?? null;
 
     return {
-      ...toItemSummaryDto(item, cover),
+      ...toItemSummaryDto(item, cover, itemRatings.get(item.id)),
       description: item.description,
       serialNumber: item.serial_number,
       lat: item.lat,

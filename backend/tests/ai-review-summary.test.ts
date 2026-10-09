@@ -150,6 +150,30 @@ describe("item reviews", () => {
     expect(tentRes.body.summary).toBeNull();
   });
 
+  it("puts each item's rating on listing cards, counting only revealed reviews", async () => {
+    const owner = await registerUser("card-owner");
+    const renter = await registerUser("card-renter");
+    const rated = await createItem(owner, { title: "Kart Puanlı" });
+    const hidden = await createItem(owner, { title: "Kart Gizli" });
+    await reviewedRental(owner, renter, rated.id, "2036-01-05", "İyi");
+    await reviewedRental(owner, renter, rated.id, "2036-01-10", "Çok iyi");
+
+    // Only the renter reviews here, so the double-blind rule keeps it hidden for now.
+    const rental = await createAndAcceptRental(owner, renter, hidden.id, { startDate: "2036-02-01", endDate: "2036-02-01" });
+    await advanceToActive(owner, renter, rental.id);
+    await advanceToCompleted(owner, renter, rental.id);
+    await request(app).post(`/api/rentals/${rental.id}/reviews`).set(authHeader(renter.accessToken)).send({ rating: 1, comment: "Gizli" });
+
+    const cards = (await request(app).get("/api/items").query({ ownerId: owner.user.id })).body.items;
+    const byTitle = Object.fromEntries(cards.map((c: { title: string }) => [c.title, c]));
+    expect(byTitle["Kart Puanlı"]).toMatchObject({ ratingAvg: 5, ratingCount: 2 });
+    expect(byTitle["Kart Gizli"]).toMatchObject({ ratingAvg: 0, ratingCount: 0 });
+
+    // The listing page and its review list agree with the card.
+    expect((await request(app).get(`/api/items/${rated.id}`)).body.item).toMatchObject({ ratingAvg: 5, ratingCount: 2 });
+    expect((await request(app).get(`/api/items/${hidden.id}/reviews`)).body.ratingCount).toBe(0);
+  });
+
   it("is 404 for an item that does not exist", async () => {
     expect((await request(app).get("/api/items/44444444-4444-4444-8444-444444444444/reviews")).status).toBe(404);
   });

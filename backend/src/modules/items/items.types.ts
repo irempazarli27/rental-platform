@@ -38,6 +38,9 @@ export interface ItemSummaryDto {
   district: string | null;
   status: string;
   coverImageUrl: string | null;
+  /** From public renter reviews of this item; 0 / 0 when it has none. */
+  ratingAvg: number;
+  ratingCount: number;
   createdAt: Date | string;
 }
 
@@ -53,7 +56,11 @@ export interface ItemDetailDto extends ItemSummaryDto {
   owner: PublicUserDto | null;
 }
 
-export function toItemSummaryDto(item: ItemRow, coverImageUrl: string | null): ItemSummaryDto {
+export function toItemSummaryDto(
+  item: ItemRow,
+  coverImageUrl: string | null,
+  rating: { ratingAvg: number; ratingCount: number } = { ratingAvg: 0, ratingCount: 0 },
+): ItemSummaryDto {
   return {
     id: item.id,
     ownerId: item.owner_id,
@@ -72,6 +79,8 @@ export function toItemSummaryDto(item: ItemRow, coverImageUrl: string | null): I
     district: item.district,
     status: item.status,
     coverImageUrl,
+    ratingAvg: rating.ratingAvg,
+    ratingCount: rating.ratingCount,
     createdAt: item.created_at,
   };
 }

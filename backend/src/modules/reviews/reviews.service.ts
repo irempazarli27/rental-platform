@@ -3,14 +3,11 @@ import { notificationsService } from "../notifications/notifications.service";
 import { itemsRepository } from "../items/items.repository";
 import { rentalsRepository } from "../rentals/rentals.repository";
 import { usersRepository } from "../users/users.repository";
+import { REVEAL_TIMEOUT_MS } from "./reveal";
 import { reviewsRepository } from "./reviews.repository";
 import { toReviewDto, type PublicReviewDto, type ReviewDto } from "./reviews.types";
 import type { CreateReviewInput } from "./reviews.validation";
 
-// Double-blind window: a lone review stays hidden from the reviewee (and everyone else)
-// until the counterparty also reviews, or this much time has passed since completion —
-// whichever comes first. Prevents reading the other side's review before writing your own.
-const REVEAL_TIMEOUT_MS = 14 * 24 * 60 * 60 * 1000;
 
 function isRevealed(reviewCountForRental: number, completedAt: Date | string | null): boolean {
   if (reviewCountForRental >= 2) return true;

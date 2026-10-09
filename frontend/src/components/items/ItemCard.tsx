@@ -51,9 +51,17 @@ export function ItemCard({ item }: { item: ItemSummary }) {
           {(item.city || item.district) && (
             <p className="text-xs text-stone-500">{[item.district, item.city].filter(Boolean).join(", ")}</p>
           )}
-          <p className="mt-auto pt-2 text-sm font-semibold text-stone-900">
-            {formatPrice(item.dailyPrice, item.currency)} <span className="font-normal text-stone-500">/ gün</span>
-          </p>
+          <div className="mt-auto flex items-baseline justify-between gap-2 pt-2">
+            <p className="text-sm font-semibold text-stone-900">
+              {formatPrice(item.dailyPrice, item.currency)} <span className="font-normal text-stone-500">/ gün</span>
+            </p>
+            {item.ratingCount > 0 && (
+              <p className="shrink-0 text-xs" aria-label={`${item.ratingAvg.toFixed(1)} puan, ${item.ratingCount} değerlendirme`}>
+                <span className="text-amber-500">★</span> <span className="font-medium text-stone-900">{item.ratingAvg.toFixed(1)}</span>{" "}
+                <span className="text-stone-500">({item.ratingCount})</span>
+              </p>
+            )}
+          </div>
         </div>
       </Link>
       <FavoriteButton item={item} className="absolute right-2 top-2" />
