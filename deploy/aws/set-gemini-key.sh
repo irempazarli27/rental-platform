@@ -12,8 +12,10 @@ ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
 read -r -s -p "Gemini API anahtari (yazarken gorunmez): " API_KEY
 echo
 API_KEY="${API_KEY// /}"
-if [[ ! "$API_KEY" =~ ^[A-Za-z0-9_-]{30,}$ ]]; then
-  echo "Bu bir Gemini API anahtarina benzemiyor (AIza... ile baslayan uzun bir metin olmali)." >&2
+# Keys come in more than one format (older "AIza...", newer "AQ.Ab..."), so
+# only the character set and a minimum length are checked here.
+if [[ ! "$API_KEY" =~ ^[A-Za-z0-9._-]{30,}$ ]]; then
+  echo "Bu bir Gemini API anahtarina benzemiyor: en az 30 karakter, yalnizca harf, rakam, nokta, tire ve alt cizgi olmali." >&2
   exit 1
 fi
 
