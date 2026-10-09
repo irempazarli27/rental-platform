@@ -110,16 +110,6 @@ export default function DashboardPage() {
           </div>
           <p className="mt-2 text-sm text-stone-500">İlanlarının ne kadar kazandırdığını ay ay ve ilan ilan gör.</p>
         </section>
-
-        <section className="rounded-2xl border border-stone-200 bg-surface p-6">
-          <div className="flex items-center justify-between">
-            <h2 className="text-sm font-semibold text-stone-900">Takvim</h2>
-            <Link href="/dashboard/calendar" className="text-sm font-medium text-stone-700 underline">
-              Tümünü gör
-            </Link>
-          </div>
-          <p className="mt-2 text-sm text-stone-500">Kiralanan ve kapattığın günleri tek takvimde gör, tarih kapat.</p>
-        </section>
       </div>
     </div>
   );

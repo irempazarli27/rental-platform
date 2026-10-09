@@ -17,18 +17,6 @@ export function recentMonths(now: Date, count: number): string[] {
   });
 }
 
-export interface CalendarEntry {
-  /** Unique within a response; a block id or a rental id depending on kind. */
-  id: string;
-  kind: "rental" | "manual" | "pending";
-  itemId: string;
-  itemTitle: string;
-  startDate: string;
-  endDate: string;
-  rentalId: string | null;
-  renterName: string | null;
-}
-
 export const ownerInsightsService = {
   /**
    * What the owner's rentals add up to. The owner's share of a rental is its
@@ -67,39 +55,5 @@ export const ownerInsightsService = {
         rentedDays: Number(r.rented_days),
       })),
     };
-  },
-
-  async calendar(ownerId: string, from: string, to: string) {
-    const [items, blocks, pending] = await Promise.all([
-      ownerInsightsRepository.listItems(ownerId),
-      ownerInsightsRepository.blocksInRange(ownerId, from, to),
-      ownerInsightsRepository.pendingInRange(ownerId, from, to),
-    ]);
-
-    const entries: CalendarEntry[] = [
-      ...blocks.map((b) => ({
-        id: b.id,
-        kind: b.reason === "rental" ? ("rental" as const) : ("manual" as const),
-        itemId: b.item_id,
-        itemTitle: b.item_title,
-        startDate: b.start_date,
-        endDate: b.end_date,
-        rentalId: b.rental_id,
-        renterName: b.renter_name,
-      })),
-      ...pending.map((r) => ({
-        id: r.id,
-        kind: "pending" as const,
-        itemId: r.item_id,
-        itemTitle: r.item_title,
-        startDate: r.start_date,
-        endDate: r.end_date,
-        rentalId: r.id,
-        renterName: r.renter_name,
-      })),
-    ];
-
-    entries.sort((a, b) => a.startDate.localeCompare(b.startDate));
-    return { items, entries };
   },
 };
