@@ -3,9 +3,8 @@
 import { useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { Settings } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
-import { DeleteAccountSection } from "@/components/dashboard/DeleteAccountSection";
-import { ProfileForm } from "@/components/dashboard/ProfileForm";
 import { TrustCard } from "@/components/dashboard/TrustCard";
 
 export default function DashboardPage() {
@@ -30,21 +29,30 @@ export default function DashboardPage() {
 
   return (
     <div className="mx-auto w-full max-w-4xl px-4 py-12 sm:px-6">
-      <h1 className="text-2xl font-semibold text-stone-900">Panelim</h1>
+      <div className="flex items-center justify-between gap-4">
+        <h1 className="text-2xl font-semibold text-stone-900">Panelim</h1>
+        <Link
+          href="/dashboard/settings"
+          className="flex items-center gap-1.5 rounded-full border border-stone-300 px-3.5 py-2 text-sm font-medium text-stone-700 hover:bg-stone-100"
+        >
+          <Settings className="h-4 w-4" strokeWidth={1.75} />
+          Ayarlar
+        </Link>
+      </div>
 
       <div className="mt-8 grid gap-8 sm:grid-cols-2">
         {user.trust && <TrustCard trust={user.trust} verificationLevel={user.verificationLevel} />}
 
-        <section className="rounded-2xl border border-stone-200 bg-surface p-6">
+        <section className="rounded-2xl border border-stone-200 bg-surface p-6 sm:col-span-2">
           <h2 className="text-sm font-semibold text-stone-900">Hesap Bilgileri</h2>
-          <dl className="mt-4 space-y-2 text-sm">
+          <dl className="mt-4 grid gap-x-10 gap-y-2 text-sm sm:grid-cols-2">
             <div className="flex justify-between">
               <dt className="text-stone-500">Ad Soyad</dt>
               <dd className="text-stone-900">{user.fullName}</dd>
             </div>
-            <div className="flex justify-between">
-              <dt className="text-stone-500">E-posta</dt>
-              <dd className="text-stone-900">{user.email}</dd>
+            <div className="flex justify-between gap-4">
+              <dt className="shrink-0 text-stone-500">E-posta</dt>
+              <dd className="min-w-0 break-all text-right text-stone-900">{user.email}</dd>
             </div>
             <div className="flex justify-between">
               <dt className="text-stone-500">E-posta doğrulama</dt>
@@ -63,10 +71,6 @@ export default function DashboardPage() {
           </dl>
         </section>
 
-        <section className="rounded-2xl border border-stone-200 bg-surface p-6">
-          <h2 className="text-sm font-semibold text-stone-900">Profili Düzenle</h2>
-          <ProfileForm user={user} onSaved={refreshUser} />
-        </section>
       </div>
 
       <div className="mt-8 grid gap-8 sm:grid-cols-2">
@@ -112,8 +116,6 @@ export default function DashboardPage() {
           <p className="mt-2 text-sm text-stone-500">İlanlarının ne kadar kazandırdığını ay ay ve ilan ilan gör.</p>
         </section>
       </div>
-
-      <DeleteAccountSection user={user} />
     </div>
   );
 }
