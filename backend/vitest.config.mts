@@ -17,6 +17,9 @@ export default defineConfig({
     // Explicitly forward .env.test values to the worker that runs test files —
     // dotenv only mutates process.env in this (main) process, which workers
     // don't automatically inherit.
-    env: parsed,
+    // GEMINI_API_KEY is forced empty: env.ts also loads .env, where a real key
+    // lives for local development, and tests must never spend real quota.
+    // AI tests swap in a fake provider instead.
+    env: { ...parsed, GEMINI_API_KEY: "" },
   },
 });
