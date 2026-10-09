@@ -8,16 +8,41 @@ import { trustService } from "../trust/trust.service";
 import { billingRepository } from "./billing.repository";
 import { computePricing } from "./rentals.pricing";
 import { rentalsRepository } from "./rentals.repository";
-import { toRentalBase, type RentalDto, type RentalItemSummaryDto, type RentalPartyDto } from "./rentals.types";
+import {
+  toRentalBase,
+  type RentalDto,
+  type RentalItemSummaryDto,
+  type RentalPartyDto,
+  type RenterProfileDto,
+} from "./rentals.types";
 import type { CreateRentalInput, ListRentalsQuery } from "./rentals.validation";
 
-async function assembleDto(row: Awaited<ReturnType<typeof rentalsRepository.findById>>): Promise<RentalDto> {
+type RenterProfiles = Map<string, Promise<RenterProfileDto | null>>;
+
+/**
+ * The renter's summary, computed once per renter even when a list holds
+ * several of their rentals. A deleted or missing renter has none.
+ */
+function renterProfile(renterId: string, cache: RenterProfiles): Promise<RenterProfileDto | null> {
+  let profile = cache.get(renterId);
+  if (!profile) {
+    profile = trustService.getRenterSummary(renterId).catch(() => null);
+    cache.set(renterId, profile);
+  }
+  return profile;
+}
+
+async function assembleDto(
+  row: Awaited<ReturnType<typeof rentalsRepository.findById>>,
+  profiles: RenterProfiles = new Map(),
+): Promise<RentalDto> {
   if (!row) throw AppError.notFound("Rental not found");
 
-  const [item, renter, owner] = await Promise.all([
+  const [item, renter, owner, profile] = await Promise.all([
     itemsRepository.findById(row.item_id),
     usersRepository.findById(row.renter_id),
     usersRepository.findById(row.owner_id),
+    renterProfile(row.renter_id, profiles),
   ]);
 
   let itemDto: RentalItemSummaryDto | null = null;
@@ -34,6 +59,7 @@ async function assembleDto(row: Awaited<ReturnType<typeof rentalsRepository.find
     item: itemDto,
     renter: toParty(renter),
     owner: toParty(owner),
+    renterProfile: renter?.status === "deleted" ? null : profile,
   };
 }
 
@@ -105,7 +131,8 @@ export const rentalsService = {
 
   async listMine(userId: string, query: ListRentalsQuery): Promise<RentalDto[]> {
     const rows = await rentalsRepository.listForUser(userId, query);
-    return Promise.all(rows.map((row) => assembleDto(row)));
+    const profiles: RenterProfiles = new Map();
+    return Promise.all(rows.map((row) => assembleDto(row, profiles)));
   },
 
   async accept(rentalId: string, ownerId: string): Promise<RentalDto> {

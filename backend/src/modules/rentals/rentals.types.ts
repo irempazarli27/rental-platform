@@ -15,6 +15,15 @@ export interface RentalItemSummaryDto {
   coverImageUrl: string | null;
 }
 
+/** The renter at a glance, for an owner deciding on a request. */
+export interface RenterProfileDto {
+  ratingAvg: number;
+  ratingCount: number;
+  completedRentals: number;
+  verificationLevel: string;
+  trust: { score: number; level: string };
+}
+
 export interface RentalDto {
   id: string;
   status: string;
@@ -34,6 +43,7 @@ export interface RentalDto {
   item: RentalItemSummaryDto | null;
   renter: RentalPartyDto | null;
   owner: RentalPartyDto | null;
+  renterProfile: RenterProfileDto | null;
 }
 
 export function toRentalBase(row: RentalRow) {

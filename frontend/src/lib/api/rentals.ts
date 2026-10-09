@@ -18,6 +18,14 @@ export interface RentalParty {
   avatarUrl: string | null;
 }
 
+export interface RenterProfile {
+  ratingAvg: number;
+  ratingCount: number;
+  completedRentals: number;
+  verificationLevel: string;
+  trust: { score: number; level: string };
+}
+
 export interface RentalItemSummary {
   id: string;
   title: string;
@@ -43,6 +51,8 @@ export interface Rental {
   item: RentalItemSummary | null;
   renter: RentalParty | null;
   owner: RentalParty | null;
+  /** The renter at a glance; null if the account was deleted. */
+  renterProfile: RenterProfile | null;
 }
 
 export function createRentalRequest(input: { itemId: string; startDate: string; endDate: string }) {

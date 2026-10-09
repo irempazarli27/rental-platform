@@ -18,6 +18,26 @@ const DAY_MS = 24 * 60 * 60 * 1000;
 
 export const trustService = {
   async getTrust(userId: string): Promise<TrustDto> {
+    return (await this.compute(userId)).trust;
+  },
+
+  /**
+   * What an owner needs to judge a renter at a glance: rating, track record,
+   * trust level and verification. Everything here is already public on the
+   * renter's profile except the completed-rental count.
+   */
+  async getRenterSummary(userId: string) {
+    const { trust, completedRentals, rating, verificationLevel } = await this.compute(userId);
+    return {
+      ratingAvg: rating.ratingAvg,
+      ratingCount: rating.ratingCount,
+      completedRentals,
+      verificationLevel,
+      trust: { score: trust.score, level: trust.level },
+    };
+  },
+
+  async compute(userId: string) {
     const user = await usersRepository.findById(userId);
     if (!user) throw AppError.notFound("User not found");
 
@@ -37,13 +57,14 @@ export const trustService = {
       suspended: user.status === "suspended",
     });
 
-    return {
+    const trust: TrustDto = {
       score,
       level,
       breakdown,
       canRentHighRisk: score >= env.highRiskMinTrust,
       highRiskMinScore: env.highRiskMinTrust,
     };
+    return { trust, completedRentals, rating, verificationLevel: user.verification_level };
   },
 
   /** Throws unless the renter is trusted enough for a high-risk item. */

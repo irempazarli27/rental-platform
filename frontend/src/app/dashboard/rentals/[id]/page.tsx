@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { RenterSummary } from "@/components/rentals/RenterSummary";
 import { useParams, useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import { acceptRental, cancelRental, getRental, rejectRental, type Rental } from "@/lib/api/rentals";
@@ -144,6 +145,7 @@ export default function RentalDetailPage() {
           ) : (
             <p className="mt-2 text-sm text-stone-700">—</p>
           )}
+          {isOwner && rental.renterProfile && <RenterSummary profile={rental.renterProfile} />}
           {counterparty && isParticipant && (
             <button
               disabled={messaging}

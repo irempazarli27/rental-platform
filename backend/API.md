@@ -159,7 +159,7 @@ Giriş gerekli. Kiralama talebi. Gövde: `itemId`, `startDate`, `endDate` (başl
 Giriş gerekli. Kullanıcının kiralamaları. Sorgu: `role` (`renter` ya da `owner`), `status`.
 
 ### GET /api/rentals/:id
-Giriş gerekli, yalnızca tarafları. Kiralama detayı.
+Giriş gerekli, yalnızca tarafları. Kiralama detayı. Bu ve kiralama listesi yanıtlarında `renterProfile` alanı kiracıyı özetler: `{ ratingAvg, ratingCount, completedRentals, verificationLevel, trust: { score, level } }` (kiracı hesabını sildiyse `null`). Eşya sahibinin talebi değerlendirirken kullanması içindir.
 
 ### PATCH /api/rentals/:id/accept
 Giriş gerekli, yalnızca eşya sahibi. Bekleyen talebi kabul eder; tarihleri kapatır ve depozitoyu kaydeder.

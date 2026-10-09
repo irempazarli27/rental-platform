@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import type { Rental } from "@/lib/api/rentals";
+import { RenterSummary } from "./RenterSummary";
 import { RENTAL_STATUS_BADGE_CLASSES, RENTAL_STATUS_LABELS, formatDate, formatPrice } from "@/lib/format";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "";
@@ -39,6 +40,10 @@ export function RentalCard({
         <p className="text-xs text-stone-500">
           {formatDate(rental.startDate)} – {formatDate(rental.endDate)} · {counterparty?.fullName ?? "—"}
         </p>
+        {/* Only where the owner has a decision to make; the rental page always shows it. */}
+        {viewerRole === "owner" && rental.status === "PENDING" && rental.renterProfile && (
+          <RenterSummary profile={rental.renterProfile} compact />
+        )}
         <p className="text-xs font-medium text-stone-700">{formatPrice(rental.totalAmount)}</p>
       </div>
 
