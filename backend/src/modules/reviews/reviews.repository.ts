@@ -33,6 +33,18 @@ export const reviewsRepository = {
     return db.selectFrom("reviews").selectAll().where("rental_id", "in", rentalIds).execute();
   },
 
+  /** What renters wrote after renting this item (not what owners wrote about those renters). */
+  listByRentersOfItem(itemId: string) {
+    return db
+      .selectFrom("reviews")
+      .innerJoin("rentals", "rentals.id", "reviews.rental_id")
+      .selectAll("reviews")
+      .where("rentals.item_id", "=", itemId)
+      .whereRef("reviews.reviewer_id", "=", "rentals.renter_id")
+      .orderBy("reviews.created_at", "desc")
+      .execute();
+  },
+
   listByRevieweeId(revieweeId: string) {
     return db
       .selectFrom("reviews")

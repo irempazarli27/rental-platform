@@ -1,7 +1,7 @@
 import Image from "next/image";
-import Link from "next/link";
 import { ItemCard } from "@/components/items/ItemCard";
 import { ReviewSummaryCard, type ReviewSummary } from "@/components/ReviewSummaryCard";
+import { ReviewCard } from "@/components/reviews/ReviewCard";
 import { TrustBadge, VerificationChips } from "@/components/TrustBadge";
 import type { TrustLevel } from "@/lib/api/auth";
 import { formatDate } from "@/lib/format";
@@ -99,22 +99,7 @@ export default async function ProfilePage({ params }: { params: Promise<{ id: st
           <div className="mt-4 flex flex-col gap-3">
             {user.reviewSummary && <ReviewSummaryCard summary={user.reviewSummary} />}
             {reviews.map((review) => (
-              <div key={review.id} className="rounded-2xl border border-stone-200 bg-surface p-4">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    {review.reviewer ? (
-                      <Link href={`/profile/${review.reviewer.id}`} className="text-sm font-medium text-stone-900 hover:underline">
-                        {review.reviewer.fullName}
-                      </Link>
-                    ) : (
-                      <span className="text-sm font-medium text-stone-900">Kullanıcı</span>
-                    )}
-                    <span className="text-amber-500">{"★".repeat(review.rating)}{"☆".repeat(5 - review.rating)}</span>
-                  </div>
-                  <span className="text-xs text-stone-400">{formatDate(review.createdAt)}</span>
-                </div>
-                {review.comment && <p className="mt-2 text-sm text-stone-600">{review.comment}</p>}
-              </div>
+              <ReviewCard key={review.id} review={review} showItem />
             ))}
           </div>
         )}

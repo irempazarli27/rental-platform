@@ -115,3 +115,42 @@ describe("AI budget", () => {
     expect(generateStructured.mock.calls.filter(([req]) => req.system === "x")).toEqual([]);
   });
 });
+
+describe("item reviews", () => {
+  beforeEach(() => {
+    ai._resetFailures();
+    generateStructured.mockReset();
+    generateStructured.mockResolvedValue({ value: SUMMARY, model: "fake-model" });
+  });
+
+  it("lists only what renters wrote about this item, with its own rating and summary", async () => {
+    const owner = await registerUser("itemrev-owner");
+    const renter = await registerUser("itemrev-renter");
+    const camera = await createItem(owner, { title: "Kamera İnceleme" });
+    const tent = await createItem(owner, { title: "Çadır İnceleme" });
+    for (const [i, day] of ["2035-01-05", "2035-01-10", "2035-01-15"].entries()) {
+      await reviewedRental(owner, renter, camera.id, day, `Kamera yorumu ${i}`);
+    }
+    await reviewedRental(owner, renter, tent.id, "2035-01-20", "Çadır yorumu");
+
+    const res = await request(app).get(`/api/items/${camera.id}/reviews`);
+    expect(res.status).toBe(200);
+    expect(res.body.ratingCount).toBe(3);
+    expect(res.body.ratingAvg).toBe(5);
+    // Only renter-written reviews of this item: no tent review, and none of the owner's reviews of the renter.
+    expect(res.body.reviews.map((r: { comment: string }) => r.comment).sort()).toEqual(["Kamera yorumu 0", "Kamera yorumu 1", "Kamera yorumu 2"]);
+    expect(res.body.reviews[0].item).toEqual({ id: camera.id, title: "Kamera İnceleme" });
+
+    await vi.waitFor(async () => expect((await request(app).get(`/api/items/${camera.id}/reviews`)).body.summary).toEqual(SUMMARY));
+    const prompt = generateStructured.mock.calls.find(([req]) => req.kind === "item_review_summary" || JSON.stringify(req.parts).includes("Kamera yorumu"))![0];
+    expect(prompt.system).toContain("one particular listed item");
+
+    const tentRes = await request(app).get(`/api/items/${tent.id}/reviews`);
+    expect(tentRes.body.ratingCount).toBe(1);
+    expect(tentRes.body.summary).toBeNull();
+  });
+
+  it("is 404 for an item that does not exist", async () => {
+    expect((await request(app).get("/api/items/44444444-4444-4444-8444-444444444444/reviews")).status).toBe(404);
+  });
+});

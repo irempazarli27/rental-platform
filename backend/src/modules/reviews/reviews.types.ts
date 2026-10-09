@@ -54,5 +54,7 @@ export interface PublicReviewDto {
   rating: number;
   comment: string | null;
   reviewer: { id: string; fullName: string; avatarUrl: string | null } | null;
+  /** The listing the rental was for, so a review can be read in context. */
+  item: { id: string; title: string } | null;
   createdAt: Date | string;
 }

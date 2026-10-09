@@ -18,7 +18,7 @@ import { ApiError } from "@/lib/api/client";
 import { CONDITION_LABELS, DELIVERY_LABELS, RISK_LABELS, formatDate, formatPrice } from "@/lib/format";
 import { FavoriteButton } from "@/components/items/FavoriteButton";
 import { RentalRequestForm } from "@/components/items/RentalRequestForm";
-import { ReviewsPreview } from "@/components/reviews/ReviewsPreview";
+import { ItemReviews } from "@/components/reviews/ItemReviews";
 import { startConversation } from "@/lib/api/messaging";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "";
@@ -236,11 +236,9 @@ export default function ItemDetailPage() {
             </div>
           )}
 
-          {item.owner && (
-            <div className="mt-8">
-              <ReviewsPreview userId={item.owner.id} title="Eşya sahibi hakkındaki değerlendirmeler" hideWhenEmpty />
-            </div>
-          )}
+          <div className="mt-8">
+            <ItemReviews itemId={item.id} />
+          </div>
         </div>
 
         <div>

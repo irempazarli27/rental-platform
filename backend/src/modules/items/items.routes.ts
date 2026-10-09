@@ -21,6 +21,7 @@ itemsRouter.post(
 itemsRouter.delete("/:id/images/:imageId", requireAuth, asyncHandler(itemsController.deleteImage));
 
 itemsRouter.get("/:id/availability", asyncHandler(itemsController.listAvailability));
+itemsRouter.get("/:id/reviews", asyncHandler(itemsController.reviews));
 itemsRouter.post(
   "/:id/availability-blocks",
   requireAuth,

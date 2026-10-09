@@ -5,8 +5,8 @@
  *   node dist/db/seed-demo-reviews.js            add (does nothing if already added)
  *   node dist/db/seed-demo-reviews.js --remove   remove everything it added
  *
- * Reviews come from three demo accounts whose names end in "(Demo)" and that
- * cannot sign in. Each review sits on a past, completed rental between a
+ * Up to three listings per owner get three reviews each, from three demo
+ * accounts whose names end in "(Demo)" and that cannot sign in. Each review sits on a past, completed rental between a
  * demo account and a real listing's owner, and the owner reviews back, so
  * the reveal rule shows it straight away. Those rentals also count toward
  * the owner's completed rentals (trust score, earnings) until removed.
@@ -17,8 +17,10 @@ import { db } from ".";
 
 const DEMO_EMAIL_DOMAIN = "@demo.paylasimlik.invalid";
 const REVIEWERS = ["Ayşe K. (Demo)", "Can T. (Demo)", "Zeynep A. (Demo)"];
-/** Enough for an AI summary to appear. */
-const REVIEWS_PER_OWNER = 4;
+// Reviews are shown per listing, so a few listings per owner get enough of
+// them (three) for an AI summary to appear on the listing page.
+const LISTINGS_PER_OWNER = 3;
+const REVIEWS_PER_LISTING = 3;
 
 const COMMENTS: [number, string][] = [
   [5, "Eşya tertemiz ve anlatıldığı gibiydi, teslimde her şeyi tek tek gösterdi."],
@@ -72,13 +74,13 @@ async function add() {
   let commentIndex = 0;
   let created = 0;
   for (const [ownerId, ownerItems] of byOwner) {
-    for (let n = 0; n < REVIEWS_PER_OWNER; n++) {
-      // Spread over the owner's listings; an owner with one listing gets several rentals of it.
-      const item = ownerItems[n % ownerItems.length]!;
+    for (let n = 0; n < Math.min(ownerItems.length, LISTINGS_PER_OWNER) * REVIEWS_PER_LISTING; n++) {
+      const item = ownerItems[Math.floor(n / REVIEWS_PER_LISTING)]!;
       const reviewer = reviewers[n % reviewers.length]!;
       const [rating, comment] = COMMENTS[commentIndex++ % COMMENTS.length]!;
       const days = 2;
-      const endDaysAgo = 10 + created * 6;
+      // Counted per owner, so dates stay within the last few months however many owners there are.
+      const endDaysAgo = 10 + n * 9;
       const price = Number(item.daily_price) * days;
       const fee = Math.round(price * 0.1 * 100) / 100;
       const completedAt = new Date(Date.now() - (endDaysAgo - 1) * 86_400_000);

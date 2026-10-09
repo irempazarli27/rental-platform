@@ -1,5 +1,6 @@
 import { AppError } from "../../utils/AppError";
 import { notificationsService } from "../notifications/notifications.service";
+import { itemsRepository } from "../items/items.repository";
 import { rentalsRepository } from "../rentals/rentals.repository";
 import { usersRepository } from "../users/users.repository";
 import { reviewsRepository } from "./reviews.repository";
@@ -16,6 +17,54 @@ function isRevealed(reviewCountForRental: number, completedAt: Date | string | n
   if (!completedAt) return false;
   const deadline = new Date(completedAt).getTime() + REVEAL_TIMEOUT_MS;
   return Date.now() >= deadline;
+}
+
+type ReviewRow = Awaited<ReturnType<typeof reviewsRepository.listByRevieweeId>>[number];
+
+/** Keeps only reviews the double-blind rule has revealed, with reviewer and item attached. */
+async function toPublicReviews(reviews: ReviewRow[]): Promise<PublicReviewDto[]> {
+  if (reviews.length === 0) return [];
+
+  const rentalIds = [...new Set(reviews.map((r) => r.rental_id))];
+  const [rentals, siblingReviews] = await Promise.all([
+    rentalsRepository.findByIds(rentalIds),
+    reviewsRepository.listForRentals(rentalIds),
+  ]);
+  const rentalById = new Map(rentals.map((r) => [r.id, r]));
+  const countByRental = new Map<string, number>();
+  for (const r of siblingReviews) {
+    countByRental.set(r.rental_id, (countByRental.get(r.rental_id) ?? 0) + 1);
+  }
+
+  const revealedReviews = reviews.filter((r) => {
+    const count = countByRental.get(r.rental_id) ?? 1;
+    return isRevealed(count, rentalById.get(r.rental_id)?.completed_at ?? null);
+  });
+
+  const reviewerIds = [...new Set(revealedReviews.map((r) => r.reviewer_id))];
+  const itemIds = [...new Set(revealedReviews.map((r) => rentalById.get(r.rental_id)?.item_id).filter((id) => id !== undefined))];
+  const [reviewers, items] = await Promise.all([usersRepository.findByIds(reviewerIds), itemsRepository.findByIds(itemIds)]);
+  const reviewerById = new Map(reviewers.map((u) => [u.id, u]));
+  const itemById = new Map(items.map((i) => [i.id, i]));
+
+  return revealedReviews.map((r) => {
+    const reviewer = reviewerById.get(r.reviewer_id);
+    const item = itemById.get(rentalById.get(r.rental_id)?.item_id ?? "");
+    return {
+      id: r.id,
+      rating: r.rating,
+      comment: r.comment,
+      reviewer: reviewer ? { id: reviewer.id, fullName: reviewer.full_name, avatarUrl: reviewer.avatar_url } : null,
+      item: item ? { id: item.id, title: item.title } : null,
+      createdAt: r.created_at,
+    };
+  });
+}
+
+export function ratingStats(reviews: { rating: number }[]): { ratingAvg: number; ratingCount: number } {
+  if (reviews.length === 0) return { ratingAvg: 0, ratingCount: 0 };
+  const sum = reviews.reduce((acc, r) => acc + r.rating, 0);
+  return { ratingAvg: Math.round((sum / reviews.length) * 100) / 100, ratingCount: reviews.length };
 }
 
 export const reviewsService = {
@@ -68,45 +117,15 @@ export const reviewsService = {
   },
 
   async listPublicForUser(userId: string): Promise<PublicReviewDto[]> {
-    const reviews = await reviewsRepository.listByRevieweeId(userId);
-    if (reviews.length === 0) return [];
+    return toPublicReviews(await reviewsRepository.listByRevieweeId(userId));
+  },
 
-    const rentalIds = [...new Set(reviews.map((r) => r.rental_id))];
-    const [rentals, siblingReviews] = await Promise.all([
-      rentalsRepository.findByIds(rentalIds),
-      reviewsRepository.listForRentals(rentalIds),
-    ]);
-    const completedAtByRental = new Map(rentals.map((r) => [r.id, r.completed_at]));
-    const countByRental = new Map<string, number>();
-    for (const r of siblingReviews) {
-      countByRental.set(r.rental_id, (countByRental.get(r.rental_id) ?? 0) + 1);
-    }
-
-    const revealedReviews = reviews.filter((r) => {
-      const count = countByRental.get(r.rental_id) ?? 1;
-      return isRevealed(count, completedAtByRental.get(r.rental_id) ?? null);
-    });
-
-    const reviewerIds = [...new Set(revealedReviews.map((r) => r.reviewer_id))];
-    const reviewers = await usersRepository.findByIds(reviewerIds);
-    const reviewerById = new Map(reviewers.map((u) => [u.id, u]));
-
-    return revealedReviews.map((r) => {
-      const reviewer = reviewerById.get(r.reviewer_id);
-      return {
-        id: r.id,
-        rating: r.rating,
-        comment: r.comment,
-        reviewer: reviewer ? { id: reviewer.id, fullName: reviewer.full_name, avatarUrl: reviewer.avatar_url } : null,
-        createdAt: r.created_at,
-      };
-    });
+  /** Public reviews renters wrote about renting one item, newest first. */
+  async listPublicForItem(itemId: string): Promise<PublicReviewDto[]> {
+    return toPublicReviews(await reviewsRepository.listByRentersOfItem(itemId));
   },
 
   async getRatingStats(userId: string): Promise<{ ratingAvg: number; ratingCount: number }> {
-    const publicReviews = await this.listPublicForUser(userId);
-    if (publicReviews.length === 0) return { ratingAvg: 0, ratingCount: 0 };
-    const sum = publicReviews.reduce((acc, r) => acc + r.rating, 0);
-    return { ratingAvg: Math.round((sum / publicReviews.length) * 100) / 100, ratingCount: publicReviews.length };
+    return ratingStats(await this.listPublicForUser(userId));
   },
 };

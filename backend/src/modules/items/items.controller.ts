@@ -1,5 +1,8 @@
 import type { Request, Response } from "express";
 import { AppError } from "../../utils/AppError";
+import { reviewSummaryService } from "../reviews/reviewSummary.service";
+import { ratingStats, reviewsService } from "../reviews/reviews.service";
+import { itemsRepository } from "./items.repository";
 import { itemsService } from "./items.service";
 import {
   availabilityBlockSchema,
@@ -31,6 +34,14 @@ export const itemsController = {
     const id = requireParam(req, "id");
     const item = await itemsService.getDetail(id, req.auth?.userId);
     res.json({ item });
+  },
+
+  async reviews(req: Request, res: Response) {
+    const id = requireParam(req, "id");
+    const item = await itemsRepository.findById(id);
+    if (!item || item.status === "deleted") throw AppError.notFound("Item not found");
+    const reviews = await reviewsService.listPublicForItem(id);
+    res.json({ reviews, ...ratingStats(reviews), summary: await reviewSummaryService.getForItem(id, reviews) });
   },
 
   async update(req: Request, res: Response) {

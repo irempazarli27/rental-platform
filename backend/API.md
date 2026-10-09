@@ -75,7 +75,7 @@ Giriş gerekli. İlan sahibinin kazanç özeti: `totals` (tamamlanan kazanç, de
 Herkese açık. Bir kullanıcının herkese açık profili, puanı ve güven seviyesi. Silinmiş hesaplar için 404. Kullanıcı hakkında en az 3 herkese açık yorum varsa ve yapay zeka açıksa `reviewSummary` alanında yorumların özeti gelir (`{ summary, positives, negatives }`); yoksa `null`. Özet arka planda hazırlanır, bu yüzden yeni yorumlar özete bir sonraki görüntülemede yansır.
 
 ### GET /api/users/:id/reviews
-Herkese açık. Kullanıcı hakkında yazılmış yorumlar.
+Herkese açık. Kullanıcı hakkında yazılmış, herkese açık hale gelmiş yorumlar. Her yorumda hangi ürünün kiralamasından geldiği `item` (`{ id, title }`) olarak yer alır.
 
 ## Hesap doğrulama
 
@@ -124,6 +124,9 @@ Giriş gerekli, yalnızca ilan sahibi. `multipart/form-data`, alan adı `images`
 
 ### DELETE /api/items/:id/images/:imageId
 Giriş gerekli, yalnızca ilan sahibi. Bir fotoğrafı siler.
+
+### GET /api/items/:id/reviews
+Herkese açık. Bu ürünü kiralayanların yazdığı, herkese açık hale gelmiş değerlendirmeler (en yeni önce): `{ reviews, ratingAvg, ratingCount, summary }`. Eşya sahiplerinin kiracılar hakkında yazdıkları burada yer almaz. En az 3 değerlendirme varsa ve yapay zeka açıksa `summary` ürünün yorumlarının özetidir, yoksa `null`; özet arka planda hazırlanır.
 
 ### GET /api/items/:id/availability
 Herkese açık. İlanın dolu tarih aralıkları (kabul edilmiş kiralamalar ve sahibinin kapattığı günler).
