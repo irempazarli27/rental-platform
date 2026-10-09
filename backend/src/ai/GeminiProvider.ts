@@ -1,4 +1,12 @@
-import { GoogleGenAI, ThinkingLevel, type Content, type GenerateContentResponse, type Part } from "@google/genai";
+import {
+  ApiError,
+  GoogleGenAI,
+  ThinkingLevel,
+  type Content,
+  type GenerateContentParameters,
+  type GenerateContentResponse,
+  type Part,
+} from "@google/genai";
 import type {
   AiPart,
   AiProvider,
@@ -11,6 +19,10 @@ import type {
 } from "./AiProvider";
 
 const DEFAULT_MAX_TOOL_ROUNDS = 5;
+/** Per attempt. Without it a busy model held a request for minutes. */
+const REQUEST_TIMEOUT_MS = 25_000;
+/** Overload and rate-limit answers worth one more try, then the fallback model. */
+const TRANSIENT_STATUSES = [429, 500, 503, 504];
 
 function toParts(parts: AiPart[]): Part[] {
   return parts.map((p) =>
@@ -24,6 +36,10 @@ const THINKING_LEVELS: Record<ThinkingEffort, ThinkingLevel> = {
   medium: ThinkingLevel.MEDIUM,
   high: ThinkingLevel.HIGH,
 };
+
+function isTimeout(err: unknown) {
+  return err instanceof Error && (err.name === "AbortError" || err.name === "TimeoutError" || /timed? ?out|aborted/i.test(err.message));
+}
 
 function usageOf(response: GenerateContentResponse): TokenUsage | undefined {
   const u = response.usageMetadata;
@@ -39,13 +55,36 @@ export class GeminiProvider implements AiProvider {
     apiKey: string,
     private readonly models: Record<ModelTier, string>,
   ) {
-    this.client = new GoogleGenAI({ apiKey });
+    this.client = new GoogleGenAI({
+      apiKey,
+      httpOptions: {
+        timeout: REQUEST_TIMEOUT_MS,
+        // The SDK's own default backs off for up to a minute between many
+        // attempts; one quick retry, then the fallback model, serves a user better.
+        retryOptions: { attempts: 2, initialDelay: 1, maxDelay: 3, httpStatusCodes: TRANSIENT_STATUSES },
+      },
+    });
+  }
+
+  /**
+   * Calls the tier's model; if it is overloaded or times out, tries the other
+   * tier's model once. A slightly weaker answer beats an error page.
+   */
+  private async generate(tier: ModelTier, params: Omit<GenerateContentParameters, "model">) {
+    const primary = this.models[tier];
+    const fallback = this.models[tier === "vision" ? "fast" : "vision"];
+    try {
+      return { response: await this.client.models.generateContent({ ...params, model: primary }), model: primary };
+    } catch (err) {
+      const transient = (err instanceof ApiError && TRANSIENT_STATUSES.includes(err.status)) || isTimeout(err);
+      if (!transient || fallback === primary) throw err;
+      console.warn(`Gemini model ${primary} unavailable, falling back to ${fallback}:`, err instanceof Error ? err.message.slice(0, 120) : err);
+      return { response: await this.client.models.generateContent({ ...params, model: fallback }), model: fallback };
+    }
   }
 
   async generateStructured(request: StructuredRequest): Promise<StructuredResult> {
-    const model = this.models[request.tier];
-    const response = await this.client.models.generateContent({
-      model,
+    const { response, model } = await this.generate(request.tier, {
       contents: [{ role: "user", parts: toParts(request.parts) }],
       config: {
         systemInstruction: request.system,
@@ -61,7 +100,7 @@ export class GeminiProvider implements AiProvider {
   }
 
   async chat(request: ChatRequest): Promise<{ text: string; model: string }> {
-    const model = this.models.vision;
+    let model = this.models.vision;
     const contents: Content[] = request.messages.map((m) => ({
       role: m.role === "assistant" ? "model" : "user",
       parts: [{ text: m.text }],
@@ -78,11 +117,15 @@ export class GeminiProvider implements AiProvider {
           })),
         },
       ],
-      maxOutputTokens: 1024,
+      // Reasoning tokens count toward this limit too, so leave room for both.
+      maxOutputTokens: 2048,
+      thinkingConfig: { thinkingLevel: THINKING_LEVELS[request.thinking ?? "low"] },
     };
 
     for (let round = 0; round <= (request.maxToolRounds ?? DEFAULT_MAX_TOOL_ROUNDS); round++) {
-      const response = await this.client.models.generateContent({ model, contents, config });
+      const result = await this.generate("vision", { contents, config });
+      const response = result.response;
+      model = result.model;
       const calls = response.functionCalls ?? [];
       if (calls.length === 0) {
         return { text: response.text ?? "", model };

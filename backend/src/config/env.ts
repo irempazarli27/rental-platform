@@ -48,7 +48,7 @@ export const env = {
     apiKey: process.env.GEMINI_API_KEY || null,
     models: {
       fast: process.env.AI_MODEL_FAST || "gemini-3.5-flash-lite",
-      vision: process.env.AI_MODEL_VISION || "gemini-3.8-flash",
+      vision: process.env.AI_MODEL_VISION || "gemini-3.5-flash",
     },
     // Calls to the provider allowed per day, across everyone / per user.
     dailyCap: Number(process.env.AI_DAILY_REQUEST_CAP ?? 500),

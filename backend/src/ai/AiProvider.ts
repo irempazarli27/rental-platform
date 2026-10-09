@@ -58,6 +58,8 @@ export interface ChatRequest {
   tools: ChatTool[];
   /** Upper bound on tool round-trips, so a confused model can't loop forever. */
   maxToolRounds?: number;
+  /** Defaults to "low": a help chat rarely needs long deliberation. */
+  thinking?: ThinkingEffort;
 }
 
 export interface AiProvider {
