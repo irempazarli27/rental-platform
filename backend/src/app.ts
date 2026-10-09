@@ -6,6 +6,7 @@ import { env } from "./config/env";
 import { errorHandler, notFoundHandler } from "./middleware/errorHandler";
 import { apiRateLimiter } from "./middleware/rateLimit";
 import { adminRouter } from "./modules/admin/admin.routes";
+import { assistantRouter } from "./modules/assistant/assistant.routes";
 import { authRouter } from "./modules/auth/auth.routes";
 import { categoriesRouter } from "./modules/categories/categories.routes";
 import { disputesRouter } from "./modules/disputes/disputes.routes";
@@ -48,6 +49,7 @@ app.use("/api/notifications", notificationsRouter);
 app.use("/api/conversations", conversationsRouter);
 app.use("/api/disputes", disputesRouter);
 app.use("/api/admin", adminRouter);
+app.use("/api/ai", assistantRouter);
 
 app.use(notFoundHandler);
 app.use(errorHandler);

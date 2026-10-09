@@ -236,6 +236,14 @@ Giriş gerekli, yalnızca katılımcılar. Sohbetin mesajları; okunmamışları
 ### POST /api/conversations/:id/messages
 Giriş gerekli, yalnızca katılımcılar. Gövde: `content` (1-4000 karakter). İletişim bilgisi içeren mesajlar admin incelemesi için işaretlenir. Karşı taraf hesabını sildiyse 409 `RECIPIENT_DELETED`.
 
+## Yapay zeka
+
+### GET /api/ai/status
+Herkese açık. Yapay zeka özelliklerinin açık olup olmadığını söyler: `{ "enabled": true }`. Sunucuda API anahtarı yoksa `false` olur; arayüz bu durumda yapay zeka öğelerini göstermez.
+
+### POST /api/ai/assistant
+Giriş gerekli. Destek asistanına soru sorar. Gövde: `messages` (`[{ role: "user" | "assistant", text }]`, son mesaj kullanıcıdan olmalı ve en fazla 1000 karakter). Sunucu durum tutmaz; istemci sohbetin geçmişini her istekte gönderir, sunucu son 12 mesajı kullanır. Yanıt: `{ reply }`, düz metin. Asistan yalnızca okur: kullanıcının kendi kiralamalarına, depozito durumuna ve doğrulama durumuna bakabilir, hiçbir işlem yapamaz. Günlük kullanım sınırı aşılınca 429 `AI_USER_CAP`; model geçici olarak ulaşılamazsa 502 `AI_UNAVAILABLE`.
+
 ## Admin
 
 ### GET /api/admin/stats
