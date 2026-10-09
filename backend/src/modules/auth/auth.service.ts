@@ -138,7 +138,7 @@ export const authService = {
     }
 
     const user = await usersRepository.findById(stored.user_id);
-    if (!user || user.status === "suspended") {
+    if (!user || user.status !== "active") {
       throw AppError.unauthorized("Account unavailable");
     }
 

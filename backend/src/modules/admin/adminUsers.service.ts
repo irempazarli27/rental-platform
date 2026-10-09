@@ -12,6 +12,9 @@ export const adminUsersService = {
   async suspend(userId: string, adminId: string, reason: string) {
     const user = await usersRepository.findById(userId);
     if (!user) throw AppError.notFound("User not found");
+    // A deleted account has no personal data left to restore; reviving it would
+    // hand someone an empty identity.
+    if (user.status === "deleted") throw AppError.conflict("This account has been deleted", "ACCOUNT_DELETED");
     if (user.role === "admin") {
       throw AppError.badRequest("Admins cannot be suspended through this endpoint", "CANNOT_SUSPEND_ADMIN");
     }
@@ -30,6 +33,9 @@ export const adminUsersService = {
   async activate(userId: string, adminId: string) {
     const user = await usersRepository.findById(userId);
     if (!user) throw AppError.notFound("User not found");
+    // A deleted account has no personal data left to restore; reviving it would
+    // hand someone an empty identity.
+    if (user.status === "deleted") throw AppError.conflict("This account has been deleted", "ACCOUNT_DELETED");
 
     const updated = await usersRepository.update(userId, { status: "active" });
     await adminActionsRepository.log({

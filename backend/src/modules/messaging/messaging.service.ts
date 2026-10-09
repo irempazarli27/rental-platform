@@ -20,7 +20,7 @@ export const messagingService = {
       throw AppError.badRequest("You cannot message yourself", "SELF_CONVERSATION");
     }
     const recipient = await usersRepository.findById(input.recipientId);
-    if (!recipient) throw AppError.notFound("User not found");
+    if (!recipient || recipient.status === "deleted") throw AppError.notFound("User not found");
 
     const itemId = input.itemId ?? null;
     const existing = await conversationsRepository.findByParticipantsAndItem(requesterId, input.recipientId, itemId);
@@ -89,6 +89,13 @@ export const messagingService = {
     if (!conversation) throw AppError.notFound("Conversation not found");
     assertParticipant(conversation, requesterId);
 
+    const recipientId =
+      conversation.participant_one_id === requesterId ? conversation.participant_two_id : conversation.participant_one_id;
+    const recipient = await usersRepository.findById(recipientId);
+    if (recipient?.status === "deleted") {
+      throw AppError.conflict("Bu kullanıcı hesabını sildi, mesaj gönderilemez", "RECIPIENT_DELETED");
+    }
+
     const message = await messagesRepository.create({
       conversationId,
       senderId: requesterId,
@@ -96,8 +103,6 @@ export const messagingService = {
       flagged: looksLikeContactInfo(content),
     });
 
-    const recipientId =
-      conversation.participant_one_id === requesterId ? conversation.participant_two_id : conversation.participant_one_id;
     await notificationsService.notify(recipientId, "new_message", "Yeni mesaj", "Yeni bir mesajın var.", {
       type: "conversation",
       id: conversationId,

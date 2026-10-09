@@ -26,6 +26,8 @@ export interface AuthUser {
   phoneVerified: boolean;
   role: string;
   status: string;
+  /** False for Google-only accounts. */
+  hasPassword: boolean;
   createdAt: string;
   /** Only present on /users/me responses (not on login/register/refresh). */
   trust?: TrustInfo;
@@ -88,6 +90,11 @@ export function logout(refreshToken: string) {
 
 export function getMe() {
   return apiRequest<{ user: AuthUser }>("/api/users/me");
+}
+
+/** Permanently erases the account. Password accounts confirm with the password, Google-only ones with their email. */
+export function deleteAccount(confirmation: { password: string } | { confirmEmail: string }) {
+  return apiRequest<void>("/api/users/me", { method: "DELETE", body: confirmation });
 }
 
 export function updateMe(input: UpdateProfileInput) {

@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
+import { DeleteAccountSection } from "@/components/dashboard/DeleteAccountSection";
 import { ProfileForm } from "@/components/dashboard/ProfileForm";
 import { TrustCard } from "@/components/dashboard/TrustCard";
 
@@ -111,6 +112,8 @@ export default function DashboardPage() {
           <p className="mt-2 text-sm text-stone-500">İlanlarının ne kadar kazandırdığını ay ay ve ilan ilan gör.</p>
         </section>
       </div>
+
+      <DeleteAccountSection user={user} />
     </div>
   );
 }

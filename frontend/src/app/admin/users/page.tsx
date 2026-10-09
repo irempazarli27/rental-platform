@@ -115,13 +115,13 @@ export default function AdminUsersPage() {
                           u.status === "active" ? "bg-emerald-50 text-emerald-700" : "bg-stone-100 text-stone-600"
                         }`}
                       >
-                        {u.status === "active" ? "Aktif" : "Askıda"}
+                        {u.status === "active" ? "Aktif" : u.status === "deleted" ? "Silindi" : "Askıda"}
                       </span>
                     </div>
                     <p className="truncate text-xs text-stone-500">{u.email}</p>
                     <p className="text-xs text-stone-400">Katılım: {formatDate(u.createdAt)}</p>
                   </div>
-                  {u.role !== "admin" && (
+                  {u.role !== "admin" && u.status !== "deleted" && (
                     <div className="shrink-0">
                       {u.status === "active" ? (
                         suspendingId === u.id ? (

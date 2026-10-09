@@ -16,7 +16,7 @@ export const usersService = {
 
   async getPublicProfile(userId: string) {
     const user = await usersRepository.findById(userId);
-    if (!user) throw AppError.notFound("User not found");
+    if (!user || user.status === "deleted") throw AppError.notFound("User not found");
     const [stats, trust] = await Promise.all([reviewsService.getRatingStats(userId), trustService.getTrust(userId)]);
     // The breakdown (e.g. lost-dispute penalties) is private to the user; the public
     // profile only shows the resulting score and level.

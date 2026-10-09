@@ -10,7 +10,7 @@ type NullableTimestamp = ColumnType<Date | null, Date | string | null | undefine
 type Nullable<T> = ColumnType<T | null, T | null | undefined, T | null>;
 
 export type UserRole = "user" | "admin";
-export type UserStatus = "active" | "suspended";
+export type UserStatus = "active" | "suspended" | "deleted";
 export type UserAuthProvider = "password" | "google";
 export type VerificationLevel = "none" | "email" | "phone" | "id_verified";
 export type ItemCondition = "new" | "like_new" | "good" | "fair";
@@ -77,6 +77,7 @@ export interface UsersTable {
   verification_consent_at: NullableTimestamp;
   status: Generated<UserStatus>;
   role: Generated<UserRole>;
+  deleted_at: NullableTimestamp;
   created_at: GeneratedTimestamp;
   updated_at: GeneratedTimestamp;
 }

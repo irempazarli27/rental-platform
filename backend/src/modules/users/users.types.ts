@@ -16,6 +16,8 @@ export interface PrivateUserDto {
   phoneVerified: boolean;
   role: string;
   status: string;
+  /** False for Google-only accounts, which confirm sensitive actions by other means. */
+  hasPassword: boolean;
   createdAt: Date | string;
 }
 
@@ -48,6 +50,7 @@ export function toPrivateUserDto(user: User): PrivateUserDto {
     phoneVerified: user.phone_verified_at !== null,
     role: user.role,
     status: user.status,
+    hasPassword: user.password_hash !== null,
     createdAt: user.created_at,
   };
 }

@@ -1,10 +1,17 @@
 import type { Request, Response } from "express";
+import { z } from "zod";
 import { AppError } from "../../utils/AppError";
 import { itemsService } from "../items/items.service";
 import { ownerInsightsService } from "../rentals/ownerInsights.service";
 import { reviewsService } from "../reviews/reviews.service";
+import { accountDeletionService } from "./accountDeletion.service";
 import { usersService } from "./users.service";
 import { updateProfileSchema } from "./users.validation";
+
+const deleteAccountSchema = z.object({
+  password: z.string().max(200).optional(),
+  confirmEmail: z.string().max(255).optional(),
+});
 
 export const usersController = {
   async me(req: Request, res: Response) {
@@ -19,6 +26,11 @@ export const usersController = {
 
   async myEarnings(req: Request, res: Response) {
     res.json({ earnings: await ownerInsightsService.earnings(req.auth!.userId) });
+  },
+
+  async deleteMe(req: Request, res: Response) {
+    await accountDeletionService.deleteAccount(req.auth!.userId, deleteAccountSchema.parse(req.body ?? {}));
+    res.status(204).send();
   },
 
   async updateMe(req: Request, res: Response) {
