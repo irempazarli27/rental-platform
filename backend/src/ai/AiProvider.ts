@@ -12,18 +12,32 @@ export type AiPart = { text: string } | { media: { data: Buffer; mimeType: strin
 /** A JSON Schema object describing the expected reply. */
 export type JsonSchema = Record<string, unknown>;
 
+/**
+ * How much the model reasons before answering. Reasoning tokens are billed,
+ * so simple jobs (summaries) ask for little and judgement calls for more.
+ */
+export type ThinkingEffort = "minimal" | "low" | "medium" | "high";
+
 export interface StructuredRequest {
   tier: ModelTier;
   system: string;
   parts: AiPart[];
   schema: JsonSchema;
   maxOutputTokens?: number;
+  thinking?: ThinkingEffort;
+}
+
+export interface TokenUsage {
+  input: number;
+  output: number;
+  thinking: number;
 }
 
 export interface StructuredResult {
   /** The model's reply, parsed from JSON but not yet validated. */
   value: unknown;
   model: string;
+  usage?: TokenUsage;
 }
 
 export interface ChatTool {

@@ -1,5 +1,14 @@
-import { GoogleGenAI, type Content, type Part } from "@google/genai";
-import type { AiPart, AiProvider, ChatRequest, ModelTier, StructuredRequest, StructuredResult } from "./AiProvider";
+import { GoogleGenAI, ThinkingLevel, type Content, type GenerateContentResponse, type Part } from "@google/genai";
+import type {
+  AiPart,
+  AiProvider,
+  ChatRequest,
+  ModelTier,
+  StructuredRequest,
+  StructuredResult,
+  ThinkingEffort,
+  TokenUsage,
+} from "./AiProvider";
 
 const DEFAULT_MAX_TOOL_ROUNDS = 5;
 
@@ -7,6 +16,19 @@ function toParts(parts: AiPart[]): Part[] {
   return parts.map((p) =>
     "text" in p ? { text: p.text } : { inlineData: { data: p.media.data.toString("base64"), mimeType: p.media.mimeType } },
   );
+}
+
+const THINKING_LEVELS: Record<ThinkingEffort, ThinkingLevel> = {
+  minimal: ThinkingLevel.MINIMAL,
+  low: ThinkingLevel.LOW,
+  medium: ThinkingLevel.MEDIUM,
+  high: ThinkingLevel.HIGH,
+};
+
+function usageOf(response: GenerateContentResponse): TokenUsage | undefined {
+  const u = response.usageMetadata;
+  if (!u) return undefined;
+  return { input: u.promptTokenCount ?? 0, output: u.candidatesTokenCount ?? 0, thinking: u.thoughtsTokenCount ?? 0 };
 }
 
 export class GeminiProvider implements AiProvider {
@@ -30,11 +52,12 @@ export class GeminiProvider implements AiProvider {
         responseMimeType: "application/json",
         responseJsonSchema: request.schema,
         maxOutputTokens: request.maxOutputTokens ?? 2048,
+        ...(request.thinking ? { thinkingConfig: { thinkingLevel: THINKING_LEVELS[request.thinking] } } : {}),
       },
     });
     const text = response.text;
     if (!text) throw new Error(`Gemini returned no text (finish reason: ${response.candidates?.[0]?.finishReason ?? "unknown"})`);
-    return { value: JSON.parse(text), model };
+    return { value: JSON.parse(text), model, usage: usageOf(response) };
   }
 
   async chat(request: ChatRequest): Promise<{ text: string; model: string }> {

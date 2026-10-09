@@ -2,7 +2,7 @@ import { createHash } from "node:crypto";
 import type { z } from "zod";
 import { env } from "../config/env";
 import { AppError } from "../utils/AppError";
-import type { AiPart, ChatRequest, JsonSchema, ModelTier } from "./AiProvider";
+import type { AiPart, ChatRequest, JsonSchema, ModelTier, ThinkingEffort, TokenUsage } from "./AiProvider";
 import { aiRepository } from "./ai.repository";
 import { provider } from "./provider";
 
@@ -56,6 +56,7 @@ interface StructuredCall<T> {
   /** …and checked again here, because a provider's schema support is best-effort. */
   validator: z.ZodType<T>;
   maxOutputTokens?: number;
+  thinking?: ThinkingEffort;
 }
 
 export const ai = {
@@ -63,7 +64,7 @@ export const ai = {
     return provider !== null;
   },
 
-  async structured<T>(call: StructuredCall<T>): Promise<{ value: T; model: string }> {
+  async structured<T>(call: StructuredCall<T>): Promise<{ value: T; model: string; usage?: TokenUsage }> {
     if (!provider) throw new AppError(503, "Yapay zeka özellikleri kapalı", "AI_DISABLED");
     await checkBudget(call.userId);
     await aiRepository.logRequest(call.userId, call.kind);
@@ -76,6 +77,7 @@ export const ai = {
         parts: call.parts,
         schema: call.schema,
         maxOutputTokens: call.maxOutputTokens,
+        thinking: call.thinking,
       });
     } catch (err) {
       console.error(`AI request failed (${call.kind}):`, err);
@@ -87,7 +89,7 @@ export const ai = {
       console.error(`AI reply did not match the schema (${call.kind}):`, parsed.error.flatten());
       throw new AppError(502, "Yapay zeka geçerli bir yanıt üretemedi, tekrar dene", "AI_BAD_OUTPUT");
     }
-    return { value: parsed.data, model: raw.model };
+    return { value: parsed.data, model: raw.model, usage: raw.usage };
   },
 
   /**
