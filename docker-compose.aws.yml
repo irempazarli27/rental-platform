@@ -42,6 +42,13 @@ services:
       SMTP_USER: ${SMTP_USER:-}
       SMTP_PASS: ${SMTP_PASS:-}
       MAIL_FROM: ${MAIL_FROM:-}
+      # Empty GEMINI_API_KEY switches every AI feature off.
+      AI_PROVIDER: ${AI_PROVIDER:-gemini}
+      GEMINI_API_KEY: ${GEMINI_API_KEY:-}
+      AI_MODEL_FAST: ${AI_MODEL_FAST:-}
+      AI_MODEL_VISION: ${AI_MODEL_VISION:-}
+      AI_DAILY_REQUEST_CAP: ${AI_DAILY_REQUEST_CAP:-500}
+      AI_USER_DAILY_CAP: ${AI_USER_DAILY_CAP:-30}
       UPLOAD_DIR: uploads
       MAX_UPLOAD_SIZE_MB: 25
       MAX_VIDEO_SIZE_MB: 100

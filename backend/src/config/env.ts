@@ -40,6 +40,20 @@ export const env = {
         from: process.env.MAIL_FROM || required("SMTP_USER"),
       }
     : null,
+  // Language-model features. With no key every AI feature is off and hidden;
+  // the rest of the site is unaffected. Model names come from config because
+  // providers rename and reprice them often.
+  ai: {
+    provider: process.env.AI_PROVIDER ?? "gemini",
+    apiKey: process.env.GEMINI_API_KEY || null,
+    models: {
+      fast: process.env.AI_MODEL_FAST || "gemini-2.5-flash-lite",
+      vision: process.env.AI_MODEL_VISION || "gemini-2.5-flash",
+    },
+    // Calls to the provider allowed per day, across everyone / per user.
+    dailyCap: Number(process.env.AI_DAILY_REQUEST_CAP ?? 500),
+    userDailyCap: Number(process.env.AI_USER_DAILY_CAP ?? 30),
+  },
   // Demo mode: steps without a real provider (SMS, and email when SMTP is unset)
   // return their verification code in the API response instead of sending it.
   // With it off, those steps fail loudly rather than silently pretending.

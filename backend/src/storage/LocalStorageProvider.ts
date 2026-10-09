@@ -1,4 +1,4 @@
-import { mkdir, rm, writeFile } from "node:fs/promises";
+import { mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { env } from "../config/env";
 import type { SavedFile, StorageProvider } from "./StorageProvider";
@@ -30,6 +30,11 @@ export class LocalStorageProvider implements StorageProvider {
       url: `/uploads/${relativePath.split(path.sep).join("/")}`,
       path: relativePath,
     };
+  }
+
+  async readByUrl(url: string): Promise<Buffer> {
+    if (!url.startsWith("/uploads/")) throw new Error(`Not a local upload URL: ${url}`);
+    return readFile(safeJoin(...url.slice("/uploads/".length).split("/")));
   }
 
   async delete(relativePath: string): Promise<void> {

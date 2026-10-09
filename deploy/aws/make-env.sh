@@ -34,5 +34,8 @@ SMTP_PORT=587
 SMTP_USER=
 SMTP_PASS=
 MAIL_FROM=
+# Optional: Gemini API key for the AI features (empty = AI off). Use a key on
+# a billed project in production: free-tier content may be used by Google.
+GEMINI_API_KEY=
 ENV
 echo "Wrote $OUT (permissions 600) for domain ${DOMAIN}."

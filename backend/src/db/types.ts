@@ -325,6 +325,23 @@ export interface FavoritesTable {
   created_at: Generated<Date>;
 }
 
+export interface AiResultsTable {
+  id: Generated<string>;
+  kind: string;
+  subject_id: string;
+  input_hash: string;
+  output: unknown;
+  model: string;
+  created_at: GeneratedTimestamp;
+}
+
+export interface AiRequestsTable {
+  id: Generated<string>;
+  user_id: Nullable<string>;
+  kind: string;
+  created_at: GeneratedTimestamp;
+}
+
 export interface Database {
   users: UsersTable;
   refresh_tokens: RefreshTokensTable;
@@ -335,6 +352,8 @@ export interface Database {
   item_images: ItemImagesTable;
   item_availability_blocks: ItemAvailabilityBlocksTable;
   favorites: FavoritesTable;
+  ai_results: AiResultsTable;
+  ai_requests: AiRequestsTable;
   rentals: RentalsTable;
   handover_records: HandoverRecordsTable;
   handover_media: HandoverMediaTable;
