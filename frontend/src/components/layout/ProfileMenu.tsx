@@ -7,14 +7,17 @@ import { ChevronDown } from "lucide-react";
 import type { AuthUser } from "@/lib/api/auth";
 
 /** The signed-in user's own pages, shared by the desktop dropdown and the phone menu. */
-export const PROFILE_LINKS = [
-  { href: "/dashboard", label: "Profilim" },
-  { href: "/dashboard/listings", label: "İlanlarım" },
-  { href: "/dashboard/rentals", label: "Kiralamalarım" },
-  { href: "/dashboard/favorites", label: "Favorilerim" },
-  { href: "/dashboard/earnings", label: "Kazançlarım" },
-  { href: "/dashboard/settings", label: "Ayarlar" },
-];
+export function profileLinks(userId: string) {
+  return [
+    { href: "/dashboard", label: "Profilim" },
+    { href: "/dashboard/listings", label: "İlanlarım" },
+    { href: "/dashboard/rentals", label: "Kiralamalarım" },
+    { href: "/dashboard/favorites", label: "Favorilerim" },
+    { href: `/profile/${userId}#degerlendirmeler`, label: "Değerlendirmelerim" },
+    { href: "/dashboard/earnings", label: "Kazançlarım" },
+    { href: "/dashboard/settings", label: "Ayarlar" },
+  ];
+}
 
 export function initials(fullName: string) {
   const parts = fullName.trim().split(/\s+/);
@@ -85,7 +88,7 @@ export function ProfileMenu({ user, onLogout }: { user: AuthUser; onLogout: () =
             </div>
           </div>
           <div className="my-1 border-t border-stone-100" />
-          {PROFILE_LINKS.map((link) => (
+          {profileLinks(user.id).map((link) => (
             <Link key={link.href} href={link.href} role="menuitem" className={item}>
               {link.label}
             </Link>

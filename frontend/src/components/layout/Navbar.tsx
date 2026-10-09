@@ -7,7 +7,7 @@ import { Bell, Menu, MessageCircle, Package, X } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import { listNotifications } from "@/lib/api/notifications";
 import { listConversations } from "@/lib/api/messaging";
-import { Avatar, PROFILE_LINKS, ProfileMenu } from "./ProfileMenu";
+import { Avatar, ProfileMenu, profileLinks } from "./ProfileMenu";
 import { ThemeToggle } from "./ThemeToggle";
 
 const POLL_INTERVAL_MS = 30_000;
@@ -166,7 +166,7 @@ export function Navbar() {
             İlan Ver
           </Link>
           <div className="my-1 border-t border-stone-100" />
-          {PROFILE_LINKS.map((link) => (
+          {profileLinks(user.id).map((link) => (
             <Link key={link.href} href={link.href} className={mobileLink}>
               {link.label}
             </Link>

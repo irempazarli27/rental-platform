@@ -1,3 +1,4 @@
+import type { ReviewSummary } from "@/components/ReviewSummaryCard";
 import { apiRequest } from "./client";
 
 export interface PublicUserDto {
@@ -10,6 +11,8 @@ export interface PublicUserDto {
   ratingCount: number;
   verificationLevel: string;
   memberSince: string;
+  /** AI digest of their reviews; null below three reviews or when AI is off. */
+  reviewSummary?: ReviewSummary | null;
 }
 
 export function getPublicProfile(id: string) {

@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { Settings } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import { TrustCard } from "@/components/dashboard/TrustCard";
+import { ReviewsPreview } from "@/components/reviews/ReviewsPreview";
 
 export default function DashboardPage() {
   const { user, isLoading, refreshUser } = useAuth();
@@ -71,6 +72,17 @@ export default function DashboardPage() {
           </dl>
         </section>
 
+      </div>
+
+      <div className="mt-8 rounded-2xl border border-stone-200 bg-surface p-6">
+        <ReviewsPreview
+          userId={user.id}
+          title="Hakkındaki değerlendirmeler"
+          emptyText="Henüz değerlendirme almadın. Tamamlanan kiralamalardan sonra karşı taraf seni değerlendirebilir."
+        />
+        <Link href={`/profile/${user.id}`} className="mt-4 inline-block text-sm font-medium text-rose-600 hover:text-rose-700">
+          Herkese açık profilimi gör →
+        </Link>
       </div>
 
       <div className="mt-8 grid gap-8 sm:grid-cols-2">

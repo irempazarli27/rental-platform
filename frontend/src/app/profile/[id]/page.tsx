@@ -91,7 +91,7 @@ export default async function ProfilePage({ params }: { params: Promise<{ id: st
         </section>
       )}
 
-      <section className="mt-10">
+      <section id="degerlendirmeler" className="mt-10 scroll-mt-24">
         <h2 className="text-sm font-semibold text-stone-900">Değerlendirmeler</h2>
         {reviews.length === 0 ? (
           <p className="mt-2 text-sm text-stone-500">Henüz değerlendirme yok.</p>
