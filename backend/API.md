@@ -72,7 +72,7 @@ Giriş gerekli. Kullanıcının kendi ilanları (taslak ve pasifler dahil, silin
 Giriş gerekli. İlan sahibinin kazanç özeti: `totals` (tamamlanan kazanç, devam edenlerden beklenen, sayılar), son 6 ay (`months`, Türkiye saatine göre) ve ilan bazında döküm (`items`). Tutarlar kiralama bedelidir; ödeme sistemi bağlı olmadığı için gerçek para hareketini göstermez.
 
 ### GET /api/users/:id
-Herkese açık. Bir kullanıcının herkese açık profili, puanı ve güven seviyesi. Silinmiş hesaplar için 404.
+Herkese açık. Bir kullanıcının herkese açık profili, puanı ve güven seviyesi. Silinmiş hesaplar için 404. Kullanıcı hakkında en az 3 herkese açık yorum varsa ve yapay zeka açıksa `reviewSummary` alanında yorumların özeti gelir (`{ summary, positives, negatives }`); yoksa `null`. Özet arka planda hazırlanır, bu yüzden yeni yorumlar özete bir sonraki görüntülemede yansır.
 
 ### GET /api/users/:id/reviews
 Herkese açık. Kullanıcı hakkında yazılmış yorumlar.

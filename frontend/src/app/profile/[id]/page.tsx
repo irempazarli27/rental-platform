@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ItemCard } from "@/components/items/ItemCard";
+import { ReviewSummaryCard, type ReviewSummary } from "@/components/ReviewSummaryCard";
 import { TrustBadge, VerificationChips } from "@/components/TrustBadge";
 import type { TrustLevel } from "@/lib/api/auth";
 import { formatDate } from "@/lib/format";
@@ -22,6 +23,8 @@ interface ProfileUser {
   verificationLevel: string;
   memberSince: string;
   trust?: { score: number; level: TrustLevel };
+  /** Null until the user has enough public reviews, or when AI is switched off. */
+  reviewSummary?: ReviewSummary | null;
 }
 
 async function getProfileData(id: string) {
@@ -94,6 +97,7 @@ export default async function ProfilePage({ params }: { params: Promise<{ id: st
           <p className="mt-2 text-sm text-stone-500">Henüz değerlendirme yok.</p>
         ) : (
           <div className="mt-4 flex flex-col gap-3">
+            {user.reviewSummary && <ReviewSummaryCard summary={user.reviewSummary} />}
             {reviews.map((review) => (
               <div key={review.id} className="rounded-2xl border border-stone-200 bg-surface p-4">
                 <div className="flex items-center justify-between">

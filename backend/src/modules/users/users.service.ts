@@ -1,5 +1,6 @@
 import { AppError } from "../../utils/AppError";
 import { omitUndefined } from "../../utils/object";
+import { reviewSummaryService } from "../reviews/reviewSummary.service";
 import { reviewsService } from "../reviews/reviews.service";
 import { trustService } from "../trust/trust.service";
 import { usersRepository } from "./users.repository";
@@ -17,10 +18,14 @@ export const usersService = {
   async getPublicProfile(userId: string) {
     const user = await usersRepository.findById(userId);
     if (!user || user.status === "deleted") throw AppError.notFound("User not found");
-    const [stats, trust] = await Promise.all([reviewsService.getRatingStats(userId), trustService.getTrust(userId)]);
+    const [stats, trust, reviewSummary] = await Promise.all([
+      reviewsService.getRatingStats(userId),
+      trustService.getTrust(userId),
+      reviewSummaryService.getForUser(userId),
+    ]);
     // The breakdown (e.g. lost-dispute penalties) is private to the user; the public
     // profile only shows the resulting score and level.
-    return { ...toPublicUserDto(user), ...stats, trust: { score: trust.score, level: trust.level } };
+    return { ...toPublicUserDto(user), ...stats, trust: { score: trust.score, level: trust.level }, reviewSummary };
   },
 
   async updateMe(userId: string, input: UpdateProfileInput) {
