@@ -46,7 +46,7 @@ export default function EarningsPage() {
   return (
     <div className="mx-auto w-full max-w-4xl px-4 py-12 sm:px-6">
       <Link href="/dashboard" className="text-sm text-stone-500 hover:text-stone-700">
-        ← Panelim
+        ← Profilim
       </Link>
       <h1 className="mt-2 text-2xl font-semibold text-stone-900">Kazançlarım</h1>
       <p className="mt-1 text-sm text-stone-600">

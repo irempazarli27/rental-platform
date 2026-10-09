@@ -7,6 +7,7 @@ import { Bell, Menu, MessageCircle, Package, X } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import { listNotifications } from "@/lib/api/notifications";
 import { listConversations } from "@/lib/api/messaging";
+import { Avatar, PROFILE_LINKS, ProfileMenu } from "./ProfileMenu";
 import { ThemeToggle } from "./ThemeToggle";
 
 const POLL_INTERVAL_MS = 30_000;
@@ -95,9 +96,6 @@ export function Navbar() {
               <Link href="/items/new" className={`${desktopLink} hidden sm:inline-block`}>
                 İlan Ver
               </Link>
-              <Link href="/dashboard" className={`${desktopLink} hidden sm:inline-block`}>
-                Panelim
-              </Link>
               <Link
                 href="/dashboard/messages"
                 className="relative rounded-full p-2.5 text-stone-600 hover:bg-stone-100"
@@ -122,21 +120,9 @@ export function Navbar() {
                   </span>
                 )}
               </Link>
-              {user.role === "admin" && (
-                <Link
-                  href="/admin"
-                  className="hidden whitespace-nowrap rounded-full px-4 py-2 text-sm font-medium text-red-600 hover:bg-red-50 sm:inline-block"
-                >
-                  Admin Paneli
-                </Link>
-              )}
-              <span className="hidden pl-2 text-sm text-stone-500 lg:inline">{user.fullName}</span>
-              <button
-                onClick={handleLogout}
-                className="ml-1 hidden whitespace-nowrap rounded-full bg-stone-900 px-4 py-2 text-sm font-medium text-stone-50 hover:bg-stone-800 sm:inline-block"
-              >
-                Çıkış Yap
-              </button>
+              <div className="hidden sm:block">
+                <ProfileMenu user={user} onLogout={handleLogout} />
+              </div>
               <ThemeToggle />
               <button
                 onClick={() => setMenuOpen((o) => !o)}
@@ -166,16 +152,25 @@ export function Navbar() {
 
       {menuOpen && user && (
         <div className="border-t border-stone-200 bg-surface px-3 pb-4 pt-2 sm:hidden">
-          <p className="px-3 py-2 text-xs font-medium text-stone-400">{user.fullName}</p>
+          <div className="flex items-center gap-3 px-3 py-2">
+            <Avatar user={user} size="h-9 w-9" />
+            <div className="min-w-0">
+              <p className="truncate text-sm font-medium text-stone-900">{user.fullName}</p>
+              <p className="truncate text-xs text-stone-500">{user.email}</p>
+            </div>
+          </div>
           <Link href="/search" className={mobileLink}>
             Ara
           </Link>
           <Link href="/items/new" className={mobileLink}>
             İlan Ver
           </Link>
-          <Link href="/dashboard" className={mobileLink}>
-            Panelim
-          </Link>
+          <div className="my-1 border-t border-stone-100" />
+          {PROFILE_LINKS.map((link) => (
+            <Link key={link.href} href={link.href} className={mobileLink}>
+              {link.label}
+            </Link>
+          ))}
           {user.role === "admin" && (
             <Link href="/admin" className="block rounded-xl px-3 py-3 text-base font-medium text-red-600 active:bg-red-50">
               Admin Paneli

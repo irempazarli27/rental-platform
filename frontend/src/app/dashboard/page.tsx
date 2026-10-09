@@ -30,7 +30,7 @@ export default function DashboardPage() {
   return (
     <div className="mx-auto w-full max-w-4xl px-4 py-12 sm:px-6">
       <div className="flex items-center justify-between gap-4">
-        <h1 className="text-2xl font-semibold text-stone-900">Panelim</h1>
+        <h1 className="text-2xl font-semibold text-stone-900">Profilim</h1>
         <Link
           href="/dashboard/settings"
           className="flex items-center gap-1.5 rounded-full border border-stone-300 px-3.5 py-2 text-sm font-medium text-stone-700 hover:bg-stone-100"

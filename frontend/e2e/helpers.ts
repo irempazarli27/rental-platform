@@ -15,6 +15,13 @@ export async function registerAndLogin(page: Page, label: string): Promise<strin
   return email;
 }
 
+/** Signs out through the profile menu in the navbar. */
+export async function logout(page: Page) {
+  await page.click('button[aria-label="Profil menüsü"]');
+  await page.click('[role="menu"] >> text=Çıkış Yap');
+  await page.waitForURL("**/login");
+}
+
 /** Walks the handover wizard, uploading whatever step is current until the finish button appears. */
 export async function uploadAllRequiredSteps(page: Page) {
   await page.waitForSelector('input[type="file"]');
