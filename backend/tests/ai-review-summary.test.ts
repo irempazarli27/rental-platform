@@ -35,6 +35,7 @@ const profile = (userId: string) => request(app).get(`/api/users/${userId}`);
 
 describe("review summary", () => {
   beforeEach(() => {
+    ai._resetFailures();
     generateStructured.mockReset();
     generateStructured.mockResolvedValue({ value: SUMMARY, model: "fake-model" });
   });
@@ -82,6 +83,12 @@ describe("review summary", () => {
     expect(res.status).toBe(200);
     await vi.waitFor(() => expect(generateStructured).toHaveBeenCalled());
     expect((await profile(owner.user.id)).body.user.reviewSummary).toBeNull();
+
+    // After a failure, further views don't retry until the cooldown passes —
+    // otherwise an outage or a full quota would cost a call per page view.
+    for (let i = 0; i < 3; i++) await profile(owner.user.id);
+    await new Promise((r) => setTimeout(r, 200));
+    expect(generateStructured).toHaveBeenCalledTimes(1);
   });
 });
 

@@ -1,10 +1,20 @@
 import { z } from "zod";
 import { ai, UNTRUSTED_DATA_RULE, untrusted } from "../../ai";
+import { AppError } from "../../utils/AppError";
 import { reviewsService } from "./reviews.service";
 
 const KIND = "review_summary";
 /** Below this, a "summary" would just restate one or two reviews. */
 export const MIN_REVIEWS_FOR_SUMMARY = 3;
+/** The newest reviews say the most about someone now, and bound the prompt size. */
+const MAX_REVIEWS_SENT = 40;
+const MAX_COMMENT_CHARS = 500;
+/**
+ * An existing summary is kept at least this long even after new reviews
+ * arrive: one more review rarely changes the picture, and regenerating on
+ * every review would spend a request each time.
+ */
+const MIN_REFRESH_INTERVAL_MS = 6 * 60 * 60 * 1000;
 
 const summaryValidator = z.object({
   summary: z.string().min(1).max(500),
@@ -53,7 +63,10 @@ async function refresh(userId: string, input: { rating: number; comment: string 
       }),
     );
   } catch (err) {
-    console.error("Review summary could not be refreshed:", err);
+    // A cooldown is the expected quiet period after a failure, not a new one.
+    if (!(err instanceof AppError && err.code === "AI_COOLDOWN")) {
+      console.error("Review summary could not be refreshed:", err);
+    }
   } finally {
     inFlight.delete(userId);
   }
@@ -68,13 +81,18 @@ export const reviewSummaryService = {
 
     // Only what the reviews say: no reviewer names or ids reach the model.
     const input = [...reviews]
-      .sort((a, b) => a.id.localeCompare(b.id))
-      .map((r) => ({ rating: r.rating, comment: r.comment }));
+      .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime() || a.id.localeCompare(b.id))
+      .slice(0, MAX_REVIEWS_SENT)
+      .map((r) => ({ rating: r.rating, comment: r.comment ? r.comment.slice(0, MAX_COMMENT_CHARS) : null }));
 
     const current = await ai.cachedIfCurrent(KIND, userId, input, summaryValidator);
     if (current) return current;
-    void refresh(userId, input);
-    return ai.stored(KIND, userId, summaryValidator);
+
+    const stored = await ai.stored(KIND, userId, summaryValidator);
+    if (!stored || Date.now() - stored.createdAt.getTime() >= MIN_REFRESH_INTERVAL_MS) {
+      void refresh(userId, input);
+    }
+    return stored?.value ?? null;
   },
 
   /** Exposed for tests, which need to wait for the background refresh. */
